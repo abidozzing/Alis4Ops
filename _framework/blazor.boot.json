@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "Alis4Ops2024.Web",
   "resources": {
-    "hash": "sha256-9C7HQpxXkYLTZ8rRws62q/Cao6EUdg97TDFjjCxSefw=",
+    "hash": "sha256-0RoWDH6p4lIBh3J7H6u1WY1G8VJqDWU9PYkr0RtKLCw=",
     "jsModuleNative": {
       "dotnet.native.8.0.6.suuomc2hr0.js": "sha256-YU6M9+jtDVnB8/wtrgIndOstzNh778Ls8g9XnbjorSk="
     },
@@ -17,7 +17,7 @@
       "icudt_no_CJK.dat": "sha256-L7sV7NEYP37/Qr2FPCePo5cJqRgTXRwGHuwF5Q+0Nfs="
     },
     "assembly": {
-      "Alis4Ops2024.Web.wasm": "sha256-5+hWxXp860qG9rFjU8tu/Vja4SZyeg6/X4Ir/C6CWRE=",
+      "Alis4Ops2024.Web.wasm": "sha256-5Y0qTqjV6gE8EE26gUo5OcwPX8zSUfVhnr0BAIvaVIo=",
       "Microsoft.AspNetCore.Components.wasm": "sha256-Hc+iWQKzbA7hD744ZSnOHXthxkrnrmIvi77oXej2P5w=",
       "Microsoft.AspNetCore.Components.Web.wasm": "sha256-YA5s8sfLmLi/HwCitkdy9ubTO/9pnKucJcDxdASCfdg=",
       "Microsoft.AspNetCore.Components.WebAssembly.wasm": "sha256-9pa4TX6FPCR8IZ3hObhj8D/J0Rp+4PZ1bfCK0WQAIZ8=",
