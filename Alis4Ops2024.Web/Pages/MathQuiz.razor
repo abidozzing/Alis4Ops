@@ -1,0 +1,521 @@
+﻿@page "/mathquiz"
+@using Alis4Ops2024.Web.Core
+@using Alis4Ops2024.Web.Models
+@inject NavigationManager _navigationManager
+<link href="css/site.css" rel="stylesheet" />
+<PageTitle>MathQuiz</PageTitle>
+@using System
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Page Title</title>
+@* <style>
+    html, body {
+        width: 100vw;
+        height: 100vw; /* 16:9 aspect ratio */
+        max-width: 1000vh; /* Limit height to maintain aspect ratio */
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: left;
+        align-items: left;
+        text-align: left;
+    }
+
+    .content {
+        max-width: 100%; /* Adjust as needed */
+        font-size: 2vw; /* Adjust font size relative to viewport width */
+    }
+</style> *@
+
+
+@*   
+    Maintaining the aspect ratio of the entire webpage as the screen size changes
+    One approach is to use the vw (viewport width) and vh (viewport height) units to set the dimensions of elements as a percentage of the viewport size. By carefully designing your layout using these units, you can ensure that the webpage maintains its aspect ratio as the screen size changes.
+
+    In this example:
+
+The html and body elements are set to 100vw width and a height calculated to maintain a 16:9 aspect ratio. The max-width property ensures that the height doesn't exceed a certain limit to maintain the aspect ratio.
+Inside a .container, you can place your webpage content.
+Adjustments can be made to the .content class to control the layout and font sizes based on the viewport size.
+This approach ensures that the webpage maintains its aspect ratio as the screen size changes, preventing distortion of elements. Adjust the aspect ratio and styles according to your specific design requirements.
+
+Here's a basic example:
+html, body {
+    width: 100vw;
+    height: 56.25vw; /* 16:9 aspect ratio */
+    max-width: 177.78vh; /* Limit height to maintain aspect ratio */
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.content {
+    max-width: 90%; /* Adjust as needed */
+    font-size: 2vw; /* Adjust font size relative to viewport width */
+}
+
+Maintaining aspect ratio becomes particularly challenging when dealing with the different aspect ratios of landscape (wider screens) and portrait (taller screens) orientations, especially when designing for both desktop and mobile devices.
+
+To address this challenge, you might need to use media queries to adjust styles based on the orientation of the device. For example:
+
+    /* For landscape orientation */
+@media screen and (orientation: landscape) {
+    /* Adjust styles here */
+}
+
+/* For portrait orientation */
+@media screen and (orientation: portrait) {
+    /* Adjust styles here */
+}
+
+Within these media queries, you can fine-tune the layout, dimensions, and other styles to better suit the aspect ratio of the device's orientation.
+
+Additionally, responsive design techniques such as using percentage-based widths, flexible grids (like CSS Grid or Flexbox), and fluid typography can help adapt the layout and content to various screen sizes and aspect ratios more effectively.
+
+By combining these approaches, you can create a more robust and adaptable layout that maintains usability and visual appeal across different devices and orientations.
+
+ *@
+
+
+
+
+
+@if (Question.InputPosition <= 0 || Question.InputPosition > 3)
+{
+    Question.InputPosition = 3;
+}
+        @* <div class=""> *@
+@switch (Question.InputPosition)
+
+
+{
+            case 1:
+
+
+            <div class="row">
+                <div class="col-10 p-1 text-dark d-flex justify-content-end" style="height: 50px; font-size: 18px; ">
+                    <a style="color: @resultColor;">@resultMessage</a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-10 p-1 text-dark d-flex justify-content-end" style="height: 50px;  "> @Question.Operand1</div>
+            </div>
+
+            <div class="row">
+                <div class="col-10 p-1 text-dark d-flex justify-content-end" style="height: 50px;  ">    @Question.OperatorAsSymbol @Question.Operand2 </div>
+            </div>
+
+
+          
+            <div class="row">
+                @*InputBox userInput//////////// *@
+                <div class="col-2 p-1 text-dark d-flex justify-content-center align-items-right" style="background-color: #FFF559; ">
+                    <input class="centre flex-grow-1 input-box" type="text" style="flex: 1  solid #FFF559; background-color: #FFA559; text-align: right; " @bind-value="userInput" @bind-value:event="oninput" @onkeydown="HandleKeydown" @ref="inputElement" />
+                </div> @* //////////// InputBox userInput*@
+            
+                @switch (Question.Operator)
+                {
+                    case "Add":
+                        <div class="col-1 p-1 bg-light text-dark d-flex justify-content-center align-items-center" style="flex: 1; ">
+                            <i class="fa-solid fa-add"></i>
+                        </div>
+                        break;
+                    case "Subtract":
+                        <div class="col-1 p-1 bg-light text-dark d-flex justify-content-center align-items-center" style="flex: 1; ">
+                            <i class="fa-solid fa-minus"></i>
+                        </div>
+                        break;
+                    case "Multiply":
+                        <div class="col-1 p-1 bg-light text-dark d-flex justify-content-center align-items-center" style="flex: 1; ">
+                            <i class="fa-solid fa-times"></i>
+                        </div>
+                        break;
+                    case "Divide":
+                        <div class="col-1 p-1 bg-light text-dark d-flex justify-content-center align-items-center" style="flex: 1; ">
+                            <i class="fa-solid fa-divide"></i>
+                        </div>
+                        break;
+                    default:
+                        <div class="col-1 p-1 bg-light text-dark d-flex justify-content-center align-items-center" style="flex: 1; ">
+                            <strong>@Question.OperatorAsSymbol</strong>
+                        </div>
+                        break;
+                }
+
+                @*Operand2 //////////// *@
+                <div class="col-2 p-1 text-dark d-flex justify-content-center align-items-center" style="background-color: #FFF559; ">
+                    <strong>@Question.Operand2</strong>
+                </div> @* //////////// Operand2*@
+               
+
+                <div class="col-1 p-1 text-dark d-flex justify-content-center align-items-center" style="flex: 1; ">
+                    <strong><i class="fa-solid fa-equals"></i></strong>
+                </div>
+
+                @*Operand1 //////////// *@
+                <div class="col-2 p-1 text-dark d-flex justify-content-center align-items-center" style="background-color: #FFF559; ">
+                    <strong>@Question.Operand1</strong>
+                </div>@* //////////// Operand1*@
+
+
+
+                <div class="col-2 d-flex justify-content-center align-items-center" style="">@Question.Answer</div>
+            </div>
+        @* </div> *@
+
+
+
+                break;
+    case 2:
+
+        @* <div class="flex-container"> *@
+
+            <div class="row">
+                <div class="col-10 p-1 text-dark text-center" style="height: 50px;  font-size: 18px;">
+                    <a style="color: @resultColor;">@resultMessage</a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-10 p-1 text-dark d-flex justify-content-end" style="height: 50px;  ;"> @Question.Operand1</div>
+            </div>
+            <div class="row">
+                <div class="col-10 p-1 text-dark d-flex justify-content-end" style="height: 50px;  ;">    @Question.OperatorAsSymbol @Question.Operand2 </div>
+            </div>
+
+
+
+            <div class="row">
+                @*Operand1 //////////// *@
+                <div class="col-2 p-1 text-dark d-flex justify-content-center align-items-center" style="background-color: #FFF559; ">
+                    <strong>@Question.Operand1</strong>
+                </div>@* //////////// Operand1*@
+
+                @switch (Question.Operator)
+                {
+                    case "Add":
+                        <div class="col-1 p-1 bg-light text-dark d-flex justify-content-center align-items-center" style="flex: 1; ">
+                            <i class="fa-solid fa-add"></i>
+                        </div>
+                        break;
+                    case "Subtract":
+                        <div class="col-1 p-1 bg-light text-dark d-flex justify-content-center align-items-center" style="flex: 1; ">
+                            <i class="fa-solid fa-minus"></i>
+                        </div>
+                        break;
+                    case "Multiply":
+                        <div class="col-1 p-1 bg-light text-dark d-flex justify-content-center align-items-center" style="flex: 1; ">
+                            <i class="fa-solid fa-times"></i>
+                        </div>
+                        break;
+                    case "Divide":
+                        <div class="col-1 p-1 bg-light text-dark d-flex justify-content-center align-items-center" style="flex: 1; ">
+                            <i class="fa-solid fa-divide"></i>
+                        </div>
+                        break;
+                    default:
+                        <div class="col-1 p-1 bg-light text-dark d-flex justify-content-center align-items-center" style="flex: 1; ">
+                            <strong>@Question.OperatorAsSymbol</strong>
+                        </div>
+                        break;
+                }
+
+                @*InputBox userInput//////////// *@
+                <div class="col-2 p-1 text-dark d-flex justify-content-center align-items-right" style="background-color: #FFF559; ">
+                    <input class="centre flex-grow-1 input-box" type="text" style="flex: 1  solid #FFF559; background-color: #FFA559; text-align: right; " @bind-value="userInput" @bind-value:event="oninput" @onkeydown="HandleKeydown" @ref="inputElement" />
+                </div> @* //////////// InputBox userInput*@
+
+
+
+
+                <div class="col-1 p-1 text-dark d-flex justify-content-center align-items-center" style="flex: 1; ">
+                    <strong><i class="fa-solid fa-equals"></i></strong>
+                </div>
+
+                @*Operand2 //////////// *@
+                <div class="col-2 p-1 text-dark d-flex justify-content-center align-items-center" style="background-color: #FFF559; ">
+                    <strong>@Question.Operand2</strong>
+                </div> @* //////////// Operand2*@
+
+
+                <div class="col-2 d-flex justify-content-center align-items-center" style="">@Question.Answer</div>
+            </div>
+        @* </div> *@
+        break;
+
+    case 3:
+
+        <div class="flex-container">
+
+            <div class="row">
+                <div class="col-10 p-1 text-dark text-center" style="height: 50px;  font-size: 18px;">
+                    <a style="color: @resultColor;">@resultMessage</a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-10 p-1 text-dark d-flex justify-content-end" style="height: 50px;  "> @Question.Operand1</div>
+            </div>
+            <div class="row">
+                <div class="col-10 p-1 text-dark d-flex justify-content-end" style="height: 50px;  ">    @Question.OperatorAsSymbol @Question.Operand2 </div>
+            </div>
+
+
+
+            @*Operand1 //////////// *@
+            <div class="row">
+                <div class="col-1 p-1 text-dark d-flex justify-content-center align-items-center" style="background-color: #FFF559; flex: 0.4;">
+                    <strong>@Question.Operand1</strong>
+                </div>@* //////////// Operand1*@
+
+
+                @switch (Question.Operator)
+                {
+                    case "Add":
+                        <div class="col-1 p-1 bg-light text-dark d-flex justify-content-center align-items-center" style="flex: 0.2 ">
+                            <i class="fa-solid fa-add"></i>
+                        </div>
+                        break;
+                    case "Subtract":
+                        <div class="col-1 p-1 bg-light text-dark d-flex justify-content-center align-items-center" style="flex: 0.2 ">
+                            <i class="fa-solid fa-minus"></i>
+                        </div>
+                        break;
+                    case "Multiply":
+                        <div class="col-1 p-1 bg-light text-dark d-flex justify-content-center align-items-center" style="flex: 0.2 ">
+                            <i class="fa-solid fa-times"></i>
+                        </div>
+                        break;
+                    case "Divide":
+                        <div class="col-1 p-1 bg-light text-dark d-flex justify-content-center align-items-center" style="flex: 0.2 ">
+                            <i class="fa-solid fa-divide"></i>
+                        </div>
+                        break;
+                    default:
+                        <div class="col-1 p-1 bg-light text-dark d-flex justify-content-center align-items-center" style="flex: 0.2 ">
+                            <strong>@Question.OperatorAsSymbol</strong>
+                        </div>
+                        break;
+                }
+
+
+                         @*Operand2 //////////// *@   
+                <div class="col-2 p-1 text-dark d-flex justify-content-center align-items-center" style="background-color: #FFF559; flex: 0.4;">   
+                        <strong>@Question.Operand2</strong>   
+                </div> @* //////////// Operand2*@   
+            
+                <div class="col-1 p-1 text-dark d-flex justify-content-center align-items-center" style="flex: 0.2;">   
+                        <strong><i class="fa-solid fa-equals"></i></strong>   
+                </div>   
+            
+                         @*InputBox userInput //////////// *@    
+                <div class="col-2 p-1 text-dark d-flex justify-content-center align-items-right" style="background-color: #FFF559; flex: 0.4;">
+                    <input class="centre flex-grow-1 input-box" type="text" style="  solid #FFF559; background-color: #FFA559; text-align: right; flex:1;" @bind-value="userInput" @bind-value:event="oninput" @onkeydown="HandleKeydown" @ref="inputElement" />
+                </div> @* //////////// InputBo userInputx*@    
+            
+                <div class="col-2 d-flex justify-content-center align-items-center" style="">@Question.Answer</div>
+            </div>
+
+            <div class="row">
+                <div class="col-10 p-1 text-dark d-flex justify-content-end" style="height: 50px;  ">
+                    @if (Question.Operand1 != 0)
+                    {
+                        <div class="box1" style="width: @((Question.Operand1 / (Question.Operand1 + Question.Operand2 + 0.01)) * 540)px; font-size: 28px;">
+                            @Question.Operand1
+                        </div>
+                    }
+                    @if (Question.Operand2 != 0)
+                    {
+                        <div class="box2" style="width: @((Question.Operand2 / (Question.Operand1 + Question.Operand2 + 0.01)) * 540)px; font-size: 28px;">
+                            @Question.Operand2
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-10 p-1 text-dark d-flex justify-content-start align-item-start" style="height: 50px;  ">
+                    <svg width="400" height="400">
+                        <!-- Circle for the main number -->
+                        <circle cx="70" cy="200" r="30" fill="lightblue" />
+
+                        <!-- Text for the main number -->
+                        <text x="70" y="208" font-size="16" text-anchor="middle">@Question.Answer</text>
+
+                        <!-- Circle for the first addend (upper-right) -->
+                        <circle cx="140" cy="150" r="18" fill="lightgreen" />
+
+                        <!-- Text for the first addend -->
+                        <text x="140" y="157" font-size="16" text-anchor="middle">@Question.Operand1</text>
+
+                        <!-- Circle for the second addend (lower-right) -->
+                        <circle cx="140" cy="250" r="18" fill="lightgreen" />
+
+                        <!-- Text for the second addend -->
+                        <text x="140" y="257" font-size="16" text-anchor="middle">@Question.Operand2</text>
+
+                        <!-- Line connecting main number to first addend -->
+                        <line x1="96" y1="182" x2="125" y2="159" stroke="black" stroke-width="2" />
+
+                        <!-- Line connecting main number to second addend -->
+                        <line x1="96" y1="218" x2="125" y2="239" stroke="black" stroke-width="2" />
+                    </svg>
+                </div>
+            </div>
+
+        </div>
+break;
+
+
+}
+
+
+
+<style>
+    .model {
+        display: flex;
+        margin-bottom: 10px;
+    }
+
+    .box1 {
+        border: 1px solid black;
+        margin-top: 20px;
+        margin-right: 0px;
+        display: flex;
+        /*align-items: center;*/
+        justify-content: center; 
+        height: 50px;
+        /* Adjust box height as needed */
+        background-color: beige; /* Set background color to beige */
+    }
+
+    .box2 {
+        border: 1px solid black;
+        margin-top: 20px;
+        margin-right: 0px;
+        display: flex;
+        /* align-items: center; */
+        justify-content: center;
+        height: 50px;
+        /* Adjust box height as needed */
+        background-color:bisque; /* Set background color to beige */
+    }
+</style>
+
+
+
+
+
+@code {
+    [Parameter]
+    public int AnswerBond { get; set; }
+
+    private Random random = new Random();
+    private int addend1;
+    private int addend2;
+
+    protected override void OnInitialized()
+    {
+        CalculateAddends();
+    }
+
+    private void CalculateAddends()
+    {
+
+        addend1 = random.Next(0, 20 + 1);
+        addend2 = random.Next(0, 20 + 1);
+        AnswerBond = addend1 + addend2;
+    }
+
+
+
+
+
+    [Parameter]
+    public BaseQuestion Question { get; set; }
+    [Parameter]
+    public EventCallback AnsweredCorrectly { get; set; }
+    [Parameter]
+    public int Answer { get; set; }
+    private ElementReference inputElement;
+
+    // protected override void OnInitialized()
+    // {
+    //     base.OnInitialized();
+
+    //     // Initialize the Question property here
+    //     Question = new BaseQuestion();
+    //     //Question.Operator = "Add";
+    // }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        // if (firstRender)
+        // {
+         inputElement.FocusAsync();
+        // }
+    }
+    // The key to binding is:
+    // 1. @bind-value="userInput"
+    // This means bind the value of the property called value
+
+    // 2. @bind-value:event="oninput"
+    // This means bind the
+
+    //@bind-{HTMLElementPropertyName}="{variable}"
+    private string? userInput = "";
+    private bool showResult;
+    private string resultMessage = "";
+    private string resultColor = "White";
+
+    [Inject]
+    private IQuestionGeneratorService QuestionGenerator { get; set; }
+
+    private async Task HandleKeydown(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            int parsedInput;
+
+            bool isNumeric = int.TryParse(userInput, out parsedInput);
+            if (isNumeric && parsedInput == Question.Answer)
+            {
+                resultMessage = "Good Job!";
+                resultColor = "green";
+                await Task.Delay(500);
+                userInput = "";
+                resultMessage = "";
+                resultColor = "white";
+                await AnsweredCorrectly.InvokeAsync();
+
+            }
+            else
+            {
+                resultMessage = "Please Try Again.";
+                resultColor = "red";
+            }
+            showResult = true;
+            StateHasChanged();
+
+        }
+    }
+}
+

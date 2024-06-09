@@ -1,0 +1,230 @@
+﻿@page "/addrangemenu"
+
+@inherits LayoutComponentBase
+@rendermode InteractiveServer
+@inject IJSRuntime JSRuntime
+@using Alis4Ops2024.Core
+@using Alis4Ops2024.Models
+@using Alis4Ops2024.Components.Layout
+<link href="/fontawesome/css/site.css" rel="stylesheet" />
+<link href="/fontawesome/css/rangemenu.css" rel="stylesheet" />
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Page Title</title>
+@* <style>
+    html, body {
+        width: 100vw;
+        height: 100vw; /* 16:9 aspect ratio */
+        max-width: 1000vh; /* Limit height to maintain aspect ratio */
+        max-height: 1000vh; /* Limit height to maintain aspect ratio */
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: left;
+        align-items: start;
+        text-align: left;
+    }
+
+    .content {
+        max-width: 100%; /* Adjust as needed */
+        font-size: 2vw; /* Adjust font size relative to viewport width */
+    }
+</style> *@
+
+<div class="row">
+    <div class="dropdown">
+@*         <div class="col-3 flex-container;" style="align-items:flex-end; align-content:center;">
+            <!-- Adjusted to take half width and center align -->
+            <h6>Select Range</h6>
+        </div> *@
+        <div>
+            <button class="dropbtn" @onclick="ToggleDropdown"> Add </button>
+            <div class="dropdown-content" style="@dropdownStyle; font-size: 16px;">
+                @foreach (var item in MenuItems)
+                {
+                    <a @onclick="(() => { HandleClickedItem(item); ToggleDropdown(); })">@item.Text</a> <!-- Toggle dropdown when item clicked -->
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row" style="font-size: 16px;">
+    ClickedItem: @SelectedMenuItem?.Text LowerRange:@LowerRange UpperRange:@UpperRange Operator:@Operator
+</div>
+
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        SelectedMenuItem = MenuItems.FirstOrDefault(item => item.Text == "0-5");
+    }
+
+    public List<MenuItem> MenuItems { get; set; } = new List<MenuItem>
+    {
+        new MenuItem { Text = "0-5"},
+        new MenuItem { Text = "0-10"},
+        new MenuItem { Text = "Add-to-10"},
+        new MenuItem { Text = "0-20"},
+        new MenuItem { Text = "Add-to-20"},
+        new MenuItem { Text = "10-50"},
+        new MenuItem { Text = "10-100"},
+        new MenuItem { Text = "100-1,000"},
+        new MenuItem { Text = "Add-Missing"}
+    };
+
+   private string dropdownStyle => isDropdownOpen ? "display: block;" : "display: none;";
+
+    private bool isDropdownOpen = false;
+    private void ToggleDropdown()
+    {
+        isDropdownOpen = !isDropdownOpen;
+    }
+
+    [Parameter]
+    public EventCallback<string> OperatorChanged { get; set; }
+    [Parameter]
+    public EventCallback<int> UpperRangeChanged { get; set; }
+    [Parameter]
+    public EventCallback<int> LowerRangeChanged { get; set; }
+    [Parameter]
+    public EventCallback<string> SelectedItemChanged { get; set; }
+
+
+    private string ClickedMenuItem = "";
+
+    private int _upperRange = 5;
+    [Parameter]
+    public int UpperRange
+    {
+        get { return _upperRange; }
+        set
+        {
+            _upperRange = value;
+        }
+    }
+
+    private int _lowerRange = 0;
+    [Parameter]
+    public int LowerRange
+    {
+        get { return _lowerRange; }
+        set
+        {
+            _lowerRange = value;
+        }
+    }
+
+    private string _operator = "Add";
+    [Parameter]
+    public string Operator
+    {
+        get { return _operator; }
+        set
+        {
+            _operator = value;
+        }
+    }
+
+    private string _selectedItem = "0-5";
+    [Parameter]
+    public string SelectedItem
+    {
+        get { return _selectedItem; }
+        set
+        {
+            _selectedItem = value;
+        }
+    }
+
+
+    public MenuItem SelectedMenuItem { get; set; } = null;
+
+    void HandleClickedItem(MenuItem clickedItem)
+    {
+        SelectedMenuItem = clickedItem;
+
+        Operator = "Add";
+        SelectedItem = SelectedMenuItem.Text;
+        switch (SelectedItem)
+        {
+            case "0-5":
+                LowerRange = 0;
+                UpperRange = 5;
+                break;
+            case "0-10":
+                LowerRange = 0;
+                UpperRange = 10;
+                break;
+            case "Add-to-10":
+                LowerRange = 0;
+                UpperRange = 10;
+                break;
+            case "0-20":
+                LowerRange = 0;
+                UpperRange = 20;
+                break;
+            case "Add-to-20":
+                LowerRange = 0;
+                UpperRange = 20;
+                break;
+            case "10-50":
+                LowerRange = 10;
+                UpperRange = 50;
+                break;
+            case "10-100":
+                LowerRange = 10;
+                UpperRange = 100;
+                break;
+            case "100-1,000":
+                LowerRange = 100;
+                UpperRange = 1000;
+                break;
+            case "Add-Missing":
+                LowerRange = 0;
+                UpperRange = 10;
+                break;
+        }
+
+        // Call the asynchronous method here
+        _ = HandleParametersChangedAsync();
+
+    }   
+
+
+    string GetItemClass(MenuItem item)
+    {
+        return item == SelectedMenuItem ? "selected" : "";
+    }
+
+    public class MenuItem
+    {
+        public string Text { get; set; }
+    }
+
+
+
+    [Parameter]
+    public EventCallback ParametersChanged { get; set; }
+
+    async Task HandleParametersChangedAsync()
+    {
+        await UpperRangeChanged.InvokeAsync(UpperRange);
+        await LowerRangeChanged.InvokeAsync(LowerRange);
+        await OperatorChanged.InvokeAsync(Operator);
+        await SelectedItemChanged.InvokeAsync(SelectedItem);
+        await ParametersChanged.InvokeAsync();
+    }
+
+
+}
+

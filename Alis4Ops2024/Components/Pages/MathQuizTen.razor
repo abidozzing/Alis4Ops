@@ -1,0 +1,81 @@
+﻿@page "/mathquizten/{Operator}"
+@using Alis4Ops2024.Core
+@rendermode InteractiveServer
+@inject NavigationManager _navigationManager
+
+
+
+<h5>Math Quiz - Solve the following:</h5>
+<div> 
+    @for (int i = 1; i < 11; i++)
+
+    {
+        <p>  <MathQuiz QuestionNumber=@i></MathQuiz> </p>
+    }
+</div>
+
+<p>
+    <div>
+<button class="btn btn-primary" @onclick="ReloadPage" @onclick:preventDefault>New Quiz</button>
+<button class="btn btn-primary" @onclick="NavigateToAdd" @onclick:preventDefault>Add</button>
+<button class="btn btn-primary" @onclick="NavigateToSubtract" @onclick:preventDefault>Subtract</button>
+<button class="btn btn-primary" @onclick="NavigateToMultiply" @onclick:preventDefault>Multiply</button>
+<button class="btn btn-primary" @onclick="NavigateToDivide" @onclick:preventDefault>Divide</button>
+    </div>
+</p>
+ 
+
+@code {
+    [Parameter]
+    public string Operator { get; set; } = "Add";
+
+    [Inject]
+    private IQuestionGeneratorService QuestionGenerator { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (String.IsNullOrEmpty(QuestionGenerator.Operator))
+        {
+            QuestionGenerator.Operator = "Add";
+            QuestionGenerator.Lower = 1;
+            QuestionGenerator.Upper = 11;
+
+        }
+
+    }
+
+    public void ReloadPage()
+    {
+        _navigationManager.NavigateTo($"MathQuizTen/{Operator}", forceLoad: true);
+    }
+
+    public void NavigateToAdd()
+    {
+       
+        QuestionGenerator.Operator = "Add";
+        QuestionGenerator.Lower = 1;
+        QuestionGenerator.Upper = 11;
+        ReloadPage();
+    }
+    public void NavigateToSubtract()
+    {
+        QuestionGenerator.Operator = "Subtract";
+        QuestionGenerator.Lower = 1;
+        QuestionGenerator.Upper = 11;
+        ReloadPage();
+    }
+    public void NavigateToMultiply()
+    {
+        QuestionGenerator.Operator = "Multiply";
+        QuestionGenerator.Lower = 1;
+        QuestionGenerator.Upper = 11;
+        ReloadPage();
+    }
+    public void NavigateToDivide()
+    {
+        QuestionGenerator.Operator = "Divide";
+        QuestionGenerator.Lower = 1;
+        QuestionGenerator.Upper = 11;
+        ReloadPage();
+    }
+}

@@ -1,0 +1,57 @@
+﻿@page "/test1"
+@using Alis4Ops2024.Core
+@using Alis4Ops2024.Models
+@using Alis4Ops2024.Components.Layout
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
+@rendermode InteractiveServer
+@inject NavigationManager _navigationManager
+<h3>Test1</h3>
+
+@using System
+
+<h3>Rectangular Boxes Problem</h3>
+
+<div class="problem">
+    <!-- Boxes will be dynamically generated here -->
+    <div class="box" style="@box1Style">@num1</div>
+    <div class="box" style="@box2Style">@num2</div>
+</div>
+<a><h4>@num1 + @num2 = ?</h4></a>
+<button @onclick="GenerateProblem">Generate Problem</button>
+
+@code {
+    private int num1;
+    private int num2;
+    private string box1Style;
+    private string box2Style;
+
+    private void GenerateProblem()
+    {
+        // Generate two random numbers between 1 and 10
+        Random rand = new Random();
+        num1 = rand.Next(1, 11);
+        num2 = rand.Next(1, 11);
+
+        // Update the styles of the boxes based on the numbers
+        box1Style = $"width: {num1 * 25}px";
+        box2Style = $"width: {num2 * 25}px";
+    }
+}
+
+<style>
+    .problem {
+        display: flex;
+        margin-bottom: 10px;
+    }
+
+    .box {
+        border: 1px solid black;
+        margin-right: 0px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 35px;
+        /* Adjust box height as needed */
+    }
+</style>
