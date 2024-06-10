@@ -33,11 +33,11 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-UH2Tzz7mlZbxf3cKO+kHw3yQbANQC8R4odAlPWKR+Pc=",
+      "hash": "sha256-tuOnbrGdCdIMiHS2RRD7sva5hDWWSMR1vXkfS+YT09E=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-5Y0qTqjV6gE8EE26gUo5OcwPX8zSUfVhnr0BAIvaVIo=",
+      "hash": "sha256-lkS\/ABeiKL4tDjPOIPV2qdePvmxPkH3KpqrgZVW0ULY=",
       "url": "_framework\/Alis4Ops2024.Web.wasm"
     },
     {
@@ -165,7 +165,7 @@
       "url": "_framework\/System.Text.RegularExpressions.wasm"
     },
     {
-      "hash": "sha256-0DXTpajw5HUn+Yxv+EHCzq2AdpYtuivcgW+bZ2tPEKI=",
+      "hash": "sha256-5B9LYkVNQtvR6WO6Wp21bIM1Kj1yEgLJSfm0ecxaq\/c=",
       "url": "Alis4Ops2024.Web.styles.css"
     },
     {
@@ -8721,11 +8721,11 @@
       "url": "css\/fontawesome\/webfonts\/fa-v4compatibility.woff2"
     },
     {
-      "hash": "sha256-VSt+imdkqi\/86BEz8T3aIL31rB5Oj5GLkM5Hha8U00s=",
+      "hash": "sha256-04gQtwk1OW38NOuwq3vJrckeoWF85Ytc8kI\/9HmSkIw=",
       "url": "css\/rangemenu.css"
     },
     {
-      "hash": "sha256-j\/yTMkrVRUqkRMDSXCDoeWfeMhlsNyMrivk+ECFj9So=",
+      "hash": "sha256-PZz1B5BynhI+gsmFyEztf92rTbLRdrEofd2ysSU7Auw=",
       "url": "css\/site.css"
     },
     {
@@ -8753,5 +8753,5 @@
       "url": "sample-data\/weather.json"
     }
   ],
-  "version": "f4l55+5l"
+  "version": "RttSgVMB"
 };
