@@ -9,7 +9,7 @@
     background-color: #4CAF50;
     color: white;
     padding: 10px 24px; /* Adjusted padding to fit aspect ratio */
-    font-size: 28px;
+    font-size: 48px;
     border: none;
     cursor: pointer;
     border-radius: 8px; /* Adjust the border radius to make it rounded */
@@ -26,7 +26,6 @@
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
     border-radius: 10px; /* Adjust the border radius for dropdown content */
-    font-size: 20px;
 }
 
     .dropdown-content a {
@@ -35,7 +34,7 @@
         text-decoration: none;
         display: block;
         cursor: pointer;
-        font-size: 16px;
+        font-size: 28px;
     }
 
         .dropdown-content a:hover {

@@ -38,28 +38,9 @@
     /*left: 250px;*/
 }
 
-/* Media queries for smaller screens */
-@media screen and (max-width: 896) {
+@media screen and (max-width: 360px) {
     .container {
-        font-size: 28px; /* Adjust as needed */
-        /*padding-top: 66.6667%;*/ /* 100% / 1.5 = 66.6667 */
-        /*position: relative;*/
-        /*overflow: hidden;*/
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .container {
-        font-size: 24px; /* Adjust as needed */
-        /*padding-top: 66.6667%;*/ /* 100% / 1.5 = 66.6667 */
-        /*position: relative;*/
-        /*overflow: hidden;*/
-    }
-}
-
-@media screen and (max-width: 576px) {
-    .container {
-        font-size: 20px; /* Adjust as needed */
+        font-size: 12px; /* Adjust as needed */
         /*padding-top: 66.6667%;*/ /* 100% / 1.5 = 66.6667 */
         /*position: relative;*/
         /*overflow: hidden;*/
@@ -75,9 +56,19 @@
     }
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (max-width: 768px) {
     .container {
-        font-size: 12px; /* Adjust as needed */
+        font-size: 24px; /* Adjust as needed */
+        /*padding-top: 66.6667%;*/ /* 100% / 1.5 = 66.6667 */
+        /*position: relative;*/
+        /*overflow: hidden;*/
+    }
+}
+
+/* Media queries for smaller screens */
+@media screen and (max-width: 896) {
+    .container {
+        font-size: 28px; /* Adjust as needed */
         /*padding-top: 66.6667%;*/ /* 100% / 1.5 = 66.6667 */
         /*position: relative;*/
         /*overflow: hidden;*/
