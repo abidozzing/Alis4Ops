@@ -9,5 +9,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddSingleton<IQuestionGeneratorService, QuestionGeneratorService>();
-
+builder.Services.AddSingleton<IAddQuestionGeneratorService, AddQuestionGeneratorService>();
+builder.Services.AddSingleton<ISubtractQuestionGeneratorService, SubtractQuestionGeneratorService>();
+builder.Services.AddSingleton<IMultiplyQuestionGeneratorService, MultiplyQuestionGeneratorService>();
+builder.Services.AddSingleton<IDivideQuestionGeneratorService, DivideQuestionGeneratorService>();
 await builder.Build().RunAsync();

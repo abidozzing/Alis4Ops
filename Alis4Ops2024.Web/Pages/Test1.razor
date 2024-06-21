@@ -3,11 +3,13 @@
 @using Alis4Ops2024.Web.Models
 @using Alis4Ops2024.Web.Layout
 @using Microsoft.JSInterop
-@inject IJSRuntime JSRuntime
 @inject NavigationManager _navigationManager
+@RenderMode.InteractiveServer
+@using System
+
 <h3>Test1</h3>
 
-@using System
+
 
 <h3>Rectangular Boxes Problem</h3>
 
@@ -20,6 +22,7 @@
 <button @onclick="GenerateProblem">Generate Problem</button>
 
 @code {
+
     private int num1;
     private int num2;
     private string box1Style;
@@ -36,6 +39,9 @@
         box1Style = $"width: {num1 * 25}px";
         box2Style = $"width: {num2 * 25}px";
     }
+
+
+
 }
 
 <style>
@@ -54,3 +60,122 @@
         /* Adjust box height as needed */
     }
 </style>
+<input class="centre flex-grow-1 input-box" type="text" style="flex: 1  solid #FFF559; background-color: #FFA559; text-align: right;"/>
+@page "/numeric-input"
+
+<h3>Numeric Input</h3>
+
+<input type="text" id="numericInput" @bind="inputValue" />
+
+<div style="display: flex;">
+    <button @onclick="() => AppendNumber(1)">1</button>
+    <button @onclick="() => AppendNumber(2)">2</button>
+    <button @onclick="() => AppendNumber(3)">3</button>
+</div>
+<div style="display: flex;">
+    <button @onclick="() => AppendNumber(4)">4</button>
+    <button @onclick="() => AppendNumber(5)">5</button>
+    <button @onclick="() => AppendNumber(6)">6</button>
+</div>
+<div style="display: flex;">
+    <button @onclick="() => AppendNumber(7)">7</button>
+    <button @onclick="() => AppendNumber(8)">8</button>
+    <button @onclick="() => AppendNumber(9)">9</button>
+</div>
+<div style="display: flex;">
+    <button @onclick="() => AppendNumber(0)">0</button>
+    <button @onclick="ClearInput">Clear</button>
+    <button @onclick="Backspace">Backspace</button>
+    <!--// JavaScriptInterop.js Custom delete button to delete characters of an inputBox-->
+    <button @onclick="DeleteCharacter">Delete</button>
+</div>
+<div style="display: flex;">
+    <button @onclick="Submit">Enter</button>
+</div>
+
+
+<div class="container1">
+    <div class="item" style="text-align: center;">Col 1</div>
+    <div class="item" style="text-align: center;">Col 2</div>
+    <div class="item" style="text-align: center;">Col 3</div>
+    <div class="item" style="text-align: center;">Col 4</div>
+    <div class="item" style="text-align: center;">Col 5</div>
+    <div class="item" style="text-align: center;">Col 6</div>
+    <div class="item input-wrapper" >
+        @* <label for="inputField">Input Field:</label> *@
+        <input type="text" id="inputField" class="input-box">
+    </div>
+    <div class="item" style="text-align: center;">Col 9</div>
+    <div class="item" style="text-align: center;">Col 10</div>
+</div>
+
+
+<style>
+    .container1 {
+        display: flex;
+        /* justify-content: space-between; /* Distribute items evenly along the main axis */ */
+    }
+
+    .item {
+        flex: 1; /* Each item takes equal space */
+        /* padding: 10px; */
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+    .input-wrapper {
+        flex: 2; /* Span 2 times the width of other items */
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .input-box {
+        width: 100%;
+        /* padding: 4px; */
+        /* box-sizing: border-box; */
+    }
+
+
+</style>
+
+
+@code {
+    @inject IJSRuntime JSRuntime
+    private string inputValue = "";
+
+    private void AppendNumber(int number)
+    {
+        inputValue += number.ToString();
+    }
+
+    private void ClearInput()
+    {
+        inputValue = "";
+    }
+
+     // Create a function in JavaScriptInterop.js to to Backspace delete similar to 
+     // Custom delete button with DeleteCharacter method to delete characters of an inputBox
+    private void Backspace()
+    {
+        if (!string.IsNullOrEmpty(inputValue))
+        {
+            inputValue = inputValue.Substring(0, inputValue.Length - 1);
+        }
+    }
+    <!--// JavaScriptInterop.js Custom delete button to delete characters of an inputBox-->
+    private async Task DeleteCharacter()
+    {
+        // Invoke JavaScript function to delete the character
+        await JSRuntime.InvokeVoidAsync("blazorFunctions.deleteCharacter", "numericInput");
+    }
+
+
+
+    private void Submit()
+    {
+        // Handle submission
+    }
+}
+

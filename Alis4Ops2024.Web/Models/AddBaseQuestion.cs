@@ -10,7 +10,7 @@
 // If InputPosition = 3, InputBox is at Result
 
 {
-    public class BaseQuestion
+    public class AddBaseQuestion
     {
         public int Operand1 { get; set; }
         public int Operand2 { get; set; }
@@ -24,7 +24,6 @@
                 switch (Operator)
                 {
                     case "Add":
-                        
                         return '+';
                     case "Subtract":
                         return '-';

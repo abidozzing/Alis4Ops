@@ -26,56 +26,45 @@
         }
 
 /* Define responsive font size */
+/* Default font size */
 .container {
-    font-size: 36px; /* Default font size */
-    display: flex;
-    flex-wrap: wrap;
-    /*justify-content: flex-start;*/
-/*    float: left;
-    position: relative;*/
-    /*padding-top: 66.6667%;*/
-    /*    position: absolute;*/
-    /*left: 250px;*/
+    font-size: 36px; 
+
 }
 
-@media screen and (max-width: 360px) {
+/* Media queries for smaller screens */
+@media screen and (max-width: 1200) {
     .container {
-        font-size: 12px; /* Adjust as needed */
-        /*padding-top: 66.6667%;*/ /* 100% / 1.5 = 66.6667 */
-        /*position: relative;*/
-        /*overflow: hidden;*/
+        font-size: 32px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .container {
+        font-size: 28px;
+    }
+}
+
+@media screen and (max-width: 769px) {
+    .container {
+        font-size: 24px;
     }
 }
 
 @media screen and (max-width: 420px) {
     .container {
-        font-size: 16px; /* Adjust as needed */
-        /*padding-top: 66.6667%;*/ /* 100% / 1.5 = 66.6667 */
-        /*position: relative;*/
-        /*overflow: hidden;*/
+        font-size:20px;
     }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 360px) {
     .container {
-        font-size: 24px; /* Adjust as needed */
-        /*padding-top: 66.6667%;*/ /* 100% / 1.5 = 66.6667 */
-        /*position: relative;*/
-        /*overflow: hidden;*/
+        font-size: 18px;
     }
 }
 
-/* Media queries for smaller screens */
-@media screen and (max-width: 896) {
-    .container {
-        font-size: 28px; /* Adjust as needed */
-        /*padding-top: 66.6667%;*/ /* 100% / 1.5 = 66.6667 */
-        /*position: relative;*/
-        /*overflow: hidden;*/
-    }
-}
 
-/* Set aspect ratio for items */
+
 /* Set aspect ratio for items */
 .aspect-ratio-box {
     padding-top: 0%; /*100% / 1.5 = 66.6667*/
@@ -92,4 +81,8 @@
 /* Set maximum width for input box */
 .input-box {
     max-width: 100%; /* Adjust as needed */
+}
+
+:root {
+    --bs-gutter-x: 0;
 }

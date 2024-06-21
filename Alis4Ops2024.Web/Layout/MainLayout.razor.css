@@ -53,12 +53,11 @@ main {
         flex-direction: row;
     }
 
-    .sidebar {
-        width: 250px;
+        .sidebar {
         height: 100vh;
         position: sticky;
         top: 0;
-        font-size: 24px;
+
     }
 
     .top-row {
@@ -97,3 +96,4 @@ main {
         right: 0.75rem;
         top: 0.5rem;
     }
+

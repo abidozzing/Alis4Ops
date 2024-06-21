@@ -1,12 +1,11 @@
-﻿@page "/mathquiz"
+﻿@page "/addmathquiz"
 @using Alis4Ops2024.Web.Core
 @using Alis4Ops2024.Web.Models
 @inject NavigationManager _navigationManager
 <link href="css/site.css" rel="stylesheet" />
 @using System
 
-
-@* <PageTitle>MathQuiz</PageTitle> *@
+<PageTitle>AddMathQuiz</PageTitle>
 
 <title>Your Page Title</title>
 
@@ -16,9 +15,9 @@
         margin-bottom: 10px;
     }
 
-    .box1 {
+    .box {
         border: 1px solid black;
-        margin-top: 20px;
+        margin-top: 30px;
         margin-right: 0px;
         display: flex;
         /*align-items: center;*/
@@ -45,10 +44,10 @@
 {
     Question.InputPosition = 3;
 }
+
 @switch (Question.InputPosition)
 {
     case 1:
-
         <div class="row  gx-0">
             <!-- Message Good Job! or Please try again. -->
             <div class="col-12 p-1 d-flex text-dark text-center"
@@ -59,19 +58,19 @@
 
         <!-- Operand1 Vertical Add -->
         <div class="row gx-0" style="padding:0px;">
-            <div class=" col-12 p-1 d-flex text-dark" style="height: 30px; justify-content: right; justify-content: right; align-content: end; align-items: flex-end; text-align: right; box-sizing: border-box;">?</div>
+            <div class=" col-12 p-1 d-flex text-dark" style="justify-content: right; justify-content: right; align-content: end; align-items: flex-end; text-align: right; box-sizing: border-box;">?</div>
         </div>
 
         <!-- Operator Symbol and Operand2 Vertical Add -->
         <div class="row gx-0" style="padding:0px;">
-            <div class="col-12 p-1  d-flex text-dark" style="height: 30px; justify-content: right; align-content: end; align-items: center; text-align: right; box-sizing: border-box;">@Question.OperatorAsSymbol @Question.Operand2</div>
+            <div class="col-12 p-1  d-flex text-dark" style="justify-content: right; align-content: end; align-items: center; text-align: right; box-sizing: border-box;">@Question.OperatorAsSymbol @Question.Operand2</div>
         </div>
 
 
         <div class="row gx-0" style="padding:0px;">
             <!-- InputBox userInput -->
             <div class="col-3 d-flex text-dark">
-                <input class="input-box" style="background-color: lightgreen;  color: mediumblue; font-weight: bold; text-align: center; align-content: center; border: 0;" @bind-value="userInput" @bind-value:event="oninput" @onkeydown="HandleKeydown" @ref="inputElement" />
+                <input class="input-box" placeholder="?" style="background-color: lightgreen;  color: mediumblue; font-weight: bold; text-align: center; align-content: center; border: 0;" @bind-value="userInput" @bind-value:event="oninput" @onkeydown="HandleKeydown" @ref="inputElement" />
             </div>
 
             <!-- Switch case for Operator -->
@@ -111,24 +110,29 @@
             </div>
         </div>
 
-
-        <!-- Box1 and Box2 Model-->
-        <div class="row gx-0">
-            <div class="d-flex">
-                @if (Question.Operand1 != 0)
-                {
-                    <div class="box1" style="width: calc((@Question.Operand1 / (@Question.Operand1 + @Question.Operand2 + 0.01)) * 67%); text-align: center; align-items: center;">
-                        ?
-                    </div>
-                }
-                @if (Question.Operand2 != 0)
-                {
-                    <div class="box2" style="width: calc((@Question.Operand2 / (@Question.Operand1 + @Question.Operand2 + 0.01)) * 67%); text-align: center; align-items: center;">
-                        @Question.Operand2
-                    </div>
-                }
-            </div>
+        <!-- Box1, Box2 and Box3 Addition Model-->
+        <div class="row gx-0 d-flex">
+            @if (Question.Operand1 != 0)
+            {
+                <div class="box" style="width: calc((@Question.Answer / (@Question.Operand1 + 0.01)) * 100%); text-align: center; align-items: center;">
+                    ?
+                </div>
+            }
+            @if (Question.Operand2 != 0)
+            {
+                <div class="box" style="width: calc((@Question.Operand2 / (@Question.Operand1 + 0.01)) * 100%); text-align: center; align-items: center;">
+                    @Question.Operand2
+                </div>
+            }
         </div>
+
+        @if ((Question.Operand1) != 0)
+        {
+            <div class="box" style="width: 100%; text-align: center; align-items: center;">
+                @Question.Operand1
+            </div>
+        }
+
         <div style="flex-flow: row nowrap; padding-top: 1rem">
             <div class="col-12 p-1 text-dark  justify-content-start align-item-start">
                 <svg width="150" height="150">
@@ -171,14 +175,14 @@
             </div>
         </div>
 
-        <!-- Operand1 Vertical Add -->
+        <!-- Operand1 Vertical Add Case2 -->
         <div class="row gx-0" style="padding:0px;">
-            <div class=" col-12 p-1 d-flex text-dark" style="height: 30px; justify-content: right; justify-content: right; align-content: end; align-items: flex-end; text-align: right;box-sizing: border-box;">@Question.Operand1</div>
+            <div class=" col-12 p-1 d-flex text-dark" style="justify-content: right; align-content: end;; align-content: end; align-items: flex-end; text-align: right;box-sizing: border-box;">@Question.Operand1</div>
         </div>
 
-        <!-- Operator Symbol and Operand2 Vertical Add -->
+        <!-- Operator Symbol and Operand2 Vertical Add Case2 -->
         <div class="row gx-0" style="padding:0px;">
-            <div class="col-12 p-1  d-flex text-dark" style="height: 30px; justify-content: right; align-content: end; align-items: center; text-align: right;box-sizing: border-box;">@Question.OperatorAsSymbol ?</div>
+            <div class="col-12 p-1  d-flex text-dark" style="justify-content: right; align-content: end; align-items: center; text-align: right;box-sizing: border-box;">@Question.OperatorAsSymbol ?</div>
         </div>
 
         <div class="row gx-0" style="padding:0px;">
@@ -211,7 +215,7 @@
 
             <!-- InputBox userInput -->
             <div class="col-3 d-flex text-dark">
-                <input class="input-box" style="background-color: lightgreen; color:mediumblue; font-weight: bold; text-align: center; align-content: center;  border: 0" @bind-value="userInput" @bind-value:event="oninput" @onkeydown="HandleKeydown" @ref="inputElement" />
+                <input class="input-box" placeholder="?" style="background-color: lightgreen; color:mediumblue; font-weight: bold; text-align: center; align-content: center;  border: 0" @bind-value="userInput" @bind-value:event="oninput" @onkeydown="HandleKeydown" @ref="inputElement" />
             </div>
 
             <div class="col p-1 d-flex justify-content-center align-items-center text-dark" style="text-align: center;">
@@ -224,24 +228,28 @@
             </div>
         </div>
 
-
-        <!-- Box1 and Box2 Model-->
-        <div class="row gx-0">
-            <div class="d-flex">
-                @if (Question.Operand1 != 0)
-                {
-                    <div class="box1" style="width: calc((@Question.Operand1 / (@Question.Operand1 + @Question.Operand2 + 0.01)) * 67%); text-align: center; align-items: center;">
-                        @Question.Operand1
-                    </div>
-                }
-                @if (Question.Operand2 != 0)
-                {
-                    <div class="box2" style="width: calc((@Question.Operand2 / (@Question.Operand1 + @Question.Operand2 + 0.01)) * 67%); text-align: center; align-items: center;">
-                        ?
-                    </div>
-                }
-            </div>
+        <!-- Box1, Box2 and Box3 Model-->
+        <div class="row gx-0 d-flex">
+            @if (Question.Operand1 != 0)
+            {
+                <div class="box" style="width: calc((@Question.Operand1 / (@Question.Operand2 + 0.01)) * 100%); text-align: center; align-items: center;">
+                    @Question.Operand1
+                </div>
+            }
+            @if (Question.Operand2 != 0)
+            {
+                <div class="box" style="width: calc(((@Question.Answer) / (@Question.Operand2 + 0.01)) * 100%); text-align: center; align-items: center;">
+                    ?
+                </div>
+            }
         </div>
+        @if ((Question.Operand1 + @Question.Operand2) != 0)
+        {
+            <div class="box" style="width: 100%; text-align: center; align-items: center;">
+                @Question.Operand2
+            </div>
+        }
+
         <div style="flex-flow: row nowrap; padding-top: 1rem">
             <div class="col-12 p-1 text-dark  justify-content-start align-item-start">
                 <svg width="150" height="150">
@@ -274,26 +282,24 @@
         break;
 
     case 3:
-
+        <!-- Result Message - Message Good Job! or Please try again. -->
         <div class="row  gx-0">
-            <!-- Message Good Job! or Please try again. -->
-            <div class="col-12 p-1 d-flex text-dark text-center"
-                 style="--bs-gutter-x: 0; height: 30px; font-size: 24px;box-sizing: border-box;">
+            <div class="col-12 p-1 d-flex text-dark justify-content-center align-items-center" style="height: 30px; box-sizing: border-box;">
                 <div style="color: @resultColor;">@resultMessage</div>
             </div>
         </div>
 
         <!-- Operand1 Vertical Add -->
         <div class="row gx-0" style="padding:0px;">
-            <div class=" col-12 p-1 d-flex text-dark" style="height: 30px; justify-content: right; justify-content: right; align-content: end; align-items: flex-end; text-align: right;box-sizing: border-box;">@Question.Operand1</div>
+            <div class="col-12 p-1 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@Question.Operand1</div>
         </div>
 
         <!-- Operator Symbol and Operand2 Vertical Add -->
         <div class="row gx-0" style="padding:0px;">
-            <div class="col-12 p-1 d-flex text-dark" style="height: 30px; justify-content: right; align-content: end; align-items: center; text-align: right;box-sizing: border-box;">@Question.OperatorAsSymbol @Question.Operand2</div>
+            <div class="col-12 p-1 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@Question.OperatorAsSymbol @Question.Operand2</div>
         </div>
 
-        <div class="row gx-0" style="padding:0px;">
+        <div class="row gx-0" style="padding:0px; box-sizing: border-box;">
             <!-- Operand1 -->
             <div class="col-3 p-1 d-flex justify-content-center align-items-center text-dark" style="background-color: yellow; ">
                 <strong>@Question.Operand1</strong>
@@ -332,28 +338,33 @@
 
             <!-- InputBox userInput -->
             <div class="col-3 d-flex text-dark">
-                <input class="input-box" style="background-color: lightgreen; color:mediumblue; font-weight: bold; text-align: right; border: 0;  border: 2px solid green;" @bind-value="userInput" @bind-value:event="oninput" @onkeydown="HandleKeydown" @ref="inputElement" />
+                <input class="input-box" placeholder="?" style="background-color: lightgreen; color:mediumblue; font-weight: bold; text-align: right; border: 0;  border: 2px solid green;" @bind-value="userInput" @bind-value:event="oninput" @onkeydown="HandleKeydown" @ref="inputElement" />
             </div>
         </div>
 
-
-        <!-- Box1 and Box2 Model-->
-        <div class="row gx-0">
-            <div class="d-flex">
-                @if (Question.Operand1 != 0)
-                {
-                    <div class="box1" style="width: calc((@Question.Operand1 / (@Question.Operand1 + @Question.Operand2 + 0.01)) * 67%); text-align: center; align-items: center;">
-                        @Question.Operand1
-                    </div>
-                }
-                @if (Question.Operand2 != 0)
-                {
-                    <div class="box2" style="width: calc((@Question.Operand2 / (@Question.Operand1 + @Question.Operand2 + 0.01)) * 67%); text-align: center; align-items: center;">
-                        @Question.Operand2
-                    </div>
-                }
-            </div>
+        <!-- Box1, Box2 and Box3 Model-->
+        <div class="row gx-0 d-flex">
+            @if (Question.Operand1 != 0)
+            {
+                <div class="box" style="width: calc((@Question.Operand1 / (@Question.Operand1 + @Question.Operand2 + 0.01)) * 100%); text-align: center; align-items: center;">
+                    @Question.Operand1
+                </div>
+            }
+            @if (Question.Operand2 != 0)
+            {
+                <div class="box" style="width: calc((@Question.Operand2 / (@Question.Operand1 + @Question.Operand2 + 0.01)) * 100%); text-align: center; align-items: center;">
+                    @Question.Operand2
+                </div>
+            }
         </div>
+
+        @if ((Question.Operand1 + @Question.Operand2) != 0)
+        {
+            <div class="box" style="width: 100%; text-align: center; align-items: center;">
+                ?
+            </div>
+        }
+
         <div style="flex-flow: row nowrap; padding-top: 1rem">
             <div class="col-12 p-1 text-dark  justify-content-start align-item-start">
                 <svg width="150" height="150">

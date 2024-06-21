@@ -6,14 +6,14 @@
 }
 
 .dropbtn {
-    background-color: #4CAF50;
+    background-color: #00007D;
     color: white;
-    padding: 10px 24px; /* Adjusted padding to fit aspect ratio */
-    font-size: 48px;
+    padding: 4px 0px; /* Adjusted padding to fit aspect ratio */
+    font-size: 20px;
     border: none;
     cursor: pointer;
-    border-radius: 8px; /* Adjust the border radius to make it rounded */
-    width: 140px;
+    border-radius: 40px; /* Adjust the border radius to make button rounded */
+    width: 160px;
     align-content: center;
     align-items: center;
 }
@@ -34,7 +34,7 @@
         text-decoration: none;
         display: block;
         cursor: pointer;
-        font-size: 28px;
+        font-size: 20px;
     }
 
         .dropdown-content a:hover {
