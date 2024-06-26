@@ -11,3 +11,5 @@ window.blazorFunctions = {
         input.focus(); // Set input box in focus
     }
 };
+
+
