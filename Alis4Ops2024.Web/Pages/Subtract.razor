@@ -12,16 +12,21 @@
 <div class="container col-12">
     <div>
         <SubtractRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
-                           @bind-SelectedItem=@SelectedItem ParametersChanged="HandleGenerateQuestion"></SubtractRangeMenu>
+          @bind-SelectedItem=@SelectedItem ParametersChanged="HandleGenerateQuestion"></SubtractRangeMenu>
+    </div>
+
+    <div>
+        <SubtractMathQuiz Question="@Question" AnsweredCorrectly="HandleGenerateQuestion" Answer=@Question.Answer></SubtractMathQuiz>
+    </div>
+
+    <div>
+        <SubtractModel Question="@Question" />
     </div>
 
     <div style="font-size: 16px; --bs-gutter-x: 0;">
         Maths Sum: @Question.Operand1 @Question.OperatorAsSymbol @Question.Operand2 = @Question.Answer
     </div>
 
-    <div>
-        <SubtractMathQuiz Question="@Question" AnsweredCorrectly="HandleGenerateQuestion" Answer=@Question.Answer></SubtractMathQuiz>
-    </div>
 </div>
 
 @code {
@@ -39,7 +44,7 @@
         set { _upperRange = value; }
     }
 
-    private int _lowerRange = 0;
+    private int _lowerRange = 1;
     [Parameter]
     public int LowerRange
     {
@@ -55,7 +60,7 @@
         set { _operator = value; }
     }
 
-    private string _selectedItem = "0-5";
+    private string _selectedItem = "1-5";
     [Parameter]
     public string SelectedItem
     {

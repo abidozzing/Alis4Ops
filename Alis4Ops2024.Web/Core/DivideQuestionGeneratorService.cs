@@ -14,16 +14,17 @@ namespace Alis4Ops2024.Web.Core
     public class DivideQuestionGeneratorService : IDivideQuestionGeneratorService
     {
         // Add upper and lower
-        public int Upper { get; set; } = 5;
+        public int Upper { get; set; } = 12;
         public int Lower { get; set; } = 1;
-        public string Operator { get; set; } = "Add";
-        public string SelectedItem { get; set; } = "0-5";
+        public string Operator { get; set; } = "Divide";
+        public string SelectedItem { get; set; } = "1";
         public DivideQuestionGeneratorService()
         {
 
         }
         public BaseQuestion GenerateQuestion(int upperRange, int lowerRange, string _operator, string selectedItem)
         {
+            int minInputNumber = 1;
             int maxInputNumber = 3; // Change this value as needed if equation has more than 2 operands
             var random = new Random(); // InputNumber is the number of Operands plus Answer. 
             var question = new BaseQuestion(); // maxInputNumber for (1 + 2 = 3) is 3. maxInputNumber for (1 + 2 + 4 = 7) is 4 
@@ -34,11 +35,11 @@ namespace Alis4Ops2024.Web.Core
                     case "Divide-Missing":  // To write code logic for Divide Missing ?/6 = 5, 40/? = 10, 42/7 = ?
                         _operator = "Divide";
                         question.Operator = _operator;
-                        question.Operand2 = lowerRange;
-                        question.Operand1 = random.Next(1, upperRange) * lowerRange;
+                        question.Operand2 = randomNumberGenerator.GetRandomNumber(1, upperRange);
+                        question.Operand1 = randomNumberGenerator.GetRandomNumber(1, upperRange) * question.Operand2;
                         question.Answer = GetAnswer(question);
                         // Call the GetRandomNumber method with the desired maximum number
-                        question.InputPosition = randomNumberGenerator.GetRandomNumber(maxInputNumber);
+                        question.InputPosition = randomNumberGenerator.GetRandomNumber(minInputNumber,maxInputNumber);
                         int DivideMissingTemp;
                         switch (question.InputPosition)
                         {
@@ -52,19 +53,12 @@ namespace Alis4Ops2024.Web.Core
                                 question.Answer = question.Operand2;
                                 question.Operand2 = DivideMissingTemp;
                                 break;
-                            case 3:
-                                break;
-                        }
+                    }
                         break;
-
-                    case "Divide-by-0":
-
-                        break;
-
                     default:
                         question.Operator = _operator;
                         question.Operand2 = lowerRange;
-                        question.Operand1 = random.Next(1, upperRange) * lowerRange;
+                        question.Operand1 = randomNumberGenerator.GetRandomNumber(1, upperRange) * lowerRange;
                         question.Answer = GetAnswer(question);
                         break;
                 }
@@ -77,8 +71,8 @@ namespace Alis4Ops2024.Web.Core
             var random = new Random();
             var question = new BaseQuestion();
             string SelectedItemTemp = SelectedItem;
-            question.Operand1 = random.Next(Lower, Upper);
-            question.Operand2 = random.Next(Lower, Upper);
+            question.Operand1 = randomNumberGenerator.GetRandomNumber(Lower, Upper);
+            question.Operand2 = randomNumberGenerator.GetRandomNumber(Lower, Upper);
             question.Operator = Operator;
 
             question.Answer = GetAnswer(question);
@@ -123,10 +117,10 @@ namespace Alis4Ops2024.Web.Core
         {
             private static Random random = new Random();
 
-            public int GetRandomNumber(int maxNumber)
+            public int GetRandomNumber(int minNumber,int maxNumber)
             {
                 // Generate a random number between 1 and maxNumber (inclusive)
-                int randomNumber = random.Next(1, maxNumber + 1);
+                int randomNumber = random.Next(minNumber, maxNumber + 1);
                 return randomNumber;
             }
         }

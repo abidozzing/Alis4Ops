@@ -1,0 +1,127 @@
+﻿@using Alis4Ops2024.Web.Core
+@using Alis4Ops2024.Web.Models
+@inject NavigationManager _navigationManager
+@inject IJSRuntime JSRuntime
+@using System
+<link href="css/site.css" rel="stylesheet" />
+
+
+@if (Question.InputPosition <= 0 || Question.InputPosition > 3)
+{
+    Question.InputPosition = 3;
+}
+
+@switch (Question.InputPosition)
+{
+    case 1:
+
+        <div class="col">
+            <!-- Box1, Box2 and Box3 Model-->
+            <div class="row gx-0" style="padding:0;">
+                @if (Question.Answer != 0)
+                {
+                    <div class="box d-flex justify-content-center align-items-center" style="width: calc((@Question.Answer / @Question.Operand1) * 100%); margin-top: 5%; border: 1px solid black; background-color: lightgreen; font-size: 75%;">
+                        ?
+                    </div>
+                }
+                @if (Question.Operand2 != 0)
+                {
+                    <div class="box d-flex justify-content-center align-items-center" style="width: calc((@Question.Operand2 / @Question.Operand1) * 100%); margin-top: 5%; border: 1px solid black; background-color: lightskyblue; font-size: 75%;">
+                        @Question.Operand2
+                    </div>
+                }
+            </div>
+
+            @if ((Question.Answer) != 0)
+            {
+                <div class="box d-flex justify-content-center align-items-center" style="width: 100%; margin-top: 1%; border: 1px solid black; background-color: yellow; font-size: 75%;">
+                    @Question.Operand1
+                </div>
+            }
+        </div>
+        break;
+
+    case 2:
+
+        <div class="col">
+            <!-- Box1, Box2 and Box3 Model-->
+            <div class="row gx-0" style="padding:0;">
+                @if (Question.Operand1 != 0)
+                {
+                    <div class="box d-flex justify-content-center align-items-center" style="width: calc((@Question.Operand1 / @Question.Operand2) * 100%); margin-top: 5%; border: 1px solid black; background-color: yellow; font-size: 75%;">
+                        @Question.Operand1
+                    </div>
+                }
+                @if (Question.Operand2 != 0)
+                {
+                    <div class="box d-flex justify-content-center align-items-center" style="width: calc((@Question.Answer / @Question.Operand2) * 100%); margin-top: 5%; border: 1px solid black; background-color: lightgreen; font-size: 75%;">
+                       ?
+                    </div>
+                }
+            </div>
+
+            @if ((Question.Answer) != 0)
+            {
+                <div class="box d-flex justify-content-center align-items-center" style="width: 100%; margin-top: 1%; border: 1px solid black; background-color: lightskyblue; font-size: 75%;">
+                    @Question.Operand2
+                </div>
+            }
+        </div>
+        break;
+
+    case 3:
+        <div class="col">
+            <!-- Box1, Box2 and Box3 Model-->
+            <div class="row gx-0" style="padding:0;">
+                @if (Question.Operand1 != 0)
+                {
+                    <div class="box d-flex justify-content-center align-items-center" style="width: calc((@Question.Operand1 / @Question.Answer) * 100%); margin-top: 5%; border: 1px solid black; background-color: yellow; font-size: 75%;">
+                        @Question.Operand1
+                    </div>
+                }
+                @if (Question.Operand2 != 0)
+                {
+                    <div class="box d-flex justify-content-center align-items-center" style="width: calc((@Question.Operand2 / @Question.Answer) * 100%); margin-top: 5%; border: 1px solid black; background-color: lightskyblue; font-size: 75%;">
+                        @Question.Operand2
+                    </div>
+                }
+            </div>
+
+            @if ((Question.Answer) != 0)
+            {
+                <div class="box d-flex justify-content-center align-items-center" style="width: 100%; margin-top: 1%; border: 1px solid black; background-color: lightgreen; font-size: 75%;">
+                    ?
+                </div>
+            }
+        </div>
+        break;
+}
+
+@code {
+    private int number1; // Initialize number1
+    private int number2; // Initialize number2
+
+    [Parameter]
+    public BaseQuestion Question { get; set; } = new BaseQuestion();
+    [Parameter]
+    public int Answer { get; set; }
+    [Inject]
+    private IMultiplyQuestionGeneratorService QuestionGenerator { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (Question != null)
+        {
+            number1 = Question.Operand1;
+            number2 = Question.Operand2;
+        }
+        else
+        {
+            // Handle case where Question is not provided or initialized
+            // You may set default values or handle the null case as needed
+            number1 = 2;
+            number2 = 3;
+        }
+    }
+}
+

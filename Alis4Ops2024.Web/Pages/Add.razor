@@ -11,19 +11,28 @@
 <PageTitle>Add</PageTitle>
 
 <div class="container col-12">
+
     <div>
         <AddRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
                       @bind-SelectedItem=@SelectedItem ParametersChanged="HandleGenerateQuestion" />
     </div>
 
-    <div style="font-size: 16px;">
-        Maths Sum: @Question.Operand1 @Question.OperatorAsSymbol @Question.Operand2 = @Question.Answer
-    </div>
-
     <div>
         <AddMathQuiz Question="@Question" AnsweredCorrectly="HandleGenerateQuestion" Answer=@Question.Answer />
     </div>
+
+    <div>
+        <AddModel Question="@Question" />
+    </div>
+
+    <div style="font-size: 16px;">
+        Maths Sum: @Question.Operand1 @Question.OperatorAsSymbol @Question.Operand2 = @Question.Answer
+    </div>
 </div>
+
+@* <div>
+    <AddNumberBond Question="@Question" />
+</div> *@
 
 @code {
 
@@ -31,8 +40,6 @@
     private IAddQuestionGeneratorService QuestionGenerator { get; set; }
     [Parameter]
     public BaseQuestion Question { get; set; }
-
-
 
     private int _upperRange = 5;
     [Parameter]
@@ -42,7 +49,7 @@
         set { _upperRange = value; }
     }
 
-    private int _lowerRange = 0;
+    private int _lowerRange = 1;
     [Parameter]
     public int LowerRange
     {
@@ -58,7 +65,7 @@
         set { _operator = value; }
     }
 
-    private string _selectedItem = "0-5";
+    private string _selectedItem = "1-5";
     [Parameter]
     public string SelectedItem
     {

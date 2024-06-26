@@ -22,21 +22,21 @@
     </div>
 </div>
 
-<div style="font-size: 16px; ">ClickedItem: @SelectedMenuItem?.Text LowerRange:@LowerRange UpperRange:@UpperRange Operator:@Operator</div>
+<div style="font-size: 10px; ">ClickedItem: @SelectedMenuItem?.Text LowerRange:@LowerRange UpperRange:@UpperRange Operator:@Operator</div>
 
 
 @code {
 
     protected override void OnInitialized()
     {
-        SelectedMenuItem = MenuItems.FirstOrDefault(item => item.Text == "0-5");
+        SelectedMenuItem = MenuItems.FirstOrDefault(item => item.Text == "1-5");
     }
 
     public List<MenuItem> MenuItems { get; set; } = new List<MenuItem>
     {
-        new MenuItem { Text = "0-5"},
-        new MenuItem { Text = "0-10"},
-        new MenuItem { Text = "0-20"},
+        new MenuItem { Text = "1-5"},
+        new MenuItem { Text = "1-10"},
+        new MenuItem { Text = "1-20"},
         new MenuItem { Text = "10-50"},
         new MenuItem { Text = "10-100"},
         new MenuItem { Text = "100-1,000"},
@@ -79,7 +79,7 @@
         }
     }
 
-    private int _lowerRange = 0;
+    private int _lowerRange = 1;
     [Parameter]
     public int LowerRange
     {
@@ -101,7 +101,7 @@
         }
     }
 
-    private string _selectedItem = "0-5";
+    private string _selectedItem = "1-5";
     [Parameter]
     public string SelectedItem
     {
@@ -123,17 +123,17 @@
         SelectedItem = SelectedMenuItem.Text;
         switch (SelectedItem)
         {
-            case "0-5":
-                LowerRange = 0;
+            case "1-5":
+                LowerRange = 1;
                 UpperRange = 5;
                 break;
-            case "0-10":
-                LowerRange = 0;
+            case "1-10":
+                LowerRange = 1;
                 UpperRange = 10;
                 break;
-            case "0-20":
-                LowerRange = 0;
-                UpperRange = 10;
+            case "1-20":
+                LowerRange = 1;
+                UpperRange = 20;
                 break;
             case "10-50":
                 LowerRange = 10;
@@ -148,7 +148,7 @@
                 UpperRange = 1000;
                 break;
             case "Subtract-Missing":
-                LowerRange = 0;
+                LowerRange = 1;
                 UpperRange = 20;
                 break;
             case "Subtract-from-5":
@@ -156,19 +156,19 @@
                 UpperRange = 5;
                 break;
             case "Subtract-from-10":
-                LowerRange = 0;
+                LowerRange = 1;
                 UpperRange = 10;
                 break;
             case "Subtract-from-20":
-                LowerRange = 0;
+                LowerRange = 1;
                 UpperRange = 20;
                 break;
             case "Subtract-from-50":
-                LowerRange = 0;
+                LowerRange = 10;
                 UpperRange = 50;
                 break;
             case "Subtract-from-100":
-                LowerRange = 0;
+                LowerRange = 10;
                 UpperRange = 100;
                 break;
         }

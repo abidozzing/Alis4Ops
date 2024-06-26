@@ -3,29 +3,19 @@
 @using Alis4Ops2024.Web.Core
 @using Alis4Ops2024.Web.Models
 @using Alis4Ops2024.Web.Layout
+
 <link href="css/rangemenu.css" rel="stylesheet" />
-<link href="css/site.css" rel="stylesheet" />
 
-<div class="row  gx-0">
-    <div class="dropdown">
-        <div class="flex-flow: row nowrap;  gx-0">
-            <div class="col-8">
-                <button class="dropbtn" @onclick="ToggleDropdown">Multiply</button>
-                <div class="dropdown-content" style="@dropdownStyle">
-                    @foreach (var item in MenuItems)
-                    {
-                        <a @onclick="(() => { HandleClickedItem(item); ToggleDropdown(); })">@item.Text</a> <!-- Toggle dropdown when item clicked -->
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="topnav">
+    @foreach (var item in MenuItems)
+    {
+        {
+            <a @onclick="@(() => HandleClickedItem(item))" class="@GetItemClass(item)">@item.Text</a>
+        }
+    }
 </div>
 
-<div style="font-size: 10px;">
-    <div>ClickedItem: @SelectedMenuItem?.Text LowerRange:@LowerRange UpperRange:@UpperRange Operator:@Operator</div>
-</div>
-
+<p>ClickedItem: @SelectedMenuItem?.Text LowerRange:@LowerRange UpperRange:@UpperRange Operator:@Operator </p>
 
 @code {
 
@@ -48,16 +38,9 @@
         new MenuItem { Text = "10"},
         new MenuItem { Text = "11"},
         new MenuItem { Text = "12"},
-        new MenuItem { Text = "Multiply-Missing"}
+        new MenuItem { Text = "Divide-Missing"}
     };
 
-    private string dropdownStyle => isDropdownOpen ? "display: block;" : "display: none;";
-
-    private bool isDropdownOpen = false;
-    private void ToggleDropdown()
-    {
-        isDropdownOpen = !isDropdownOpen;
-    }
 
     [Parameter]
     public EventCallback<string> OperatorChanged { get; set; }
@@ -69,7 +52,7 @@
     public EventCallback<string> SelectedItemChanged { get; set; }
 
 
-    private string ClickedMenuItem = "";
+    private string ClickedMenuItem = "1";
 
     private int _upperRange = 12;
     [Parameter]
@@ -82,7 +65,7 @@
         }
     }
 
-    private int _lowerRange = 1;
+    private int _lowerRange = 12;
     [Parameter]
     public int LowerRange
     {
@@ -93,7 +76,7 @@
         }
     }
 
-    private string _operator = "Multiply";
+    private string _operator = "Divide";
     [Parameter]
     public string Operator
     {
@@ -122,22 +105,29 @@
     {
         SelectedMenuItem = clickedItem;
 
-        Operator = "Multiply";
+        Operator = "Divide";
         SelectedItem = SelectedMenuItem.Text;
-        if (SelectedItem != null)
+        if (SelectedItem == "Divide-Missing")
         {
-            if (int.TryParse(SelectedItem, out int parsedUpperRangeMultiply))
-            {
-                // Conversion successful, use the 'number' variable
-                LowerRange = parsedUpperRangeMultiply;
-                UpperRange = 12;
-            }
+          // Just pass clicked item "Multiply Missing" to QuestionGenerator 
+            LowerRange = 12;
+            UpperRange = 12;
+
+        }
+        else
+        {
+            if (int.TryParse(SelectedItem, out int parsedUpperRangeDivide))
+              {
+               // Conversion successful, use the 'number' variable
+                LowerRange = parsedUpperRangeDivide;
+               UpperRange = 12;
+              }
             else
-            {
-                // Conversion failed "Multiply-Missing"
-                LowerRange = 1;
-                parsedUpperRangeMultiply = 12;
-            }
+              {
+               // Conversion failed
+               LowerRange = 12;
+                parsedUpperRangeDivide = 12;
+              }
         }
         // Call the asynchronous method here
         _ = HandleParametersChangedAsync();

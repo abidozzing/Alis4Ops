@@ -17,7 +17,7 @@ namespace Alis4Ops2024.Web.Core
         public int Upper { get; set; } = 5;
         public int Lower { get; set; } = 1;
         public string Operator { get; set; } = "Add";
-        public string SelectedItem { get; set; } = "0-5";
+        public string SelectedItem { get; set; } = "1-5";
         public AddQuestionGeneratorService()
         {
 
@@ -25,97 +25,88 @@ namespace Alis4Ops2024.Web.Core
         public BaseQuestion GenerateQuestion(int upperRange, int lowerRange, string _operator, string selectedItem)
         {
             int maxInputNumber = 3; // Change this value as needed if equation has more than 2 operands
+            int minInputNumber = 1;
             var random = new Random(); // InputNumber is the number of Operands plus Answer. 
             var question = new BaseQuestion(); // maxInputNumber for (1 + 2 = 3) is 3. maxInputNumber for (1 + 2 + 4 = 7) is 4 
             int Operand2Temp = 0;
             string SelectedItemTemp = selectedItem;
 
-                    // For the others besides the exception in the "case" statement below,
-                    // the Lower and Upper range received is used to generate the the numbers as operands and the answer. 
-                    switch (selectedItem)
+            // For the others besides the exception in the "case" statement below,
+            // the Lower and Upper range received is used to generate the the numbers as operands and the answer. 
+            switch (selectedItem)
 
+            {
+                // Create equations with missing numbers in random positions.
+                // To write code logic for Add Missing ? + 6 = 18, 4 + ? = 12, 2 + 7 = ?
+                case "Add-Missing":
+                    int AddMissingTemp;
+                    question.Operand1 = upperRange;
+                    question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange-1);
+                    AddMissingTemp = question.Operand1 - question.Operand2;
+                    question.Operand1 = randomNumberGenerator.GetRandomNumber(lowerRange, AddMissingTemp-1);
+
+
+                    question.Operator = _operator;
+                    question.Answer = GetAnswer(question);
+
+                    // Call the GetRandomNumber method with the desired maximum number of operands + 1
+                    question.InputPosition = randomNumberGenerator.GetRandomNumber(minInputNumber,maxInputNumber);
+
+                    switch (question.InputPosition)
                     {
-                        // Create equations with missing numbers in random positions.
-                        // To write code logic for Add Missing ? + 6 = 18, 4 + ? = 12, 2 + 7 = ?
-                        case "Add-Missing":
-                            question.Operand1 = random.Next(0, upperRange + 1);
-                            question.Operand2 = random.Next(0, upperRange + 1);
-                            question.Operator = _operator;
-                            question.Answer = GetAnswer(question);
-
-                            // Call the GetRandomNumber method with the desired maximum number of operands + 1
-                            question.InputPosition = randomNumberGenerator.GetRandomNumber(maxInputNumber);
-                            int AddMissingTemp;
-                            switch (question.InputPosition)
-                            {
-                                case 1:
-                                    AddMissingTemp = question.Answer;
-                                    question.Answer = question.Operand1;
-                                    question.Operand1 = AddMissingTemp;
-                                    break;
-                                case 2:
-                                    AddMissingTemp = question.Answer;
-                                    question.Answer = question.Operand2;
-                                    question.Operand2 = AddMissingTemp;
-                                    break;
-                                case 3:
-                                    break;
-                            }
+                        case 1:
+                            AddMissingTemp = question.Answer;
+                            question.Answer = question.Operand1;
+                            question.Operand1 = AddMissingTemp;
                             break;
-
-                        // Create addition questions that add up to a specified number
-                        case "Make-5":
-                            question.Operand1 = 10;
-                            question.Operand2 = random.Next(0, upperRange + 1);
-                            Operand2Temp = question.Operand1 - question.Operand2;
-                            question.Operand1 = Operand2Temp;
-                            question.Operator = _operator;
-                            question.Answer = GetAnswer(question);
+                        case 2:
+                            AddMissingTemp = question.Answer;
+                            question.Answer = question.Operand2;
+                            question.Operand2 = AddMissingTemp;
                             break;
-
-                        case "Make-10":
-                            question.Operand1 = 20;
-                            question.Operand2 = random.Next(0, upperRange + 1);
-                            Operand2Temp = question.Operand1 - question.Operand2;
-                            question.Operand1 = Operand2Temp;
-                            question.Operator = _operator;
-                            question.Answer = GetAnswer(question);
-                            break;
-
-                        case "Make-20":
-                            question.Operand1 = 10;
-                            question.Operand2 = random.Next(0, upperRange + 1);
-                            Operand2Temp = question.Operand1 - question.Operand2;
-                            question.Operand1 = Operand2Temp;
-                            question.Operator = _operator;
-                            question.Answer = GetAnswer(question);
-                            break;
-
-                        case "Make-50":
-                            question.Operand1 = 20;
-                            question.Operand2 = random.Next(0, upperRange + 1);
-                            Operand2Temp = question.Operand1 - question.Operand2;
-                            question.Operand1 = Operand2Temp;
-                            question.Operator = _operator;
-                            question.Answer = GetAnswer(question);
-                            break;
-
-                        case "Make-100":
-                            question.Operand1 = 20;
-                            question.Operand2 = random.Next(0, upperRange + 1);
-                            Operand2Temp = question.Operand1 - question.Operand2;
-                            question.Operand1 = Operand2Temp;
-                            question.Operator = _operator;
-                            question.Answer = GetAnswer(question);
-                            break;
-
-                        default:
-                            question.Operand1 = random.Next(lowerRange, upperRange + 1);
-                            question.Operand2 = random.Next(lowerRange, upperRange + 1);
-                            question.Operator = _operator;
-                            question.Answer = GetAnswer(question);
+                        case 3:
                             break;
                     }
+                    break;
+
+                // Create addition questions that add up to a specified number
+                case "Make-5":
+                case "Make-10":
+                case "Make-20":
+                case "Make-50":
+                case "Make-100":
+                    question.Operand1 = upperRange;
+                    question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange-1);
+                    Operand2Temp = question.Operand1 - question.Operand2;
+                    question.Operand1 = Operand2Temp;
+                    question.Operator = _operator;
+                    question.Answer = GetAnswer(question);
+                    maxInputNumber = 2;
+                    question.InputPosition = randomNumberGenerator.GetRandomNumber(minInputNumber,maxInputNumber);
+                    switch (question.InputPosition)
+                    {
+                        case 1:
+                            AddMissingTemp = question.Answer;
+                            question.Answer = question.Operand1;
+                            question.Operand1 = AddMissingTemp;
+                            break;
+                        case 2:
+                            AddMissingTemp = question.Answer;
+                            question.Answer = question.Operand2;
+                            question.Operand2 = AddMissingTemp;
+                            break;
+                    }
+                    break;
+                default:
+                    int temp;
+                    question.Operand1 = upperRange;
+                    question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange-1);
+                    temp = question.Operand1 - question.Operand2;
+                    question.Operand1 = randomNumberGenerator.GetRandomNumber(lowerRange, temp-1);
+                    question.Operator = _operator;
+                    question.Answer = GetAnswer(question);
+                    break;
+            }
 
             return question;
 
@@ -123,11 +114,10 @@ namespace Alis4Ops2024.Web.Core
 
         public BaseQuestion GenerateQuestion()
         {
-            var random = new Random();
             var question = new BaseQuestion();
             string SelectedItemTemp = SelectedItem;
-            question.Operand1 = random.Next(Lower, Upper); 
-            question.Operand2 = random.Next(Lower, Upper); 
+            question.Operand1 = randomNumberGenerator.GetRandomNumber(Lower, Upper);
+            question.Operand2 = randomNumberGenerator.GetRandomNumber(Lower, Upper);
             question.Operator = Operator;
 
             question.Answer = GetAnswer(question);
@@ -153,7 +143,7 @@ namespace Alis4Ops2024.Web.Core
                     return question.Operand1 * question.Operand2;
                 case "Divide":
                     {
-                        
+
                     }
                     return question.Operand1 / question.Operand2;
 
@@ -172,10 +162,10 @@ namespace Alis4Ops2024.Web.Core
         {
             private static Random random = new Random();
 
-            public int GetRandomNumber(int maxNumber)
+            public int GetRandomNumber(int minNumber, int maxNumber)
             {
                 // Generate a random number between 1 and maxNumber (inclusive)
-                int randomNumber = random.Next(1, maxNumber + 1);
+                int randomNumber = random.Next(minNumber, maxNumber + 1);
                 return randomNumber;
             }
         }

@@ -17,7 +17,7 @@ namespace Alis4Ops2024.Web.Core
         public int Upper { get; set; } = 5;
         public int Lower { get; set; } = 1;
         public string Operator { get; set; } = "Add";
-        public string SelectedItem { get; set; } = "0-5";
+        public string SelectedItem { get; set; } = "1-5";
         public SubtractQuestionGeneratorService()
         {
 
@@ -25,9 +25,9 @@ namespace Alis4Ops2024.Web.Core
         public BaseQuestion GenerateQuestion(int upperRange, int lowerRange, string _operator, string selectedItem)
         {
             int maxInputNumber = 3; // Change this value as needed if equation has more than 2 operands
+            int minInputNumber = 1;
             var random = new Random(); // InputNumber is the number of Operands plus Answer. 
             var question = new BaseQuestion(); // maxInputNumber for (1 + 2 = 3) is 3. maxInputNumber for (1 + 2 + 4 = 7) is 4 
-            int Operand2Temp = 0;
             string SelectedItemTemp = selectedItem;
             // For the others besides the exception in the "case" statement below,
             // the Lower and Upper range received is used to generate the the numbers as operands and the answer. 
@@ -36,12 +36,12 @@ namespace Alis4Ops2024.Web.Core
             {
 
                 case "Subtract-Missing":  // To write code logic for Subtract Missing ? - 6 = 18, 4 - ? = 1, 21 - 7 = ?
-                    question.Operand1 = random.Next(0, upperRange + 1);
-                    question.Operand2 = random.Next(0, upperRange + 1);
+                    question.Operand1 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange - 1);
+                    question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange - 1);
                     question.Operator = _operator;
                     question.Answer = GetAnswer(question);
                     // Call the GetRandomNumber method with the desired maximum number
-                    question.InputPosition = randomNumberGenerator.GetRandomNumber(maxInputNumber);
+                    question.InputPosition = randomNumberGenerator.GetRandomNumber(minInputNumber,maxInputNumber);
                     int SubtractMissingTemp;
                     switch (question.InputPosition)
                     {
@@ -62,53 +62,31 @@ namespace Alis4Ops2024.Web.Core
 
                 // Create subtraction questions that add up to a specified number
                 case "Subtract-from-5":
-                    question.Operand1 = 10;
-                    question.Operand2 = random.Next(0, upperRange + 1);
-                    Operand2Temp = question.Operand1 - question.Operand2;
-                    question.Operand1 = Operand2Temp;
-                    question.Operator = _operator;
-                    question.Answer = GetAnswer(question);
-                    break;
-
                 case "Subtract-from-10":
-                    question.Operand1 = 20;
-                    question.Operand2 = random.Next(0, upperRange + 1);
-                    Operand2Temp = question.Operand1 - question.Operand2;
-                    question.Operand1 = Operand2Temp;
-                    question.Operator = _operator;
-                    question.Answer = GetAnswer(question);
-                    break;
-
                 case "Subtract-from-20":
-                    question.Operand1 = 10;
-                    question.Operand2 = random.Next(0, upperRange + 1);
-                    Operand2Temp = question.Operand1 - question.Operand2;
-                    question.Operand1 = Operand2Temp;
-                    question.Operator = _operator;
-                    question.Answer = GetAnswer(question);
-                    break;
-
                 case "Subtract-from-50":
-                    question.Operand1 = 20;
-                    question.Operand2 = random.Next(0, upperRange + 1);
-                    Operand2Temp = question.Operand1 - question.Operand2;
-                    question.Operand1 = Operand2Temp;
-                    question.Operator = _operator;
-                    question.Answer = GetAnswer(question);
-                    break;
-
                 case "Subtract-from-100":
-                    question.Operand1 = 20;
-                    question.Operand2 = random.Next(0, upperRange + 1);
-                    Operand2Temp = question.Operand1 - question.Operand2;
-                    question.Operand1 = Operand2Temp;
+                    int SubtractTemp;
+                    question.Operand1 = upperRange;
+                    question.Operand2 = randomNumberGenerator.GetRandomNumber(1, upperRange-1);
                     question.Operator = _operator;
                     question.Answer = GetAnswer(question);
+                    minInputNumber = 2;
+                    maxInputNumber = 3;
+                    question.InputPosition = randomNumberGenerator.GetRandomNumber(minInputNumber, maxInputNumber);
+                    switch (question.InputPosition)
+                    {
+                        case 2:
+                            SubtractTemp = question.Answer;
+                            question.Answer = question.Operand2;
+                            question.Operand2 = SubtractTemp;
+                            break;
+                    }
                     break;
 
                 default:
-                    question.Operand1 = random.Next(lowerRange, upperRange + 1);
-                    question.Operand2 = random.Next(lowerRange, upperRange + 1);
+                    question.Operand1 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange - 1);
+                    question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange - 1);
 
                     question.Operator = _operator;
                     question.Answer = GetAnswer(question);
@@ -170,10 +148,10 @@ namespace Alis4Ops2024.Web.Core
         {
             private static Random random = new Random();
 
-            public int GetRandomNumber(int maxNumber)
+            public int GetRandomNumber(int minNumber, int maxNumber)
             {
                 // Generate a random number between 1 and maxNumber (inclusive)
-                int randomNumber = random.Next(1, maxNumber + 1);
+                int randomNumber = random.Next(minNumber, maxNumber + 1);
                 return randomNumber;
             }
         }

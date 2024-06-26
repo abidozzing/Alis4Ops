@@ -1,11 +1,11 @@
-﻿ @page "/addrangemenu"
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 @inject IJSRuntime JSRuntime
 @using Alis4Ops2024.Web.Core
 @using Alis4Ops2024.Web.Models
 @using Alis4Ops2024.Web.Layout
 <link href="css/rangemenu.css" rel="stylesheet" />
 <link href="css/site.css" rel="stylesheet" />
+
 <div class="row  gx-0">
     <div class="dropdown">
         <div class="flex-flow: row nowrap;  gx-0">
@@ -22,29 +22,21 @@
     </div>
 </div>
 
-
-<div style="font-size: 16px; ">ClickedItem: @SelectedMenuItem?.Text LowerRange:@LowerRange UpperRange:@UpperRange Operator:@Operator</div>
-
-
-
-
-
-
-
+<div style="font-size: 10px;">ClickedItem: @SelectedMenuItem?.Text LowerRange:@LowerRange UpperRange:@UpperRange Operator:@Operator</div>
 
 
 @code {
 
     protected override void OnInitialized()
     {
-        SelectedMenuItem = MenuItems.FirstOrDefault(item => item.Text == "0-5");
+        SelectedMenuItem = MenuItems.FirstOrDefault(item => item.Text == "1-5");
     }
 
     public List<MenuItem> MenuItems { get; set; } = new List<MenuItem>
     {
-        new MenuItem { Text = "0-5"},
-        new MenuItem { Text = "0-10"},
-        new MenuItem { Text = "0-20"},
+        new MenuItem { Text = "1-5"},
+        new MenuItem { Text = "1-10"},
+        new MenuItem { Text = "1-20"},
         new MenuItem { Text = "10-50"},
         new MenuItem { Text = "10-100"},
         new MenuItem { Text = "100-1,000"},
@@ -87,7 +79,7 @@
         }
     }
 
-    private int _lowerRange = 0;
+    private int _lowerRange = 1;
     [Parameter]
     public int LowerRange
     {
@@ -109,7 +101,7 @@
         }
     }
 
-    private string _selectedItem = "0-5";
+    private string _selectedItem = "1-5";
     [Parameter]
     public string SelectedItem
     {
@@ -131,16 +123,16 @@
         SelectedItem = SelectedMenuItem.Text;
         switch (SelectedItem)
         {
-            case "0-5":
-                LowerRange = 0;
+            case "1-5":
+                LowerRange = 1;
                 UpperRange = 5;
                 break;
-            case "0-10":
-                LowerRange = 0;
+            case "1-10":
+                LowerRange = 1;
                 UpperRange = 10;
                 break;
-            case "0-20":
-                LowerRange = 0;
+            case "1-20":
+                LowerRange = 1;
                 UpperRange = 20;
                 break;
             case "10-50":
@@ -156,27 +148,27 @@
                 UpperRange = 1000;
                 break;
             case "Add-Missing":
-                LowerRange = 0;
+                LowerRange = 1;
                 UpperRange = 20;
                 break;
             case "Make-5":
-                LowerRange = 0;
+                LowerRange = 1;
                 UpperRange = 5;
                 break;
             case "Make-10":
-                LowerRange = 0;
+                LowerRange = 1;
                 UpperRange = 10;
                 break;
             case "Make-20":
-                LowerRange = 0;
+                LowerRange = 1;
                 UpperRange = 20;
                 break;
             case "Make-50":
-                LowerRange = 0;
+                LowerRange = 10;
                 UpperRange = 50;
                 break;
             case "Make-100":
-                LowerRange = 0;
+                LowerRange = 10;
                 UpperRange = 100;
                 break;
         }

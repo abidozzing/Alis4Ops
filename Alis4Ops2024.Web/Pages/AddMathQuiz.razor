@@ -1,44 +1,11 @@
-﻿@page "/addmathquiz"
-@using Alis4Ops2024.Web.Core
+﻿@using Alis4Ops2024.Web.Core
 @using Alis4Ops2024.Web.Models
 @inject NavigationManager _navigationManager
-<link href="css/site.css" rel="stylesheet" />
+@inject IJSRuntime JSRuntime
 @using System
+<link href="css/site.css" rel="stylesheet" />
 
 <PageTitle>AddMathQuiz</PageTitle>
-
-<title>Your Page Title</title>
-
-<style>
-    .model {
-        display: flex;
-        margin-bottom: 10px;
-    }
-
-    .box {
-        border: 1px solid black;
-        margin-top: 30px;
-        margin-right: 0px;
-        display: flex;
-        /*align-items: center;*/
-        justify-content: center;
-        /* height: 30px; */
-        /* Adjust box height as needed */
-        background-color: beige; /* Set background color to beige */
-    }
-
-    .box2 {
-        border: 1px solid black;
-        margin-top: 20px;
-        margin-right: 0px;
-        display: flex;
-        /* align-items: center; */
-        justify-content: center;
-        /* height: 30px; */
-        /* Adjust box height as needed */
-        background-color: bisque; /* Set background color to beige */
-    }
-</style>
 
 @if (Question.InputPosition <= 0 || Question.InputPosition > 3)
 {
@@ -50,20 +17,19 @@
     case 1:
         <div class="row  gx-0">
             <!-- Message Good Job! or Please try again. -->
-            <div class="col-12 p-1 d-flex text-dark text-center"
-                 style="--bs-gutter-x: 0; height: 30px; font-size: 24px;box-sizing: border-box;">
+            <div class="col-12 p-1 d-flex text-dark justify-content-center align-items-center" style="height: 30px; box-sizing: border-box;">
                 <div style="color: @resultColor;">@resultMessage</div>
             </div>
         </div>
 
-        <!-- Operand1 Vertical Add -->
+        <!--  Add Operand1 Vertical -->
         <div class="row gx-0" style="padding:0px;">
-            <div class=" col-12 p-1 d-flex text-dark" style="justify-content: right; justify-content: right; align-content: end; align-items: flex-end; text-align: right; box-sizing: border-box;">?</div>
+            <div class="col-12 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">?</div>
         </div>
 
-        <!-- Operator Symbol and Operand2 Vertical Add -->
+        <!-- Add Operator Symbol and Operand2 Vertical -->
         <div class="row gx-0" style="padding:0px;">
-            <div class="col-12 p-1  d-flex text-dark" style="justify-content: right; align-content: end; align-items: center; text-align: right; box-sizing: border-box;">@Question.OperatorAsSymbol @Question.Operand2</div>
+            <div class="col-12 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@Question.OperatorAsSymbol @Question.Operand2</div>
         </div>
 
 
@@ -109,80 +75,24 @@
                 <strong>@Question.Operand1</strong>
             </div>
         </div>
-
-        <!-- Box1, Box2 and Box3 Addition Model-->
-        <div class="row gx-0 d-flex">
-            @if (Question.Operand1 != 0)
-            {
-                <div class="box" style="width: calc((@Question.Answer / (@Question.Operand1 + 0.01)) * 100%); text-align: center; align-items: center;">
-                    ?
-                </div>
-            }
-            @if (Question.Operand2 != 0)
-            {
-                <div class="box" style="width: calc((@Question.Operand2 / (@Question.Operand1 + 0.01)) * 100%); text-align: center; align-items: center;">
-                    @Question.Operand2
-                </div>
-            }
-        </div>
-
-        @if ((Question.Operand1) != 0)
-        {
-            <div class="box" style="width: 100%; text-align: center; align-items: center;">
-                @Question.Operand1
-            </div>
-        }
-
-        <div style="flex-flow: row nowrap; padding-top: 1rem">
-            <div class="col-12 p-1 text-dark  justify-content-start align-item-start">
-                <svg width="150" height="150">
-                    <!-- Circle for the main number -->
-                    <circle cx="35" cy="75" r="35" fill="yellow" />
-
-                    <!-- Text for the main number -->
-                    <text x="35" y="81" font-size="14" text-anchor="middle">@Question.Operand1</text>
-
-                    <!-- Circle for the first addend (upper-right) -->
-                    <circle cx="116" cy="25" r="25" fill="lightgreen" />
-
-                    <!-- Text for the first addend -->
-                    <text x="115" y="31" font-size="14" text-anchor="middle">?</text>
-
-                    <!-- Circle for the second addend (lower-right) -->
-                    <circle cx="116" cy="125" r="25" fill="lightskyblue" />
-
-                    <!-- Text for the second addend -->
-                    <text x="115" y="130" font-size="14" text-anchor="middle">@Question.Operand2</text>
-
-                    <!-- Line connecting main number to first addend -->
-                    <line x1="58" y1="53" x2="95" y2="34" stroke="black" stroke-width="2" />
-
-                    <!-- Line connecting main number to second addend -->
-                    <line x1="58" y1="98" x2="95" y2="114" stroke="black" stroke-width="2" />
-                </svg>
-            </div>
-        </div>
         break;
+
     case 2:
-
-
-
         <div class="row  gx-0">
             <!-- Message Good Job! or Please try again. -->
-            <div class="col-12 p-1 d-flex text-dark text-center"
-                 style="--bs-gutter-x: 0; height: 30px; font-size: 24px;box-sizing: border-box;">
+            <div class="col-12 p-1 d-flex text-dark justify-content-center align-items-center" style="height: 30px; box-sizing: border-box;">
                 <div style="color: @resultColor;">@resultMessage</div>
             </div>
         </div>
 
-        <!-- Operand1 Vertical Add Case2 -->
+        <!--  Add Operand1 Vertical -->
         <div class="row gx-0" style="padding:0px;">
-            <div class=" col-12 p-1 d-flex text-dark" style="justify-content: right; align-content: end;; align-content: end; align-items: flex-end; text-align: right;box-sizing: border-box;">@Question.Operand1</div>
+            <div class="col-12 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@Question.Operand1</div>
         </div>
 
-        <!-- Operator Symbol and Operand2 Vertical Add Case2 -->
+        <!-- Add Operator Symbol and Operand2 Vertical -->
         <div class="row gx-0" style="padding:0px;">
-            <div class="col-12 p-1  d-flex text-dark" style="justify-content: right; align-content: end; align-items: center; text-align: right;box-sizing: border-box;">@Question.OperatorAsSymbol ?</div>
+            <div class="col-12 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@Question.OperatorAsSymbol ?</div>
         </div>
 
         <div class="row gx-0" style="padding:0px;">
@@ -227,58 +137,6 @@
                 <strong>@Question.Operand2</strong>
             </div>
         </div>
-
-        <!-- Box1, Box2 and Box3 Model-->
-        <div class="row gx-0 d-flex">
-            @if (Question.Operand1 != 0)
-            {
-                <div class="box" style="width: calc((@Question.Operand1 / (@Question.Operand2 + 0.01)) * 100%); text-align: center; align-items: center;">
-                    @Question.Operand1
-                </div>
-            }
-            @if (Question.Operand2 != 0)
-            {
-                <div class="box" style="width: calc(((@Question.Answer) / (@Question.Operand2 + 0.01)) * 100%); text-align: center; align-items: center;">
-                    ?
-                </div>
-            }
-        </div>
-        @if ((Question.Operand1 + @Question.Operand2) != 0)
-        {
-            <div class="box" style="width: 100%; text-align: center; align-items: center;">
-                @Question.Operand2
-            </div>
-        }
-
-        <div style="flex-flow: row nowrap; padding-top: 1rem">
-            <div class="col-12 p-1 text-dark  justify-content-start align-item-start">
-                <svg width="150" height="150">
-                    <!-- Circle for the UserInput -->
-                    <circle cx="35" cy="75" r="35" fill="lightskyblue" />
-
-                    <!-- Text for the UserInput -->
-                    <text x="35" y="81" font-size="14" text-anchor="middle">@Question.Operand2</text>
-
-                    <!-- Circle for the Operand1 (upper-right) -->
-                    <circle cx="116" cy="25" r="25" fill="yellow" />
-
-                    <!-- Text for the Operand1 -->
-                    <text x="115" y="31" font-size="14" text-anchor="middle">@Question.Operand1</text>
-
-                    <!-- Circle for the Operand2 (lower-right) -->
-                    <circle cx="116" cy="125" r="25" fill="lightgreen" />
-
-                    <!-- Text for the Operand2 -->
-                    <text x="115" y="130" font-size="14" text-anchor="middle">?</text>
-
-                    <!-- Line connecting UserInput to Operand1 -->
-                    <line x1="58" y1="53" x2="95" y2="34" stroke="black" stroke-width="2" />
-
-                    <!-- Line connecting UserInput to Operand2 -->
-                    <line x1="58" y1="98" x2="95" y2="114" stroke="black" stroke-width="2" />
-                </svg>
-            </div>
-        </div>
         break;
 
     case 3:
@@ -289,14 +147,14 @@
             </div>
         </div>
 
-        <!-- Operand1 Vertical Add -->
+        <!-- Add Operand1 Vertical -->
         <div class="row gx-0" style="padding:0px;">
-            <div class="col-12 p-1 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@Question.Operand1</div>
+            <div class="col-12 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@Question.Operand1</div>
         </div>
 
-        <!-- Operator Symbol and Operand2 Vertical Add -->
+        <!-- Add Operator Symbol and Operand2 Vertical -->
         <div class="row gx-0" style="padding:0px;">
-            <div class="col-12 p-1 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@Question.OperatorAsSymbol @Question.Operand2</div>
+            <div class="col-12 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@Question.OperatorAsSymbol @Question.Operand2</div>
         </div>
 
         <div class="row gx-0" style="padding:0px; box-sizing: border-box;">
@@ -342,85 +200,13 @@
             </div>
         </div>
 
-        <!-- Box1, Box2 and Box3 Model-->
-        <div class="row gx-0 d-flex">
-            @if (Question.Operand1 != 0)
-            {
-                <div class="box" style="width: calc((@Question.Operand1 / (@Question.Operand1 + @Question.Operand2 + 0.01)) * 100%); text-align: center; align-items: center;">
-                    @Question.Operand1
-                </div>
-            }
-            @if (Question.Operand2 != 0)
-            {
-                <div class="box" style="width: calc((@Question.Operand2 / (@Question.Operand1 + @Question.Operand2 + 0.01)) * 100%); text-align: center; align-items: center;">
-                    @Question.Operand2
-                </div>
-            }
-        </div>
 
-        @if ((Question.Operand1 + @Question.Operand2) != 0)
-        {
-            <div class="box" style="width: 100%; text-align: center; align-items: center;">
-                ?
-            </div>
-        }
-
-        <div style="flex-flow: row nowrap; padding-top: 1rem">
-            <div class="col-12 p-1 text-dark  justify-content-start align-item-start">
-                <svg width="150" height="150">
-                    <!-- Circle for the UserInput -->
-                    <circle cx="35" cy="75" r="35" fill="lightgreen" />
-
-                    <!-- Text for the UserInput -->
-                    <text x="35" y="81" font-size="14" text-anchor="middle">?</text>
-
-                    <!-- Circle for the Operand1 (upper-right) -->
-                    <circle cx="116" cy="25" r="25" fill="yellow" />
-
-                    <!-- Text for the Operand1 -->
-                    <text x="115" y="31" font-size="14" text-anchor="middle">@Question.Operand1</text>
-
-                    <!-- Circle for the Operand2 (lower-right) -->
-                    <circle cx="116" cy="125" r="25" fill="lightskyblue" />
-
-                    <!-- Text for the Operand2 -->
-                    <text x="115" y="130" font-size="14" text-anchor="middle">@Question.Operand2</text>
-
-                    <!-- Line connecting UserInput to Operand1 -->
-                    <line x1="58" y1="53" x2="95" y2="34" stroke="black" stroke-width="2" />
-
-                    <!-- Line connecting UserInput to Operand2 -->
-                    <line x1="58" y1="98" x2="95" y2="114" stroke="black" stroke-width="2" />
-                </svg>
-            </div>
-        </div>
         break;
 }
 
 
 
 @code {
-    [Parameter]
-    public int AnswerBond { get; set; }
-
-    private Random random = new Random();
-    private int addend1;
-    private int addend2;
-
-    protected override void OnInitialized()
-    {
-        CalculateAddends();
-    }
-
-    private void CalculateAddends()
-    {
-
-        addend1 = random.Next(0, 20 + 1);
-        addend2 = random.Next(0, 20 + 1);
-        AnswerBond = addend1 + addend2;
-    }
-
-
     [Parameter]
     public BaseQuestion Question { get; set; }
     [Parameter]
@@ -429,22 +215,12 @@
     public int Answer { get; set; }
     private ElementReference inputElement;
 
-    // protected override void OnInitialized()
-    // {
-    //     base.OnInitialized();
-
-    //     // Initialize the Question property here
-    //     Question = new BaseQuestion();
-    //     //Question.Operator = "Add";
-    // }
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         // if (firstRender)
-        // {
         inputElement.FocusAsync();
-        // }
     }
+
     // The key to binding is:
     // 1. @bind-value="userInput"
     // This means bind the value of the property called value
@@ -459,35 +235,47 @@
     private string resultColor = "White";
 
     [Inject]
-    private IQuestionGeneratorService QuestionGenerator { get; set; }
+    private IAddQuestionGeneratorService QuestionGenerator { get; set; }
 
     private async Task HandleKeydown(KeyboardEventArgs args)
     {
         if (args.Key == "Enter")
         {
+            // Retrieve current input value
+            userInput = userInput.Trim(); // Trim any leading or trailing whitespace
             int parsedInput;
 
-            bool isNumeric = int.TryParse(userInput, out parsedInput);
-            if (isNumeric && parsedInput == Question.Answer)
+            // Check if userInput is numeric
+            if (!int.TryParse(userInput, out parsedInput))
+            {
+                // If userInput is not numeric, select the input text and return
+                await JSRuntime.InvokeVoidAsync("eval", "document.activeElement.select();");
+                return;
+            }
+
+            // Now we know userInput is numeric, proceed with the comparison
+            if (parsedInput == Question.Answer)
             {
                 resultMessage = "Good Job!";
                 resultColor = "green";
                 await Task.Delay(500);
-                userInput = "";
+                userInput = ""; // Clear input after correct answer
                 resultMessage = "";
-                resultColor = "white";
+                resultColor = "white"; // Reset color
                 await AnsweredCorrectly.InvokeAsync();
-
             }
             else
             {
                 resultMessage = "Please Try Again.";
                 resultColor = "red";
+                await JSRuntime.InvokeVoidAsync("eval", "document.activeElement.select()");
             }
+
             showResult = true;
             StateHasChanged();
-
         }
     }
+
+
 }
 

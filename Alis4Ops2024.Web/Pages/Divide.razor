@@ -9,16 +9,27 @@
 
 <PageTitle>Divide</PageTitle>
 
-<div><h3>Select Range</h3></div>
+<div class="container col-12">
 
-<div>
-    <DivideRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
-                       @bind-SelectedItem=@SelectedItem ParametersChanged="HandleGenerateQuestion" />
+
+    <div>
+        <DivideRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
+                         @bind-SelectedItem=@SelectedItem ParametersChanged="HandleGenerateQuestion" />
+    </div>
+
+    <div>
+        <DivideMathQuiz Question="@Question" AnsweredCorrectly="HandleGenerateQuestion" Answer=@Question.Answer></DivideMathQuiz>
+    </div>
+
+    <div>
+        <DivideModel Question="@Question" />
+    </div>
+
+    <div style="font-size: 16px;">
+        Maths Sum: @Question.Operand1 @Question.OperatorAsSymbol @Question.Operand2 = @Question.Answer
+    </div>
+
 </div>
-
-<p></p>
-<p></p>
-<div class="container col-10" style="align-content:flex-start;"> <MathQuiz Question="@Question" AnsweredCorrectly="HandleGenerateQuestion" Answer=@Question.Answer></MathQuiz> </div>
 
 
 @code {

@@ -17,7 +17,7 @@ namespace Alis4Ops2024.Web.Core
         public int Upper { get; set; } = 5;
         public int Lower { get; set; } = 1;
         public string Operator { get; set; } = "Add";
-        public string SelectedItem { get; set; } = "0-5";
+        public string SelectedItem { get; set; } = "1-5";
         public QuestionGeneratorService()
         {
 

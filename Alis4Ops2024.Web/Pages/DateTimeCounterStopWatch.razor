@@ -1,0 +1,83 @@
+﻿@page "/datetime-counter-stopwatch"
+@using System.Timers
+
+<h3>Date and Time Counter with Stopwatch</h3>
+
+<div class="container">
+    <div class="row mb-3">
+        <div class="col">
+            <h4>@currentDateTime</h4>
+        </div>
+        <div class="col">
+            <h4>Counter: @counterValue.ToString("D3")</h4>
+            <button class="btn btn-primary" @onclick="IncrementCounter">Increment Counter</button>
+            <button class="btn btn-secondary ml-2" @onclick="ResetCounter">Reset Counter</button>
+        </div>
+        <div class="col">
+            <h4>Stopwatch: @stopwatchTime</h4>
+            <div class="row mt-2">
+                <div class="col">
+                    <button class="btn btn-primary w-100" @onclick="ToggleTimer">@(!isRunning ? "Start" : "Stop") Stopwatch</button>
+                </div>
+                <div class="col">
+                    <button class="btn btn-secondary w-100 mt-2" @onclick="ResetStopwatch" disabled="@(!isRunning && elapsedTime == TimeSpan.Zero)">Reset Stopwatch</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private bool isRunning = false;
+    private Timer timer;
+    private DateTime startTime;
+    private TimeSpan elapsedTime;
+    private int counterValue = 0;
+    private string currentDateTime => DateTime.Now.ToString("ddd dd MMM yyyy hh:mm tt");
+    private string stopwatchTime => $"{elapsedTime.Hours:D2}:{elapsedTime.Minutes:D2}:{elapsedTime.Seconds:D2}.{elapsedTime.Milliseconds / 100}";
+
+    private void ToggleTimer()
+    {
+        if (!isRunning)
+        {
+            isRunning = true;
+            startTime = DateTime.Now - elapsedTime;
+            timer = new Timer(100); // Update every 100 milliseconds
+            timer.Elapsed += TimerElapsed;
+            timer.Start();
+        }
+        else
+        {
+            isRunning = false;
+            timer.Stop();
+        }
+    }
+
+    private void TimerElapsed(object sender, ElapsedEventArgs e)
+    {
+        elapsedTime = DateTime.Now - startTime;
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void ResetStopwatch()
+    {
+        isRunning = false;
+        elapsedTime = TimeSpan.Zero;
+        if (timer != null)
+        {
+            timer.Stop();
+            timer.Dispose();
+        }
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void IncrementCounter()
+    {
+        counterValue++;
+    }
+
+    private void ResetCounter()
+    {
+        counterValue = 0;
+    }
+}

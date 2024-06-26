@@ -17,17 +17,19 @@ namespace Alis4Ops2024.Web.Core
         public int Upper { get; set; } = 5;
         public int Lower { get; set; } = 1;
         public string Operator { get; set; } = "Add";
-        public string SelectedItem { get; set; } = "0-5";
+        public string SelectedItem { get; set; } = "1-5";
         public MultiplyQuestionGeneratorService()
         {
 
         }
         public BaseQuestion GenerateQuestion(int upperRange, int lowerRange, string _operator, string selectedItem)
         {
-            int maxInputNumber = 3; // Change this value as needed if equation has more than 2 operands
+            int minInputNumber = 1;
+            int maxInputNumber = 3;
+            // Change this value as needed if equation has more than 2 operands
             var random = new Random(); // InputNumber is the number of Operands plus Answer. 
             var question = new BaseQuestion(); // maxInputNumber for (1 + 2 = 3) is 3. maxInputNumber for (1 + 2 + 4 = 7) is 4 
-            int Operand2Temp = 0;
+            int Operand2Temp = 1;
             string SelectedItemTemp = selectedItem;
 
             switch (selectedItem)
@@ -37,12 +39,12 @@ namespace Alis4Ops2024.Web.Core
                 case "Multiply-Missing":
                     _operator = "Multiply";
                     question.Operator = _operator;
-                    question.Operand1 = lowerRange;
-                    question.Operand2 = question.Operand2 = random.Next(0, upperRange);
+                    question.Operand1 = randomNumberGenerator.GetRandomNumber(1, upperRange - 1); ;
+                    question.Operand2 = randomNumberGenerator.GetRandomNumber(1, upperRange - 1);
                     question.Operator = _operator;
                     question.Answer = GetAnswer(question);
                     // Call the GetRandomNumber method with the desired maximum number
-                    question.InputPosition = randomNumberGenerator.GetRandomNumber(maxInputNumber);
+                    question.InputPosition = randomNumberGenerator.GetRandomNumber(minInputNumber,maxInputNumber);
                     int MultiplytMissingTemp;
                     switch (question.InputPosition)
                     {
@@ -60,15 +62,10 @@ namespace Alis4Ops2024.Web.Core
                             break;
                     }
                     break;
-
-                case "Multiply-by-10":
-
-                    break;
-
                 default:
                     question.Operator = _operator;
                     question.Operand1 = lowerRange;
-                    question.Operand2 = question.Operand2 = random.Next(0, upperRange);
+                    question.Operand2 = randomNumberGenerator.GetRandomNumber(1, upperRange-1);
                     question.Answer = GetAnswer(question);
                     break;
             }
@@ -81,8 +78,8 @@ namespace Alis4Ops2024.Web.Core
             var random = new Random();
             var question = new BaseQuestion();
             string SelectedItemTemp = SelectedItem;
-            question.Operand1 = random.Next(Lower, Upper);
-            question.Operand2 = random.Next(Lower, Upper);
+            question.Operand1 = randomNumberGenerator.GetRandomNumber(Lower, Upper);
+            question.Operand2 = randomNumberGenerator.GetRandomNumber(Lower, Upper);
             question.Operator = Operator;
 
             question.Answer = GetAnswer(question);
@@ -127,10 +124,10 @@ namespace Alis4Ops2024.Web.Core
         {
             private static Random random = new Random();
 
-            public int GetRandomNumber(int maxNumber)
+            public int GetRandomNumber(int minNumber,int maxNumber)
             {
                 // Generate a random number between 1 and maxNumber (inclusive)
-                int randomNumber = random.Next(1, maxNumber + 1);
+                int randomNumber = random.Next(minNumber, maxNumber + 1);
                 return randomNumber;
             }
         }

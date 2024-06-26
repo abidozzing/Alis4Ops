@@ -1,0 +1,150 @@
+﻿@using Alis4Ops2024.Web.Core
+@using Alis4Ops2024.Web.Models
+@inject NavigationManager _navigationManager
+@inject IJSRuntime JSRuntime
+@using System
+<link href="css/site.css" rel="stylesheet" />
+
+
+
+@if (Question.InputPosition <= 0 || Question.InputPosition > 3)
+{
+    Question.InputPosition = 3;
+}
+
+@switch (Question.InputPosition)
+{
+    case 1:
+
+        <div class="col">
+            <div class="row gx-0">
+                <!-- Operand1 Box Column representation -->
+                <div class="box d-flex justify-content-center align-items-center" style="width: 100%; border: 1px solid lightgray; background-color: yellow; font-size: 75%; margin-top: 5%;">
+                    @Question.Operand1
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="row gx-0">
+                    @for (int col = 1; col <= Question.Operand2; col++)
+                    {
+                        <div class="box d-flex justify-content-center align-itemscenter" style="width:calc((@Question.Answer/@Question.Operand1)*100%); border:1px solid gray; background-color: lightgreen; font-size: 75%; margin-top: 1%;">
+                            ?
+                        </div>
+                    }
+
+                </div>
+            </div>
+            <div class="col">
+                <div class="row gx-0">
+                    @for (int col = 1; col <= Question.Operand2; col++)
+                    {
+                        <div class="box d-flex justify-content-center align-itemscenter" style="width:calc((@Question.Answer/@Question.Operand1)*100%); border:1px solid gray; background-color: lightgray; font-size: 50%; margin-top: 1%;">
+                            @col
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+        break;
+
+    case 2:
+
+        <div class="col">
+            <div class="row gx-0">
+                <!-- Operand1 Box Column representation -->
+                <div class="box d-flex justify-content-center align-items-center" style="width: 100%; border: 1px solid lightgray; background-color: lightskyblue; font-size: 75%; margin-top: 5%;">
+                    @Question.Operand2
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="row gx-0">
+                    @for (int col = 1; col <= Question.Operand1; col++)
+                    {
+                        <div class="box d-flex justify-content-center align-itemscenter" style="width:calc((@Question.Answer/@Question.Operand2)*100%); border:1px solid gray; background-color: lightgreen; font-size: 75%; margin-top: 1%;">
+                            ?
+                        </div>
+                    }
+
+                </div>
+            </div>
+            <div class="col">
+                <div class="row gx-0">
+                    @for (int col = 1; col <= Question.Operand1; col++)
+                    {
+                        <div class="box d-flex justify-content-center align-itemscenter" style="width:calc((@Question.Answer/@Question.Operand2)*100%); border:1px solid gray; background-color: lightgray; font-size: 50%; margin-top: 1%;">
+                            @col
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+        break;
+
+    case 3:
+        <div class="col">
+
+            <div class="col">
+                <div class="row gx-0">
+                    @for (int col = 1; col <= Question.Operand2; col++)
+                    {
+                        <div class="box d-flex justify-content-center align-itemscenter" style="width:calc((@Question.Operand1/@Question.Answer)*100%); border:1px solid gray; background-color: yellow; font-size: 75%; margin-top: 5%;">
+                            @Question.Operand1
+                        </div>
+                    }
+                </div>
+
+                <div class="row gx-0">
+                    @for (int col = 1; col <= Question.Operand2; col++)
+                    {
+                        <div class="box d-flex justify-content-center align-itemscenter" style="width:calc((@Question.Operand1/@Question.Answer)*100%); font-size: 50%; margin-top: 1%;">
+                            @col
+                        </div>
+                    }
+
+                </div>
+            </div>
+
+            <div class="row gx-0">
+                <!-- Operand1 Box Column representation -->
+                <div class="box d-flex justify-content-center align-items-center" style="width: calc((@Question.Answer/@Question.Answer)*100%); border: 1px solidlightgray; background-color: lightgreen; font-size: 75%; margin-top:1%;">
+                    ? 
+                </div>
+            </div>
+
+        </div>
+        break;
+}
+
+
+@code {
+    private int number1; // Initialize number1
+    private int number2; // Initialize number2
+
+    [Parameter]
+    public BaseQuestion Question { get; set; }
+    [Parameter]
+    public int Answer { get; set; }
+    [Inject]
+    private IMultiplyQuestionGeneratorService QuestionGenerator { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (Question != null)
+        {
+            number1 = Question.Operand1; // Assign Operand1 to number1
+            number2 = Question.Operand2; // Assign Operand2 to number2
+        }
+        else
+        {
+            // Handle case where Question is not provided or initialized
+            // You may set default values or handle the null case as needed
+            number1 = 2; // Example default value
+            number2 = 3; // Example default value
+        }
+    }
+}
+

@@ -2,21 +2,36 @@
 @using Alis4Ops2024.Web.Core
 @using Alis4Ops2024.Web.Models
 @using Alis4Ops2024.Web.Layout
+@using Alis4Ops2024.Web.Pages
 @using Microsoft.JSInterop
 @inject IJSRuntime JSRuntime
 @inject NavigationManager _navigationManager
 <link href="css/site.css" rel="stylesheet" />
 
 <PageTitle>Multiply</PageTitle>
+<div class="container col-12">
+    <div>
+        <MultiplyRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
+          @bind-SelectedItem=@SelectedItem ParametersChanged="HandleGenerateQuestion" />
+    </div>
 
-<div>
-    <MultiplyRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
-                  @bind-SelectedItem=@SelectedItem ParametersChanged="HandleGenerateQuestion" />
+    <div>
+        <MultiplyMathQuiz Question="@Question" AnsweredCorrectly="HandleGenerateQuestion" Answer=@Question.Answer />
+    </div>
+    <div>
+        <MultiplyModel Question="@Question" />
+    </div>
+
+@*     <div>
+        <NumberBondSvg Question="@Question" />
+    </div> *@
+
+    <div style="font-size: 16px;">
+        Maths Sum: @Question.Operand1 @Question.OperatorAsSymbol @Question.Operand2 = @Question.Answer
+    </div>
 </div>
 
-<p></p>
-<p></p>
-<div class="container col-10" style="align-content:flex-start;"> <MathQuiz Question="@Question" AnsweredCorrectly="HandleGenerateQuestion" Answer=@Question.Answer></MathQuiz> </div>
+
 
 
 @code {
@@ -34,7 +49,7 @@
         set { _upperRange = value; }
     }
 
-    private int _lowerRange = 0;
+    private int _lowerRange = 1;
     [Parameter]
     public int LowerRange
     {
@@ -50,7 +65,7 @@
         set { _operator = value; }
     }
 
-    private string _selectedItem = "0";
+    private string _selectedItem = "1";
     [Parameter]
     public string SelectedItem
     {

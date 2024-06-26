@@ -1,0 +1,41 @@
+﻿@page "/longdivisionpage"
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <div class="long-division">
+                <div class="numerator">42</div>
+                <div class="long-division-symbol">÷</div>
+                <div class="denominator">7</div>
+            </div>
+            <hr class="result" />
+            <div class="result-number">6</div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .long-division {
+        position: relative;
+        display: inline-block;
+    }
+
+    .long-division-symbol {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2rem;
+    }
+
+    .numerator, .denominator, .result-number {
+        display: inline-block;
+        text-align: center;
+        font-size: 1.5rem;
+        padding: 10px 20px;
+    }
+
+    .result {
+        border-top: 2px solid black;
+        width: 100%;
+    }
+</style>
