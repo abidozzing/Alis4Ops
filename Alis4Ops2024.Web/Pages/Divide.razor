@@ -25,9 +25,9 @@
         <DivideModel Question="@Question" />
     </div>
 
-    <div style="font-size: 16px;">
+@*     <div style="font-size: 16px;">
         Maths Sum: @Question.Operand1 @Question.OperatorAsSymbol @Question.Operand2 = @Question.Answer
-    </div>
+    </div> *@
 
 </div>
 
@@ -38,6 +38,8 @@
     private IDivideQuestionGeneratorService QuestionGenerator { get; set; }
     [Parameter]
     public BaseQuestion Question { get; set; }
+    [Parameter]
+    public EventCallback AnsweredCorrectly { get; set; }
 
     private int _upperRange = 12;
     [Parameter]
@@ -76,12 +78,13 @@
         HandleGenerateQuestion();
     }
 
-    private void HandleGenerateQuestion()
+    private async void HandleGenerateQuestion()
     {
         if (Operator == null)
         {
             return;
         }
+        await AnsweredCorrectly.InvokeAsync();
         Question = QuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem);
     }
 

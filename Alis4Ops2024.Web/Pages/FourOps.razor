@@ -1,0 +1,68 @@
+﻿@page "/fourops"
+@using Alis4Ops2024.Web.Core
+@using Alis4Ops2024.Web.Models
+@using Alis4Ops2024.Web.Layout
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
+@inject NavigationManager _navigationManager
+<link href="css/site.css" rel="stylesheet" />
+
+<PageTitle>Add</PageTitle>
+
+<div class="container col-12">
+
+
+    @if (FourOpsSelect == 0)
+    {
+        <div>
+            <Add AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Add-Missing" LowerRange ="1" UpperRange ="20" />
+        </div>
+    }
+    else if(FourOpsSelect == 1)
+    {
+        <div>
+            <Subtract AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Subtract-Missing" LowerRange="1" UpperRange="20" />
+        </div>
+    }
+    else if (FourOpsSelect == 2)
+    {
+    <div>
+        <Multiply AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Subtract-Missing" LowerRange="12" UpperRange="12" />
+    </div>
+    }
+    else if (FourOpsSelect == 3)
+    {
+    <div>
+        <Divide AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Subtract-Missing" LowerRange="12" UpperRange="12" />
+    </div>
+    }
+
+</div>
+
+@code {
+
+    private Random random = new Random();
+
+    private int FourOpsSelect { get; set; } = 0;
+
+    [Parameter]
+    public EventCallback AnsweredCorrectly { get; set; }
+
+    protected override void OnInitialized()
+    {
+        HandleGenerateQuestion();
+    }
+
+    private void HandleGenerateQuestion()
+    {
+        FourOpsSelect = random.Next(0, 4);
+
+    }
+
+}
+
+
+
+
+
+

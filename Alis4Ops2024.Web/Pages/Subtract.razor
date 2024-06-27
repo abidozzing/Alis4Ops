@@ -22,10 +22,10 @@
     <div>
         <SubtractModel Question="@Question" />
     </div>
-
+@* 
     <div style="font-size: 16px; --bs-gutter-x: 0;">
         Maths Sum: @Question.Operand1 @Question.OperatorAsSymbol @Question.Operand2 = @Question.Answer
-    </div>
+    </div> *@
 
 </div>
 
@@ -35,6 +35,8 @@
     private ISubtractQuestionGeneratorService QuestionGenerator { get; set; }
     [Parameter]
     public BaseQuestion Question { get; set; }
+    [Parameter]
+    public EventCallback AnsweredCorrectly { get; set; }
 
     private int _upperRange = 5;
     [Parameter]
@@ -73,12 +75,13 @@
         HandleGenerateQuestion();
     }
 
-    private void HandleGenerateQuestion()
+    private async void HandleGenerateQuestion()
     {
         if (Operator == null)
         {
             return;
         }
+        await AnsweredCorrectly.InvokeAsync();
         Question = QuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem);
     }
 

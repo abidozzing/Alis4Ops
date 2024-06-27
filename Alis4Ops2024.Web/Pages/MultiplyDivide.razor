@@ -1,0 +1,55 @@
+﻿@page "/multiplydivide"
+@using Alis4Ops2024.Web.Core
+@using Alis4Ops2024.Web.Models
+@using Alis4Ops2024.Web.Layout
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
+@inject NavigationManager _navigationManager
+<link href="css/site.css" rel="stylesheet" />
+
+<PageTitle>Add</PageTitle>
+
+<div class="container col-12">
+
+    @if (AddOrSub <= 0 || AddOrSub > 2)
+    {
+        <div>
+            <Multiply AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Multiply-Missing" LowerRange ="12" UpperRange ="12" />
+        </div>
+    }
+    else
+    {
+        <div>
+            <Divide AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Divide-Missing" LowerRange="12" UpperRange="12" />
+        </div>
+    }
+
+</div>
+
+@code {
+
+    private Random random = new Random();
+
+    private int AddOrSub { get; set; } = 0;
+
+    [Parameter]
+    public EventCallback AnsweredCorrectly { get; set; }
+
+    protected override void OnInitialized()
+    {
+        HandleGenerateQuestion();
+    }
+
+    private void HandleGenerateQuestion()
+    {
+        AddOrSub = random.Next(0, 2);
+
+    }
+
+}
+
+
+
+
+
+
