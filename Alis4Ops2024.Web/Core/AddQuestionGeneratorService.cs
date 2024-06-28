@@ -100,7 +100,7 @@ namespace Alis4Ops2024.Web.Core
                 default:
                     int temp;
                     question.Operand1 = upperRange;
-                    question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange-1);
+                    question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange-lowerRange-1);
                     temp = question.Operand1 - question.Operand2;
                     question.Operand1 = randomNumberGenerator.GetRandomNumber(lowerRange, temp-1);
                     question.Operator = _operator;
