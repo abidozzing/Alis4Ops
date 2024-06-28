@@ -41,9 +41,9 @@ namespace Alis4Ops2024.Web.Core
                 case "Add-Missing":
                     int AddMissingTemp;
                     question.Operand1 = upperRange;
-                    question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange-1);
+                    question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange-lowerRange);
                     AddMissingTemp = question.Operand1 - question.Operand2;
-                    question.Operand1 = randomNumberGenerator.GetRandomNumber(lowerRange, AddMissingTemp-1);
+                    question.Operand1 = randomNumberGenerator.GetRandomNumber(lowerRange, AddMissingTemp);
 
 
                     question.Operator = _operator;
@@ -76,7 +76,7 @@ namespace Alis4Ops2024.Web.Core
                 case "Make-50":
                 case "Make-100":
                     question.Operand1 = upperRange;
-                    question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange-1);
+                    question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange-lowerRange);
                     Operand2Temp = question.Operand1 - question.Operand2;
                     question.Operand1 = Operand2Temp;
                     question.Operator = _operator;
@@ -100,9 +100,9 @@ namespace Alis4Ops2024.Web.Core
                 default:
                     int temp;
                     question.Operand1 = upperRange;
-                    question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange-lowerRange-1);
+                    question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange-lowerRange);
                     temp = question.Operand1 - question.Operand2;
-                    question.Operand1 = randomNumberGenerator.GetRandomNumber(lowerRange, temp-1);
+                    question.Operand1 = randomNumberGenerator.GetRandomNumber(lowerRange, temp);
                     question.Operator = _operator;
                     question.Answer = GetAnswer(question);
                     break;
