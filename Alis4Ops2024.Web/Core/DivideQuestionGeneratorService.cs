@@ -35,8 +35,8 @@ namespace Alis4Ops2024.Web.Core
                     case "Divide-Missing":  // To write code logic for Divide Missing ?/6 = 5, 40/? = 10, 42/7 = ?
                         _operator = "Divide";
                         question.Operator = _operator;
-                        question.Operand2 = randomNumberGenerator.GetRandomNumber(1, upperRange);
-                        question.Operand1 = randomNumberGenerator.GetRandomNumber(1, upperRange) * question.Operand2;
+                        question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange);
+                        question.Operand1 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange) * question.Operand2;
                         question.Answer = GetAnswer(question);
                         // Call the GetRandomNumber method with the desired maximum number
                         question.InputPosition = randomNumberGenerator.GetRandomNumber(minInputNumber,maxInputNumber);
@@ -58,7 +58,7 @@ namespace Alis4Ops2024.Web.Core
                     default:
                         question.Operator = _operator;
                         question.Operand2 = lowerRange;
-                        question.Operand1 = randomNumberGenerator.GetRandomNumber(1, upperRange) * lowerRange;
+                        question.Operand1 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange) * lowerRange;
                         question.Answer = GetAnswer(question);
                         break;
                 }

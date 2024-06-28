@@ -39,8 +39,8 @@ namespace Alis4Ops2024.Web.Core
                 case "Multiply-Missing":
                     _operator = "Multiply";
                     question.Operator = _operator;
-                    question.Operand1 = randomNumberGenerator.GetRandomNumber(1, upperRange - 1); ;
-                    question.Operand2 = randomNumberGenerator.GetRandomNumber(1, upperRange - 1);
+                    question.Operand1 = randomNumberGenerator.GetRandomNumber(1, upperRange); ;
+                    question.Operand2 = randomNumberGenerator.GetRandomNumber(1, upperRange);
                     question.Operator = _operator;
                     question.Answer = GetAnswer(question);
                     // Call the GetRandomNumber method with the desired maximum number
@@ -65,7 +65,7 @@ namespace Alis4Ops2024.Web.Core
                 default:
                     question.Operator = _operator;
                     question.Operand1 = lowerRange;
-                    question.Operand2 = randomNumberGenerator.GetRandomNumber(1, upperRange-1);
+                    question.Operand2 = randomNumberGenerator.GetRandomNumber(1, upperRange);
                     question.Answer = GetAnswer(question);
                     break;
             }

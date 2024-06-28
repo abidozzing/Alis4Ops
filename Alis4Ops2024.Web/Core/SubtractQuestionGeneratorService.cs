@@ -36,8 +36,8 @@ namespace Alis4Ops2024.Web.Core
             {
 
                 case "Subtract-Missing":  // To write code logic for Subtract Missing ? - 6 = 18, 4 - ? = 1, 21 - 7 = ?
-                    question.Operand1 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange - 1);
-                    question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange - 1);
+                    question.Operand1 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange);
+                    question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange);
                     question.Operator = _operator;
                     question.Answer = GetAnswer(question);
                     // Call the GetRandomNumber method with the desired maximum number
@@ -68,7 +68,7 @@ namespace Alis4Ops2024.Web.Core
                 case "Subtract-from-100":
                     int SubtractTemp;
                     question.Operand1 = upperRange;
-                    question.Operand2 = randomNumberGenerator.GetRandomNumber(1, upperRange-1);
+                    question.Operand2 = randomNumberGenerator.GetRandomNumber(1, upperRange);
                     question.Operator = _operator;
                     question.Answer = GetAnswer(question);
                     minInputNumber = 2;
@@ -85,8 +85,8 @@ namespace Alis4Ops2024.Web.Core
                     break;
 
                 default:
-                    question.Operand1 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange - 1);
-                    question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange - 1);
+                    question.Operand1 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange);
+                    question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange);
 
                     question.Operator = _operator;
                     question.Answer = GetAnswer(question);
