@@ -205,12 +205,10 @@
 
 
 @code {
-    [Parameter]
-    public BaseQuestion Question { get; set; }
-    [Parameter]
-    public EventCallback AnsweredCorrectly { get; set; }
-    [Parameter]
-    public int Answer { get; set; }
+    [Parameter] public BaseQuestion Question { get; set; }
+    [Parameter] public EventCallback AnsweredCorrectly { get; set; }
+    [Parameter] public EventCallback AnsweredWrongly { get; set; }
+    [Parameter] public int Answer { get; set; }
     private ElementReference inputElement;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -234,8 +232,8 @@
     private string resultMessage = "";
     private string resultColor = "White";
 
-    [Inject]
-    private IMultiplyQuestionGeneratorService QuestionGenerator { get; set; }
+    // [Inject]
+    // private IMultiplyQuestionGeneratorService QuestionGenerator { get; set; }
 
     private async Task HandleKeydown(KeyboardEventArgs args)
     {
@@ -263,12 +261,15 @@
                 resultMessage = "";
                 resultColor = "white"; // Reset color
                 await AnsweredCorrectly.InvokeAsync();
+                StateHasChanged();
             }
             else
             {
                 resultMessage = "Please Try Again.";
                 resultColor = "red";
                 await JSRuntime.InvokeVoidAsync("eval", "document.activeElement.select()");
+                await AnsweredWrongly.InvokeAsync();
+                StateHasChanged();
             }
 
             showResult = true;

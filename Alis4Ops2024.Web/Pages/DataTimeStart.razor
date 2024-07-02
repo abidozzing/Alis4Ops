@@ -1,0 +1,14 @@
+﻿@page "/datetimestart"
+@using System
+
+<div class="row" style="font-size: 38%;">
+    <div class="col-3">
+        Time Start: @startTimeStatic.ToString("hh:mm:ss tt")
+    </div>
+</div>
+
+@code {
+    private DateTime startTimeStatic = DateTime.Now; // Static start time
+
+    // No other fields or methods are needed since startTimeStatic is static and doesn't need updates
+}

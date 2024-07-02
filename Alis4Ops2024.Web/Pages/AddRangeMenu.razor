@@ -3,13 +3,15 @@
 @using Alis4Ops2024.Web.Core
 @using Alis4Ops2024.Web.Models
 @using Alis4Ops2024.Web.Layout
-<link href="css/rangemenu.css" rel="stylesheet" />
+<link href="css/dropbutton.css" rel="stylesheet" />
 <link href="css/site.css" rel="stylesheet" />
 
-<div class="row  gx-0">
+
+
+<div class="row gx-0">
     <div class="dropdown">
-        <div class="flex-flow: row nowrap;  gx-0">
-            <div class="col-8">
+        <div class="flex-flow nowrap">
+            <div class="col">
                 <button class="dropbtn" @onclick="ToggleDropdown">Add</button>
                 <div class="dropdown-content" style="@dropdownStyle">
                     @foreach (var item in MenuItems)
@@ -17,7 +19,12 @@
                         <a @onclick="(() => { HandleClickedItem(item); ToggleDropdown(); })">@item.Text</a> <!-- Toggle dropdown when item clicked -->
                     }
                 </div>
+              
+@*                 <div class="col">
+                <DataTimeStart/>
+                </div> *@
             </div>
+
         </div>
     </div>
 </div>

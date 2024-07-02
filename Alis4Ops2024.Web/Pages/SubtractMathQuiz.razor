@@ -3,6 +3,7 @@
 @inject NavigationManager _navigationManager
 @inject IJSRuntime JSRuntime
 @using System
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
 <link href="css/site.css" rel="stylesheet" />
 
 <PageTitle>SubtractMathQuiz</PageTitle>
@@ -205,12 +206,10 @@
 }
 
 @code {
-    [Parameter]
-    public BaseQuestion Question { get; set; }
-    [Parameter]
-    public EventCallback AnsweredCorrectly { get; set; }
-    [Parameter]
-    public int Answer { get; set; }
+    [Parameter] public BaseQuestion Question { get; set; }
+    [Parameter] public EventCallback AnsweredCorrectly { get; set; }
+    [Parameter] public EventCallback AnsweredWrongly { get; set; }
+    [Parameter] public int Answer { get; set; }
     private ElementReference inputElement;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -233,6 +232,13 @@
     // [Inject]
     // private ISubtractQuestionGeneratorService QuestionGenerator { get; set; }
 
+    // private async Task<int> GetCounterAsync()
+    // {
+    //     var storedValue = await sessionStorage.GetItemAsync<string>("counterValue");
+    //     // counterValue = int.Parse(storedValue);
+    //     return string.IsNullOrEmpty(storedValue) ? 1 : int.Parse(storedValue);
+    // }
+
     private async Task HandleKeydown(KeyboardEventArgs args)
     {
         if (args.Key == "Enter")
@@ -252,6 +258,7 @@
             // Now we know userInput is numeric, proceed with the comparison
             if (parsedInput == Question.Answer)
             {
+
                 resultMessage = "Good Job!";
                 resultColor = "green";
                 await Task.Delay(500);
@@ -259,12 +266,15 @@
                 resultMessage = "";
                 resultColor = "white"; // Reset color
                 await AnsweredCorrectly.InvokeAsync();
+                StateHasChanged();
             }
             else
             {
                 resultMessage = "Please Try Again.";
                 resultColor = "red";
                 await JSRuntime.InvokeVoidAsync("eval", "document.activeElement.select()");
+                await AnsweredWrongly.InvokeAsync();
+                StateHasChanged();
             }
 
             showResult = true;

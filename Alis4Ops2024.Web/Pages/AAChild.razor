@@ -1,0 +1,21 @@
+﻿@page "/aachild"
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+
+<h3>AAChild</h3>
+
+<p>Counter Value: @counter</p>
+
+@code {
+    private int counter;
+
+    protected override async Task OnInitializedAsync()
+    {
+        counter = await GetCounterAsync();
+    }
+
+    private async Task<int> GetCounterAsync()
+    {
+        var storedValue = await sessionStorage.GetItemAsync<string>("counter");
+        return string.IsNullOrEmpty(storedValue) ? 0 : int.Parse(storedValue);
+    }
+}

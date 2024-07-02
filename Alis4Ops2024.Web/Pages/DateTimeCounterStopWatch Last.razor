@@ -1,7 +1,8 @@
 ﻿@using System.Timers
 @using System
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage
-<div class="row flex-nowrap gx-0" style="font-size: 40%;">
+
+<div class="row flex-nowrap gx-0" style="font-size: 45%;">
 
     <div class="col text-center">
         @currentDateTime
@@ -12,9 +13,7 @@
     </div>
 
     <div class="col text-center">
-        @* Session: @sessionTime.ToString("hh\\:mm\\:ss") *@
-        @* Session: @(DateTime.Now - startTimeStatic) *@
-        Session: @FormatSessionTime(DateTime.Now - startTimeStatic)
+        Session: @sessionTime.ToString("hh\\:mm\\:ss")
     </div>
 
     <div class="col text-center">
@@ -43,34 +42,40 @@
 
 </div>
 
-
-
 @code {
-
-    [Parameter]
-    public DateTime startTimeStatic { get; set; } = DateTime.Now; // Assuming startTimeStatic is set elsewhere
-
-    private string FormatSessionTime(TimeSpan sessionTime)
-    {
-        return $"{sessionTime.Hours:D2}:{sessionTime.Minutes:D2}:{sessionTime.Seconds:D2}";
-    }
-
     private bool isRunning = false;
     private Timer timer;
     private Timer sessionTimer; // Timer for session time
-    private DateTime startTime;
-    // private DateTime startTimeStatic = DateTime.Now; // Static start time
+                                // private DateTime startTime;
+    private DateTime startTimeStatic; // Static start time
     private TimeSpan elapsedTime;
-    // private TimeSpan sessionTime; // Total session time
     private int rightSums;      // no. of correct sums
     private int inputValue;
     private bool WrongAnswerFlag = false;
 
+    // Counter value received from parent component
+    [Parameter] public int counterValue { get; set; }
+    [Parameter] public int errorValue { get; set; }
+    [Parameter] public TimeSpan sessionTime { get; set; }
+
+    // Event callback to notify parent about counter value change
+    [Parameter] public EventCallback<int> counterValueChanged { get; set; }
+
+    private string currentDateTime => DateTime.Now.ToString("ddd dd MMM yyyy");
+    private string stopwatchTime => $"{elapsedTime.Hours:D2}:{elapsedTime.Minutes:D2}:{elapsedTime.Seconds:D2}.{elapsedTime.Milliseconds / 100}";
+
     protected override async Task OnInitializedAsync()
     {
+        // Retrieve counterValue and errorValue from session storage
         counterValue = await GetCounterAsync();
         errorValue = await GetScoreAsync();
+
+        // Retrieve startTimeStatic and sessionTime from session storage
         startTimeStatic = await GetStartTimeStaticAsync();
+        sessionTime = await GetSessionTimeAsync();
+
+        // Start timers
+        StartTimers();
     }
 
     private async Task<int> GetCounterAsync()
@@ -92,13 +97,9 @@
         {
             return result;
         }
-        await SaveStartTimeStaticAsync(DateTime.Now);
-        return DateTime.Now; // Default value if parsing fails or stored value is empty
-    }
-
-    private async Task SaveStartTimeStaticAsync(DateTime value)
-    {
-        await sessionStorage.SetItemAsync("startTimeStatic", value.ToString());
+        var datetime = DateTime.Now;
+        await SaveStartTimeStaticAsync(datetime);
+        return datetime; // Default value if parsing fails or stored value is empty
     }
 
     private async Task<TimeSpan> GetSessionTimeAsync()
@@ -108,23 +109,23 @@
         {
             return result;
         }
-        long ticks = TimeSpan.Zero.Ticks;
-        await SaveSessionTimeAsync(ticks);
-        return TimeSpan.FromTicks(ticks); // Default value if parsing fails or stored value is empty
+        return TimeSpan.Zero; // Default value if parsing fails or stored value is empty
     }
 
-    private async Task SaveSessionTimeAsync(long value)
+    private async Task SaveStartTimeStaticAsync(DateTime value)
+    {
+        await sessionStorage.SetItemAsync("startTimeStatic", value.ToString());
+    }
+
+    private async Task SaveSessionTimeAsync(TimeSpan value)
     {
         await sessionStorage.SetItemAsync("sessionTime", value.ToString());
     }
 
+    // Increment counterValue and errorValue
     public async Task IncrementCounter()
     {
-        if (WrongAnswerFlag == true)
-        {
-            WrongAnswerFlag = false;
-        }
-        else
+        if (!WrongAnswerFlag)
         {
             counterValue++;
             await sessionStorage.SetItemAsync("counterValue", counterValue.ToString());
@@ -144,28 +145,8 @@
         }
     }
 
-
-    // Counter value received from parent component
-    [Parameter] public int counterValue { get; set; }
-    [Parameter] public int errorValue { get; set; }
-    [Parameter] public TimeSpan sessionTime { get; set; }
-
-    
-    // [Parameter]
-    // public TimeSpan sessionTime
-    // {
-    //     get { return TimeSpan.FromTicks(startTimeStatic.Ticks + elapsedTime.Ticks); }
-    //     set { sessionTime = value; }
-    // }
-
-
-    // Event callback to notify parent about counter value change
-    [Parameter] public EventCallback<int> counterValueChanged { get; set; }
-
-    private string currentDateTime => DateTime.Now.ToString("ddd dd MMM yyyy");
-    private string stopwatchTime => $"{elapsedTime.Hours:D2}:{elapsedTime.Minutes:D2}:{elapsedTime.Seconds:D2}.{elapsedTime.Milliseconds / 100}";
-
-    protected override void OnInitialized()
+    // Start timers for updating time
+    private void StartTimers()
     {
         // Start the stopwatch initially
         ToggleTimer();
@@ -179,7 +160,7 @@
         // Start session timer
         sessionTimer = new Timer(1000); // Update every 1000 milliseconds (1 second)
         sessionTimer.Elapsed += SessionTimerElapsed;
-        // sessionTimer.AutoReset = true;
+        sessionTimer.AutoReset = true;
         sessionTimer.Start();
     }
 
@@ -193,7 +174,7 @@
     {
         if (isRunning)
         {
-            elapsedTime = DateTime.Now - startTime;
+            // elapsedTime = DateTime.Now - startTime;
             InvokeAsync(() => StateHasChanged());
         }
     }
@@ -202,6 +183,7 @@
     {
         sessionTime = DateTime.Now - startTimeStatic;
         InvokeAsync(() => StateHasChanged());
+        SaveSessionTimeAsync(sessionTime); // Save sessionTime to session storage
     }
 
     private void ToggleTimer()
@@ -209,7 +191,7 @@
         if (!isRunning)
         {
             isRunning = true;
-            startTime = DateTime.Now - elapsedTime;
+            // startTime = DateTime.Now - elapsedTime;
             timer = new Timer(100); // Update every 100 milliseconds
             timer.Elapsed += TimerElapsed;
             timer.Start();
@@ -226,7 +208,7 @@
     {
         isRunning = false;
         elapsedTime = TimeSpan.Zero;
-        startTime = DateTime.Now;
+        // startTime = DateTime.Now;
         ToggleTimer();
     }
 

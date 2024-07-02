@@ -5,22 +5,24 @@
 @using Microsoft.JSInterop
 @inject IJSRuntime JSRuntime
 @inject NavigationManager _navigationManager
+@using System
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
 <link href="css/site.css" rel="stylesheet" />
 
 <PageTitle>Add</PageTitle>
 
 <div class="container col-12">
 
-    @if (AddOrSub <= 0 || AddOrSub > 2)
+    @if (Num <= 0 || Num > 2)
     {
         <div>
-            <Multiply AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Multiply-Missing" LowerRange ="12" UpperRange ="12" />
+            <Multiply AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Multiply-Missing" LowerRange ="1" UpperRange ="12" />
         </div>
     }
     else
     {
         <div>
-            <Divide AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Divide-Missing" LowerRange="12" UpperRange="12" />
+            <Divide AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Divide-Missing" LowerRange="1" UpperRange="12" />
         </div>
     }
 
@@ -30,7 +32,7 @@
 
     private Random random = new Random();
 
-    private int AddOrSub { get; set; } = 0;
+    private int Num { get; set; } = 0;
 
     [Parameter]
     public EventCallback AnsweredCorrectly { get; set; }
@@ -42,7 +44,7 @@
 
     private void HandleGenerateQuestion()
     {
-        AddOrSub = random.Next(0, 2);
+        Num = random.Next(0, 2);
 
     }
 

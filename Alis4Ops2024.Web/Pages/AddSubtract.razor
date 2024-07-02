@@ -5,22 +5,24 @@
 @using Microsoft.JSInterop
 @inject IJSRuntime JSRuntime
 @inject NavigationManager _navigationManager
+@using System
 <link href="css/site.css" rel="stylesheet" />
 
-<PageTitle>Add</PageTitle>
+<PageTitle>Add:Subtract</PageTitle>
+@* <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" /> *@
 
 <div class="container col-12">
 
-    @if (AddOrSub <= 0 || AddOrSub > 2)
+    @if (NUm <= 0 || NUm > 2)
     {
         <div>
-            <Add AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Add-Missing" LowerRange ="1" UpperRange ="20" />
+            <Add AnsweredCorrectly="GenerateNewQuestion" SelectedItem="Add-Missing" LowerRange ="1" UpperRange ="20" />
         </div>
     }
     else
     {
         <div>
-            <Subtract AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Subtract-Missing" LowerRange="1" UpperRange="20" />
+            <Subtract AnsweredCorrectly="GenerateNewQuestion" SelectedItem="Subtract-Missing" LowerRange="1" UpperRange="20" />
         </div>
     }
 
@@ -30,20 +32,29 @@
 
     private Random random = new Random();
 
-    private int AddOrSub { get; set; } = 0;
+    private int NUm { get; set; } = 0;
+
+    private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
 
     [Parameter]
     public EventCallback AnsweredCorrectly { get; set; }
 
     protected override void OnInitialized()
     {
-        HandleGenerateQuestion();
+        GenerateNewQuestion();
     }
 
-    private void HandleGenerateQuestion()
+    private async void HandleAnsweredCorrectly()
     {
-        AddOrSub = random.Next(0, 2);
+        GenerateNewQuestion();
+        await AnsweredCorrectly.InvokeAsync();
+        dateTimeCounterStopWatch.ResetAndStartStopwatch();
+        await dateTimeCounterStopWatch.IncrementCounter();
+    }
 
+    private void GenerateNewQuestion()
+    {
+        NUm = random.Next(0, 2);
     }
 
 }

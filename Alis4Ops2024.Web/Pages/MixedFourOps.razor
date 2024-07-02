@@ -5,45 +5,87 @@
 @using Microsoft.JSInterop
 @inject IJSRuntime JSRuntime
 @inject NavigationManager _navigationManager
+@using System
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
 <link href="css/site.css" rel="stylesheet" />
+
+@switch (selectedItem)
+
+{
+
+    case "Add":
+        break;
+
+    case "Add-Missing":
+        break;
+
+    case "Subtract":
+        break;
+
+    case "Subtract-Missing":
+        break;
+
+    case "Multiply":
+        break;
+
+    case "Multiply-Missing":
+        break;
+
+    case "Divide":
+        break;
+
+    case "Divide-Missing":
+        break;
+
+    case "Add:Subtract":
+        break;
+
+    case "Multiply:Divide":
+        break;
+
+    case "MissingFourOps":
+        break;
+
+}
 
 <PageTitle>Add</PageTitle>
 
 <div class="container col-12">
 
 
-    @if (FourOpsSelect == 0)
+    @if (Num == 0)
     {
         <div>
-            <Add AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Add-Missing" LowerRange ="1" UpperRange ="20" />
+            <Add AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Add-Missing" LowerRange="1" UpperRange="20" />
         </div>
     }
-    else if(FourOpsSelect == 1)
+    else if (Num == 1)
     {
         <div>
             <Subtract AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Subtract-Missing" LowerRange="1" UpperRange="20" />
         </div>
     }
-    else if (FourOpsSelect == 2)
+    else if (Num == 2)
     {
-    <div>
-        <Multiply AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Multiply-Missing" LowerRange="1" UpperRange="12" />
-    </div>
+        <div>
+            <Multiply AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Multiply-Missing" LowerRange="1" UpperRange="12" />
+        </div>
     }
-    else if (FourOpsSelect == 3)
+    else if (Num == 3)
     {
-    <div>
-        <Divide AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Divide-Missing" LowerRange="1" UpperRange="12" />
-    </div>
+        <div>
+            <Divide AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Divide-Missing" LowerRange="1" UpperRange="12" />
+        </div>
     }
 
 </div>
 
 @code {
+    string selectedItem = "Add";
 
     private Random random = new Random();
 
-    private int FourOpsSelect { get; set; } = 0;
+    private int Num { get; set; } = 0;
 
     [Parameter]
     public EventCallback AnsweredCorrectly { get; set; }
@@ -55,7 +97,7 @@
 
     private void HandleGenerateQuestion()
     {
-        FourOpsSelect = random.Next(0, 4);
+        Num = random.Next(0, 4);
 
     }
 

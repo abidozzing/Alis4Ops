@@ -1,5 +1,4 @@
 ﻿@page "/subtract"
-
 @using Alis4Ops2024.Web.Core
 @using Alis4Ops2024.Web.Models
 @using Alis4Ops2024.Web.Layout
@@ -9,36 +8,32 @@
 <link href="css/site.css" rel="stylesheet" />
 
 <PageTitle>Subtract</PageTitle>
+
 <div class="container col-12">
     <div>
         <SubtractRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
-          @bind-SelectedItem=@SelectedItem ParametersChanged="HandleGenerateQuestion"></SubtractRangeMenu>
+                           @bind-SelectedItem=@SelectedItem ParametersChanged="GenerateNewQuestion" />
     </div>
-
+    <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" />
     <div>
-        <SubtractMathQuiz Question="@Question" AnsweredCorrectly="HandleGenerateQuestion" Answer=@Question.Answer></SubtractMathQuiz>
-    </div>
-
     <div>
-        <SubtractModel Question="@Question" />
+        <SubtractMathQuiz Question="@Question" AnsweredCorrectly="HandleAnsweredCorrectly" AnsweredWrongly="HandleAnsweredWrongly" Answer=@Question.Answer />
     </div>
-@* 
-    <div style="font-size: 16px; --bs-gutter-x: 0;">
-        Maths Sum: @Question.Operand1 @Question.OperatorAsSymbol @Question.Operand2 = @Question.Answer
-    </div> *@
 
+        <div>
+            <SubtractModel Question="@Question" />
+        </div>
+    </div>
 </div>
-
 @code {
 
-    [Inject]
-    private ISubtractQuestionGeneratorService QuestionGenerator { get; set; }
-    [Parameter]
-    public BaseQuestion Question { get; set; }
-    [Parameter]
-    public EventCallback AnsweredCorrectly { get; set; }
+    [Inject] private ISubtractQuestionGeneratorService QuestionGenerator { get; set; }
+    [Parameter] public BaseQuestion Question { get; set; }
+    [Parameter] public EventCallback AnsweredCorrectly { get; set; }
+    [Parameter] public EventCallback AnsweredWrongly { get; set; }
 
     private int _upperRange = 5;
+
     [Parameter]
     public int UpperRange
     {
@@ -70,18 +65,36 @@
         set { _selectedItem = value; }
     }
 
+    private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
+
     protected override void OnInitialized()
     {
-        HandleGenerateQuestion();
+        if (dateTimeCounterStopWatch is null)
+        {
+            dateTimeCounterStopWatch = new DateTimeCounterStopWatch();
+        }
+        GenerateNewQuestion();
     }
 
-    private async void HandleGenerateQuestion()
+    private async void HandleAnsweredCorrectly()
+    {
+        GenerateNewQuestion();
+        await AnsweredCorrectly.InvokeAsync();
+        dateTimeCounterStopWatch.ResetAndStartStopwatch();
+        await dateTimeCounterStopWatch.IncrementCounter();
+    }
+
+    private async void HandleAnsweredWrongly()
+    {
+        await dateTimeCounterStopWatch.IncrementErrorCount();
+    }
+
+    private void GenerateNewQuestion()
     {
         if (Operator == null)
         {
             return;
         }
-        await AnsweredCorrectly.InvokeAsync();
         Question = QuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem);
     }
 

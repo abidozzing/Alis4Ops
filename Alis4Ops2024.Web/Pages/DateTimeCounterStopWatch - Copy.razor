@@ -1,7 +1,7 @@
 ﻿@using System.Timers
 @using System
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage
-<div class="row flex-nowrap gx-0" style="font-size: 40%;">
+<div class="row flex-nowrap gx-0" style="font-size: 45%;">
 
     <div class="col text-center">
         @currentDateTime
@@ -12,9 +12,7 @@
     </div>
 
     <div class="col text-center">
-        @* Session: @sessionTime.ToString("hh\\:mm\\:ss") *@
-        @* Session: @(DateTime.Now - startTimeStatic) *@
-        Session: @FormatSessionTime(DateTime.Now - startTimeStatic)
+        Session: @sessionTime.ToString("hh\\:mm\\:ss")
     </div>
 
     <div class="col text-center">
@@ -46,20 +44,11 @@
 
 
 @code {
-
-    [Parameter]
-    public DateTime startTimeStatic { get; set; } = DateTime.Now; // Assuming startTimeStatic is set elsewhere
-
-    private string FormatSessionTime(TimeSpan sessionTime)
-    {
-        return $"{sessionTime.Hours:D2}:{sessionTime.Minutes:D2}:{sessionTime.Seconds:D2}";
-    }
-
     private bool isRunning = false;
     private Timer timer;
     private Timer sessionTimer; // Timer for session time
     private DateTime startTime;
-    // private DateTime startTimeStatic = DateTime.Now; // Static start time
+    private DateTime startTimeStatic = DateTime.Now; // Static start time
     private TimeSpan elapsedTime;
     // private TimeSpan sessionTime; // Total session time
     private int rightSums;      // no. of correct sums
@@ -71,6 +60,7 @@
         counterValue = await GetCounterAsync();
         errorValue = await GetScoreAsync();
         startTimeStatic = await GetStartTimeStaticAsync();
+        sessionTime = await GetSessionTimeAsync();
     }
 
     private async Task<int> GetCounterAsync()
@@ -92,13 +82,7 @@
         {
             return result;
         }
-        await SaveStartTimeStaticAsync(DateTime.Now);
         return DateTime.Now; // Default value if parsing fails or stored value is empty
-    }
-
-    private async Task SaveStartTimeStaticAsync(DateTime value)
-    {
-        await sessionStorage.SetItemAsync("startTimeStatic", value.ToString());
     }
 
     private async Task<TimeSpan> GetSessionTimeAsync()
@@ -108,14 +92,7 @@
         {
             return result;
         }
-        long ticks = TimeSpan.Zero.Ticks;
-        await SaveSessionTimeAsync(ticks);
-        return TimeSpan.FromTicks(ticks); // Default value if parsing fails or stored value is empty
-    }
-
-    private async Task SaveSessionTimeAsync(long value)
-    {
-        await sessionStorage.SetItemAsync("sessionTime", value.ToString());
+        return TimeSpan.Zero; // Default value if parsing fails or stored value is empty
     }
 
     public async Task IncrementCounter()
@@ -149,14 +126,6 @@
     [Parameter] public int counterValue { get; set; }
     [Parameter] public int errorValue { get; set; }
     [Parameter] public TimeSpan sessionTime { get; set; }
-
-    
-    // [Parameter]
-    // public TimeSpan sessionTime
-    // {
-    //     get { return TimeSpan.FromTicks(startTimeStatic.Ticks + elapsedTime.Ticks); }
-    //     set { sessionTime = value; }
-    // }
 
 
     // Event callback to notify parent about counter value change

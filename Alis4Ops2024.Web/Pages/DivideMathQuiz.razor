@@ -213,33 +213,11 @@
 
 
 @code {
-    [Parameter]
-    public int AnswerBond { get; set; }
 
-    private Random random = new Random();
-    private int addend1;
-    private int addend2;
-
-    protected override void OnInitialized()
-    {
-        CalculateAddends();
-    }
-
-    private void CalculateAddends()
-    {
-
-        addend1 = random.Next(0, 20 + 1);
-        addend2 = random.Next(0, 20 + 1);
-        AnswerBond = addend1 + addend2;
-    }
-
-
-    [Parameter]
-    public BaseQuestion Question { get; set; }
-    [Parameter]
-    public EventCallback AnsweredCorrectly { get; set; }
-    [Parameter]
-    public int Answer { get; set; }
+    [Parameter] public BaseQuestion Question { get; set; }
+    [Parameter] public EventCallback AnsweredCorrectly { get; set; }
+    [Parameter] public EventCallback AnsweredWrongly { get; set; }
+    [Parameter] public int Answer { get; set; }
     private ElementReference inputElement;
 
     // protected override void OnInitialized()
@@ -271,8 +249,8 @@
     private string resultMessage = "";
     private string resultColor = "White";
 
-    [Inject]
-    private IQuestionGeneratorService QuestionGenerator { get; set; }
+    // [Inject]
+    // private IQuestionGeneratorService QuestionGenerator { get; set; }
 
     private async Task HandleKeydown(KeyboardEventArgs args)
     {
@@ -300,12 +278,15 @@
                 resultMessage = "";
                 resultColor = "white"; // Reset color
                 await AnsweredCorrectly.InvokeAsync();
+                StateHasChanged();
             }
             else
             {
                 resultMessage = "Please Try Again.";
                 resultColor = "red";
                 await JSRuntime.InvokeVoidAsync("eval", "document.activeElement.select()");
+                await AnsweredWrongly.InvokeAsync();
+                StateHasChanged();
             }
 
             showResult = true;

@@ -12,12 +12,17 @@
 <div class="container col-12">
     <div>
         <MultiplyRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
-          @bind-SelectedItem=@SelectedItem ParametersChanged="HandleGenerateQuestion" />
+                           @bind-SelectedItem=@SelectedItem ParametersChanged="GenerateNewQuestion" />
     </div>
 
     <div>
-        <MultiplyMathQuiz Question="@Question" AnsweredCorrectly="HandleGenerateQuestion" Answer=@Question.Answer />
+        <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" />
     </div>
+
+    <div>
+        <MultiplyMathQuiz Question="@Question" AnsweredCorrectly="HandleAnsweredCorrectly" AnsweredWrongly="HandleAnsweredWrongly" Answer=@Question.Answer />
+    </div>
+
     <div>
         <MultiplyModel Question="@Question" />
     </div>
@@ -36,14 +41,13 @@
 
 @code {
 
-    [Inject]
-    private IMultiplyQuestionGeneratorService QuestionGenerator { get; set; }
-    [Parameter]
-    public BaseQuestion Question { get; set; }
-    [Parameter]
-    public EventCallback AnsweredCorrectly { get; set; }
+    [Inject] private IMultiplyQuestionGeneratorService QuestionGenerator { get; set; }
+    [Parameter] public BaseQuestion Question { get; set; }
+    [Parameter] public EventCallback AnsweredCorrectly { get; set; }
+    [Parameter] public EventCallback AnsweredWrongly { get; set; }
 
     private int _upperRange = 12;
+
     [Parameter]
     public int UpperRange
     {
@@ -75,24 +79,42 @@
         set { _selectedItem = value; }
     }
 
+    private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
+
     protected override void OnInitialized()
     {
-        HandleGenerateQuestion();
+        if (dateTimeCounterStopWatch is null)
+        {
+            dateTimeCounterStopWatch = new DateTimeCounterStopWatch();
+        }
+        GenerateNewQuestion();
     }
 
-    private async void HandleGenerateQuestion()
+    private async void HandleAnsweredCorrectly()
+    {
+        GenerateNewQuestion();
+        await AnsweredCorrectly.InvokeAsync();
+        dateTimeCounterStopWatch.ResetAndStartStopwatch();
+        await dateTimeCounterStopWatch.IncrementCounter();
+    }
+
+    private async void HandleAnsweredWrongly()
+    {
+        await dateTimeCounterStopWatch.IncrementErrorCount();
+    }
+
+    private void GenerateNewQuestion()
     {
         if (Operator == null)
         {
             return;
         }
-        await AnsweredCorrectly.InvokeAsync();
         Question = QuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem);
     }
 
     public void ReloadPage()
     {
-        _navigationManager.NavigateTo($"Multiply", forceLoad: true);
+        _navigationManager.NavigateTo($"Subtract", forceLoad: true);
 
     }
 }

@@ -1,0 +1,37 @@
+﻿@* @page "/" *@
+@page "/aalandingpage"
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+
+<h3>AALandingPage</h3>
+
+<p>Counter Value: @counter</p>
+
+<div>
+    <input type="number" @bind="inputValue" @onkeypress="IncrementCounter" />
+</div>
+
+@code {
+    private int counter;
+    private int inputValue;
+
+    protected override async Task OnInitializedAsync()
+    {
+        counter = await GetCounterAsync();
+    }
+
+    private async Task<int> GetCounterAsync()
+    {
+        var storedValue = await sessionStorage.GetItemAsync<string>("counter");
+        return string.IsNullOrEmpty(storedValue) ? 1 : int.Parse(storedValue);
+    }
+
+    private async Task IncrementCounter(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            counter++;
+            await sessionStorage.SetItemAsync("counter", counter.ToString());
+            StateHasChanged();
+        }
+    }
+}

@@ -11,39 +11,33 @@
 <PageTitle>Add</PageTitle>
 
 <div class="container col-12">
-
     <div>
         <AddRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
-                      @bind-SelectedItem=@SelectedItem ParametersChanged="HandleGenerateQuestion" />
+                      @bind-SelectedItem=@SelectedItem ParametersChanged="GenerateNewQuestion" />
     </div>
 
     <div>
-        <AddMathQuiz Question="@Question" AnsweredCorrectly="HandleGenerateQuestion" Answer=@Question.Answer />
+    <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" />
+    </div>
+
+    <div>
+        <AddMathQuiz Question="@Question" AnsweredCorrectly="HandleAnsweredCorrectly" AnsweredWrongly="HandleAnsweredWrongly"  Answer=@Question.Answer />
     </div>
 
     <div>
         <AddModel Question="@Question" />
     </div>
-
-@*     <div style="font-size: 16px;">
-        Maths Sum: @Question.Operand1 @Question.OperatorAsSymbol @Question.Operand2 = @Question.Answer
-    </div> *@
 </div>
-
-@* <div>
-    <AddNumberBond Question="@Question" />
-</div> *@
 
 @code {
 
-    [Inject]
-    private IAddQuestionGeneratorService QuestionGenerator { get; set; }
-    [Parameter]
-    public BaseQuestion Question { get; set; }
-    [Parameter]
-    public EventCallback AnsweredCorrectly { get; set; }
+    [Inject] private IAddQuestionGeneratorService QuestionGenerator { get; set; }
+    [Parameter] public BaseQuestion Question { get; set; }
+    [Parameter] public EventCallback AnsweredCorrectly { get; set; }
+    [Parameter] public EventCallback AnsweredWrongly { get; set; }
 
     private int _upperRange = 5;
+
     [Parameter]
     public int UpperRange
     {
@@ -75,18 +69,36 @@
         set { _selectedItem = value; }
     }
 
+    private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
+
     protected override void OnInitialized()
     {
-        HandleGenerateQuestion();
+        if (dateTimeCounterStopWatch is null)
+        {
+            dateTimeCounterStopWatch = new DateTimeCounterStopWatch();
+        }
+        GenerateNewQuestion();
     }
 
-    private async void HandleGenerateQuestion()
+    private async void HandleAnsweredCorrectly()
+    {
+        GenerateNewQuestion();
+        await AnsweredCorrectly.InvokeAsync();
+        dateTimeCounterStopWatch.ResetAndStartStopwatch();
+        await dateTimeCounterStopWatch.IncrementCounter();
+    }
+
+    private async void HandleAnsweredWrongly()
+    {
+        await dateTimeCounterStopWatch.IncrementErrorCount();
+    }
+
+    private void GenerateNewQuestion()
     {
         if (Operator == null)
         {
             return;
         }
-        await AnsweredCorrectly.InvokeAsync();
         Question = QuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem);
     }
 

@@ -14,34 +14,34 @@
 
     <div>
         <DivideRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
-                         @bind-SelectedItem=@SelectedItem ParametersChanged="HandleGenerateQuestion" />
+                         @bind-SelectedItem=@SelectedItem ParametersChanged="GenerateNewQuestion" />
     </div>
 
     <div>
-        <DivideMathQuiz Question="@Question" AnsweredCorrectly="HandleGenerateQuestion" Answer=@Question.Answer></DivideMathQuiz>
+        <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" />
+    </div>
+
+    <div>
+        <DivideMathQuiz Question="@Question" AnsweredCorrectly="HandleAnsweredCorrectly" AnsweredWrongly="HandleAnsweredWrongly" Answer=@Question.Answer />
     </div>
 
     <div>
         <DivideModel Question="@Question" />
     </div>
 
-@*     <div style="font-size: 16px;">
-        Maths Sum: @Question.Operand1 @Question.OperatorAsSymbol @Question.Operand2 = @Question.Answer
-    </div> *@
 
 </div>
 
 
 @code {
 
-    [Inject]
-    private IDivideQuestionGeneratorService QuestionGenerator { get; set; }
-    [Parameter]
-    public BaseQuestion Question { get; set; }
-    [Parameter]
-    public EventCallback AnsweredCorrectly { get; set; }
+        [Inject] private IDivideQuestionGeneratorService QuestionGenerator { get; set; }
+        [Parameter] public BaseQuestion Question { get; set; }
+        [Parameter] public EventCallback AnsweredCorrectly { get; set; }
+        [Parameter] public EventCallback AnsweredWrongly { get; set; }
 
     private int _upperRange = 12;
+
     [Parameter]
     public int UpperRange
     {
@@ -73,24 +73,42 @@
         set { _selectedItem = value; }
     }
 
-    protected override void OnInitialized()
-    {
-        HandleGenerateQuestion();
-    }
+        private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
 
-    private async void HandleGenerateQuestion()
-    {
-        if (Operator == null)
+        protected override void OnInitialized()
         {
-            return;
+            if (dateTimeCounterStopWatch is null)
+            {
+                dateTimeCounterStopWatch = new DateTimeCounterStopWatch();
+            }
+            GenerateNewQuestion();
         }
-        await AnsweredCorrectly.InvokeAsync();
-        Question = QuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem);
-    }
 
-    public void ReloadPage()
-    {
-        _navigationManager.NavigateTo($"Multiply", forceLoad: true);
+        private async void HandleAnsweredCorrectly()
+        {
+            GenerateNewQuestion();
+            await AnsweredCorrectly.InvokeAsync();
+            dateTimeCounterStopWatch.ResetAndStartStopwatch();
+            await dateTimeCounterStopWatch.IncrementCounter();
+        }
 
-    }
+        private async void HandleAnsweredWrongly()
+        {
+            await dateTimeCounterStopWatch.IncrementErrorCount();
+        }
+
+        private void GenerateNewQuestion()
+        {
+            if (Operator == null)
+            {
+                return;
+            }
+            Question = QuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem);
+        }
+
+        public void ReloadPage()
+        {
+            _navigationManager.NavigateTo($"Add", forceLoad: true);
+
+        }
 }
