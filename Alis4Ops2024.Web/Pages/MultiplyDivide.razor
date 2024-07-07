@@ -16,13 +16,13 @@
     @if (Num <= 0 || Num > 2)
     {
         <div>
-            <Multiply AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Multiply-Missing" LowerRange ="1" UpperRange ="12" />
+            <Multiply AnsweredCorrectly="GenerateNewQuestion" AnsweredWrongly="HandleAnsweredWrongly" SelectedItem="Multiply-Missing" LowerRange="1" UpperRange="12" />
         </div>
     }
     else
     {
         <div>
-            <Divide AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Divide-Missing" LowerRange="1" UpperRange="12" />
+            <Divide AnsweredCorrectly="GenerateNewQuestion" AnsweredWrongly="HandleAnsweredWrongly" SelectedItem="Divide-Missing" LowerRange="1" UpperRange="12" />
         </div>
     }
 
@@ -34,18 +34,33 @@
 
     private int Num { get; set; } = 0;
 
-    [Parameter]
-    public EventCallback AnsweredCorrectly { get; set; }
+    private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
+
+    [Parameter] public EventCallback AnsweredCorrectly { get; set; }
+    [Parameter] public EventCallback AnsweredWrongly { get; set; }
 
     protected override void OnInitialized()
     {
-        HandleGenerateQuestion();
+        GenerateNewQuestion();
     }
 
-    private void HandleGenerateQuestion()
+    private async void HandleAnsweredCorrectly()
+    {
+        // dateTimeCounterStopWatch.ResetAndStartStopwatch();
+        // await dateTimeCounterStopWatch.IncrementCounter();
+        // await AnsweredCorrectly.InvokeAsync();
+        GenerateNewQuestion();
+    }
+
+    private async void HandleAnsweredWrongly()
+    {
+        // await dateTimeCounterStopWatch.IncrementErrorCount();
+        // await AnsweredWrongly.InvokeAsync();
+    }
+
+    private void GenerateNewQuestion()
     {
         Num = random.Next(0, 2);
-
     }
 
 }

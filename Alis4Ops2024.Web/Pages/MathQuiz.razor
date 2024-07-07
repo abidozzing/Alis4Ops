@@ -466,7 +466,7 @@
                 resultMessage = "";
                 resultColor = "white";
                 await AnsweredCorrectly.InvokeAsync();
-
+                await InvokeAsync(() => StateHasChanged());
             }
             else
             {
@@ -474,7 +474,7 @@
                 resultColor = "red";
             }
             showResult = true;
-            StateHasChanged();
+            await InvokeAsync(() => StateHasChanged());
 
         }
     }

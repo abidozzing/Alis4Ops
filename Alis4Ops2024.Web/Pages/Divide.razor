@@ -6,18 +6,24 @@
 @inject IJSRuntime JSRuntime
 @inject NavigationManager _navigationManager
 <link href="css/rangemenu.css" rel="stylesheet" />
-
+<link href="css/dropbutton.css" rel="stylesheet" />
 <PageTitle>Divide</PageTitle>
 
 <div class="container col-12">
+    <div class="row gx-0 align-items-center" style="font-size: 60%;">
+        <div class="col-auto">
+            <DivideRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
+                             @bind-SelectedItem=@SelectedItem ParametersChanged="GenerateNewQuestion" />
+        </div>
 
-
-    <div>
-        <DivideRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
-                         @bind-SelectedItem=@SelectedItem ParametersChanged="GenerateNewQuestion" />
+        <div class="col-auto">
+            <div class="d-flex align-items-center" style="margin-left: 15px; color:gray">
+                <Date />
+            </div>
+        </div>
     </div>
 
-    <div>
+    <div style="font-size: 60%;">
         <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" />
     </div>
 
@@ -35,10 +41,10 @@
 
 @code {
 
-        [Inject] private IDivideQuestionGeneratorService QuestionGenerator { get; set; }
-        [Parameter] public BaseQuestion Question { get; set; }
-        [Parameter] public EventCallback AnsweredCorrectly { get; set; }
-        [Parameter] public EventCallback AnsweredWrongly { get; set; }
+    [Inject] private IDivideQuestionGeneratorService QuestionGenerator { get; set; }
+    [Parameter] public BaseQuestion Question { get; set; }
+    [Parameter] public EventCallback AnsweredCorrectly { get; set; }
+    [Parameter] public EventCallback AnsweredWrongly { get; set; }
 
     private int _upperRange = 12;
 
@@ -73,42 +79,43 @@
         set { _selectedItem = value; }
     }
 
-        private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
+    private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
 
-        protected override void OnInitialized()
+    protected override void OnInitialized()
+    {
+        if (dateTimeCounterStopWatch is null)
         {
-            if (dateTimeCounterStopWatch is null)
-            {
-                dateTimeCounterStopWatch = new DateTimeCounterStopWatch();
-            }
-            GenerateNewQuestion();
+            dateTimeCounterStopWatch = new DateTimeCounterStopWatch();
         }
+        GenerateNewQuestion();
+    }
 
-        private async void HandleAnsweredCorrectly()
+    private async void HandleAnsweredCorrectly()
+    {
+        dateTimeCounterStopWatch.ResetAndStartStopwatch();
+        await dateTimeCounterStopWatch.IncrementCounter();
+        await AnsweredCorrectly.InvokeAsync();
+        GenerateNewQuestion();
+    }
+
+    private async void HandleAnsweredWrongly()
+    {
+        await dateTimeCounterStopWatch.IncrementErrorCount();
+        // await AnsweredWrongly.InvokeAsync();
+    }
+
+    private void GenerateNewQuestion()
+    {
+        if (Operator == null)
         {
-            GenerateNewQuestion();
-            await AnsweredCorrectly.InvokeAsync();
-            dateTimeCounterStopWatch.ResetAndStartStopwatch();
-            await dateTimeCounterStopWatch.IncrementCounter();
+            return;
         }
+        Question = QuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem);
+    }
 
-        private async void HandleAnsweredWrongly()
-        {
-            await dateTimeCounterStopWatch.IncrementErrorCount();
-        }
+    // public void ReloadPage()
+    // {
+    //     _navigationManager.NavigateTo($"Add", forceLoad: true);
 
-        private void GenerateNewQuestion()
-        {
-            if (Operator == null)
-            {
-                return;
-            }
-            Question = QuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem);
-        }
-
-        public void ReloadPage()
-        {
-            _navigationManager.NavigateTo($"Add", forceLoad: true);
-
-        }
+    // }
 }

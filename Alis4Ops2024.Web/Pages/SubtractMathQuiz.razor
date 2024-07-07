@@ -8,6 +8,7 @@
 
 <PageTitle>SubtractMathQuiz</PageTitle>
 
+
 @if (Question.InputPosition <= 0 || Question.InputPosition > 3)
 {
     Question.InputPosition = 3;
@@ -26,7 +27,7 @@
 
         <!-- Subtract Operand1 Vertical -->
         <div class="row gx-0" style="padding:0px;">
-            <div class="col-12 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">?</div>
+            <div class="col-12 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@displayedValue</div>
         </div>
 
         <!-- Subtract Operator Symbol and Operand2 Vertical -->
@@ -38,7 +39,7 @@
         <div class="row gx-0" style="padding:0px;">
             <!-- InputBox userInput -->
             <div class="col-3 d-flex text-dark">
-                <input class="input-box" placeholder="?" style="background-color: lightgreen;  color: mediumblue; font-weight: bold; text-align: center; align-content: center; border: 0;" @bind-value="userInput" @bind-value:event="oninput" @onkeydown="HandleKeydown" @ref="inputElement" />
+                <input class="input-box" placeholder="?" style="background-color: lightgreen;  color: mediumblue; font-weight: bold; text-align: center; align-content: center; border: 0;" @bind-value="userInput" @oninput="HandleInput" @onkeydown="HandleKeyDown" @ref="inputElement" />
             </div>
 
             <!-- Switch case for Operator -->
@@ -94,7 +95,7 @@
 
         <!-- Subtract Operator Symbol and Operand2 Vertical -->
         <div class="row gx-0" style="padding:0px;">
-            <div class="col-12 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@Question.OperatorAsSymbol ?</div>
+            <div class="col-12 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@Question.OperatorAsSymbol @displayedValue</div>
         </div>
 
         <div class="row gx-0" style="padding:0px;">
@@ -127,7 +128,7 @@
 
             <!-- InputBox userInput -->
             <div class="col-3 d-flex text-dark">
-                <input class="input-box" placeholder="?" style="background-color: lightgreen; color:mediumblue; font-weight: bold; text-align: center; align-content: center;  border: 0" @bind-value="userInput" @bind-value:event="oninput" @onkeydown="HandleKeydown" @ref="inputElement" />
+                <input class="input-box" placeholder="?" style="background-color: lightgreen; color:mediumblue; font-weight: bold; text-align: center; align-content: center;  border: 0" @bind-value="userInput" @oninput="HandleInput" @onkeydown="HandleKeyDown" @ref="inputElement" />
             </div>
 
             <div class="col p-1 d-flex justify-content-center align-items-center text-dark" style="text-align: center;">
@@ -199,13 +200,23 @@
 
             <!-- InputBox userInput -->
             <div class="col-3 d-flex text-dark">
-                <input class="input-box" placeholder="?" style="background-color: lightgreen; color:mediumblue; font-weight: bold; text-align: right; border: 0;  border: 2px solid green;" @bind-value="userInput" @bind-value:event="oninput" @onkeydown="HandleKeydown" @ref="inputElement" />
+                <input class="input-box" placeholder="?" style="background-color: lightgreen; color:mediumblue; font-weight: bold; text-align: right; border: 0;  border: 2px solid green;" @bind-value="userInput" @bind-value:event="oninput" @onkeydown="HandleKeyDown" @ref="inputElement" />
             </div>
         </div>
         break;
 }
 
 @code {
+    private string displayedValue = "?"; // Displayed value synced with user input
+
+    private async Task HandleInput(ChangeEventArgs args)
+    {
+        userInput = args.Value?.ToString(); // Update userInput from event args
+        displayedValue = userInput; // Sync displayed value with userInput
+
+        await InvokeAsync(() => StateHasChanged()); // Refresh UI after input change
+    }
+
     [Parameter] public BaseQuestion Question { get; set; }
     [Parameter] public EventCallback AnsweredCorrectly { get; set; }
     [Parameter] public EventCallback AnsweredWrongly { get; set; }
@@ -228,7 +239,7 @@
     private bool showResult;
     private string resultMessage = "";
     private string resultColor = "White";
-
+    private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
     // [Inject]
     // private ISubtractQuestionGeneratorService QuestionGenerator { get; set; }
 
@@ -239,7 +250,14 @@
     //     return string.IsNullOrEmpty(storedValue) ? 1 : int.Parse(storedValue);
     // }
 
-    private async Task HandleKeydown(KeyboardEventArgs args)
+    protected override async Task OnInitializedAsync()
+    {
+        // Initialize dateTimeCounterStopWatch here
+        dateTimeCounterStopWatch = new DateTimeCounterStopWatch();
+    }
+
+
+    private async Task HandleKeyDown(KeyboardEventArgs args)
     {
         if (args.Key == "Enter")
         {
@@ -265,21 +283,30 @@
                 userInput = ""; // Clear input after correct answer
                 resultMessage = "";
                 resultColor = "white"; // Reset color
+                displayedValue = "?";
+                // await dateTimeCounterStopWatch.ResetAndStartStopwatch();
+                // await dateTimeCounterStopWatch.IncrementCounter();
                 await AnsweredCorrectly.InvokeAsync();
-                StateHasChanged();
+
             }
             else
             {
                 resultMessage = "Please Try Again.";
                 resultColor = "red";
                 await JSRuntime.InvokeVoidAsync("eval", "document.activeElement.select()");
+                // await dateTimeCounterStopWatch.IncrementErrorCount();
                 await AnsweredWrongly.InvokeAsync();
-                StateHasChanged();
             }
 
             showResult = true;
-            StateHasChanged();
+            await InvokeAsync(() => StateHasChanged());
         }
+        // else
+        // {
+        //     // Method to update displayedValue synchronously with userInput
+        //     displayedValue = displayedValue + args.Key; // Optionally, manipulate or format the value as needed
+        //     StateHasChanged();
+        // }
     }
 }
 

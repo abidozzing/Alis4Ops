@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Pages\DateTimeCounterStopWatch - Copy.razor">
+    <Content Update="Pages\Home - Copy.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
     <Content Update="Pages\MultiplyDivide.razor">

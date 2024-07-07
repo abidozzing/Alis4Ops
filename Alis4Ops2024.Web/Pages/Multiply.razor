@@ -7,15 +7,25 @@
 @inject IJSRuntime JSRuntime
 @inject NavigationManager _navigationManager
 <link href="css/site.css" rel="stylesheet" />
+<link href="css/dropbutton.css" rel="stylesheet" />
 
 <PageTitle>Multiply</PageTitle>
+
 <div class="container col-12">
-    <div>
-        <MultiplyRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
-                           @bind-SelectedItem=@SelectedItem ParametersChanged="GenerateNewQuestion" />
+    <div class="row gx-0 align-items-center" style="font-size: 60%;">
+        <div class="col-auto">
+            <MultiplyRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
+                               @bind-SelectedItem=@SelectedItem ParametersChanged="GenerateNewQuestion" />
+        </div>
+
+        <div class="col-auto">
+            <div class="d-flex align-items-center" style="margin-left: 15px; color:gray">
+                <Date />
+            </div>
+        </div>
     </div>
 
-    <div>
+    <div style="font-size: 60%;">
         <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" />
     </div>
 
@@ -27,12 +37,12 @@
         <MultiplyModel Question="@Question" />
     </div>
 
-@*     <div>
-        <NumberBondSvg Question="@Question" />
+    @*     <div>
+    <NumberBondSvg Question="@Question" />
     </div> *@
 
-@*     <div style="font-size: 16px;">
-        Maths Sum: @Question.Operand1 @Question.OperatorAsSymbol @Question.Operand2 = @Question.Answer
+    @*     <div style="font-size: 16px;">
+    Maths Sum: @Question.Operand1 @Question.OperatorAsSymbol @Question.Operand2 = @Question.Answer
     </div> *@
 </div>
 
@@ -92,15 +102,17 @@
 
     private async void HandleAnsweredCorrectly()
     {
-        GenerateNewQuestion();
-        await AnsweredCorrectly.InvokeAsync();
         dateTimeCounterStopWatch.ResetAndStartStopwatch();
         await dateTimeCounterStopWatch.IncrementCounter();
+        await AnsweredCorrectly.InvokeAsync();
+        GenerateNewQuestion();
     }
 
     private async void HandleAnsweredWrongly()
     {
+
         await dateTimeCounterStopWatch.IncrementErrorCount();
+        // await AnsweredWrongly.InvokeAsync();
     }
 
     private void GenerateNewQuestion()
@@ -112,9 +124,9 @@
         Question = QuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem);
     }
 
-    public void ReloadPage()
-    {
-        _navigationManager.NavigateTo($"Subtract", forceLoad: true);
+    // public void ReloadPage()
+    // {
+    //     _navigationManager.NavigateTo($"Subtract", forceLoad: true);
+    //}
 
-    }
 }

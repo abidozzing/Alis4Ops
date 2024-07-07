@@ -13,16 +13,18 @@
 
 <div class="container col-12">
 
-    @if (NUm <= 0 || NUm > 2)
+    @if (Num1 == 0)
     {
+        Num1 = 1;
         <div>
-            <Add AnsweredCorrectly="GenerateNewQuestion" SelectedItem="Add-Missing" LowerRange ="1" UpperRange ="20" />
+            <Add AnsweredCorrectly="HandleAnsweredCorrectly" AnsweredWrongly="HandleAnsweredWrongly" SelectedItem="Add-Missing" LowerRange="1" UpperRange="20" />
         </div>
     }
     else
     {
+        Num1 = 0;
         <div>
-            <Subtract AnsweredCorrectly="GenerateNewQuestion" SelectedItem="Subtract-Missing" LowerRange="1" UpperRange="20" />
+            <Subtract AnsweredCorrectly="GenerateNewQuestion" AnsweredWrongly="HandleAnsweredWrongly" SelectedItem="Subtract-Missing" LowerRange="1" UpperRange="20" />
         </div>
     }
 
@@ -32,29 +34,41 @@
 
     private Random random = new Random();
 
-    private int NUm { get; set; } = 0;
+    private int Num { get; set; } = 0;
+    private int Num1 { get; set; } = 0;
+
 
     private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
 
-    [Parameter]
-    public EventCallback AnsweredCorrectly { get; set; }
+    [Parameter] public EventCallback AnsweredCorrectly { get; set; }
+    [Parameter] public EventCallback AnsweredWrongly { get; set; }
 
     protected override void OnInitialized()
     {
         GenerateNewQuestion();
     }
 
-    private async void HandleAnsweredCorrectly()
+    private async Task HandleAnsweredCorrectly()
     {
+        if (dateTimeCounterStopWatch != null)
+        {
+        // dateTimeCounterStopWatch.ResetAndStartStopwatch();
+        // await dateTimeCounterStopWatch.IncrementCounter();
+        // await AnsweredCorrectly.InvokeAsync();
         GenerateNewQuestion();
-        await AnsweredCorrectly.InvokeAsync();
-        dateTimeCounterStopWatch.ResetAndStartStopwatch();
-        await dateTimeCounterStopWatch.IncrementCounter();
+        }
+    }
+
+    private async Task HandleAnsweredWrongly()
+    {
+        // await AnsweredWrongly.InvokeAsync();
+        // await dateTimeCounterStopWatch.IncrementErrorCount();
     }
 
     private void GenerateNewQuestion()
     {
-        NUm = random.Next(0, 2);
+
+        Num = random.Next(0, 2);
     }
 
 }

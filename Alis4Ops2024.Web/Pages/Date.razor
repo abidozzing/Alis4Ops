@@ -1,0 +1,31 @@
+﻿@page "/date"
+@using System.Timers
+@using System
+
+
+@* <div class="row gx-0 align-items-center" style="font-size: 60%;">
+    <div class="col-auto">
+        <div class="d-flex align-items-center" style="margin-left: 15px;"> *@
+            <div>
+                <!-- Adjust font size if needed -->
+                @DateTime.Now.ToString("ddd dd MMM yyyy hh:mm:ss tt")
+            </div>
+@*         </div>
+    </div>
+</div> *@
+
+
+@code {
+    private string currentDateTime = DateTime.Now.ToString("ddd dd MMM yyyy");
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Update time every second
+        while (true)
+        {
+            currentDateTime = DateTime.Now.ToString("ddd dd MMM yyyy");
+            await Task.Delay(1000); // Delay for one second
+            await InvokeAsync(() => StateHasChanged()); // Notify Blazor to re-render the UI
+        }
+    }
+}

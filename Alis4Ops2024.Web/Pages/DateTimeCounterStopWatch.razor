@@ -1,47 +1,59 @@
 ﻿@using System.Timers
 @using System
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage
-<div class="row flex-nowrap gx-0" style="font-size: 40%;">
+<div class="container" style="color: gray; margin-top: 10px; font-size: 100%">
+    <div class="row gx-0 align-items-center">
+        <div class="col">
+            <div class="text-center">
+                Start: @startTimeStatic.ToString("hh:mm:ss tt")
+            </div>
+        </div>
 
-    <div class="col text-center">
-        @currentDateTime
+        <div class="col">
+            <div class="text-center">
+                Session: @FormatSessionTime(DateTime.Now - startTimeStatic)
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="text-center">
+                Marks: @(counterValue - errorValue)/@counterValue.ToString("D1")
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="text-center">
+                Elapsed: @stopwatchTime
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="text-center">
+                @if (counterValue <= 0)
+                {
+                    <div>Score: </div>
+                }
+                else
+                {
+                    <div>Score: @(100 * (counterValue - errorValue) / counterValue)%</div>
+                }
+            </div>
+        </div>
     </div>
 
-    <div class="col text-center">
-        Start: @startTimeStatic.ToString("hh:mm:ss tt")
+    <div class="row gx-0 justify-content-center">
+        <div class="col">
+            <div class="text-center">
+                <button class="btn btn-primary btn-sm" @onclick="ResetAll">Reset All</button>
+            </div>
+        </div>
     </div>
-
-    <div class="col text-center">
-        @* Session: @sessionTime.ToString("hh\\:mm\\:ss") *@
-        @* Session: @(DateTime.Now - startTimeStatic) *@
-        Session: @FormatSessionTime(DateTime.Now - startTimeStatic)
-    </div>
-
-    <div class="col text-center">
-        Sums: @counterValue.ToString("D1")
-    </div>
-
-    <div class="col text-center">
-        Right: @(counterValue - errorValue)
-    </div>
-
-    <div class="col text-center">
-        Elapsed: @stopwatchTime
-    </div>
-
-    <div class="col text-center">
-        @switch (counterValue)
-        {
-            case <= 0:
-                <div>Score: </div>
-                break;
-            default:
-                <div>Score: @(100 * (counterValue - errorValue) / counterValue)%</div>
-                break;
-        }
-    </div>
-
 </div>
+
+
+
+
+
 
 
 
@@ -128,6 +140,7 @@
         {
             counterValue++;
             await sessionStorage.SetItemAsync("counterValue", counterValue.ToString());
+            await InvokeAsync(() => StateHasChanged());
         }
     }
 
@@ -135,12 +148,13 @@
     {
         if (WrongAnswerFlag == false)
         {
-            WrongAnswerFlag = true;
+
             errorValue++;
             counterValue++;
             await sessionStorage.SetItemAsync("counterValue", counterValue.ToString());
             await sessionStorage.SetItemAsync("errorValue", errorValue.ToString());
-            StateHasChanged();
+            WrongAnswerFlag = true;
+            // await InvokeAsync(() => StateHasChanged());
         }
     }
 
@@ -149,15 +163,6 @@
     [Parameter] public int counterValue { get; set; }
     [Parameter] public int errorValue { get; set; }
     [Parameter] public TimeSpan sessionTime { get; set; }
-
-    
-    // [Parameter]
-    // public TimeSpan sessionTime
-    // {
-    //     get { return TimeSpan.FromTicks(startTimeStatic.Ticks + elapsedTime.Ticks); }
-    //     set { sessionTime = value; }
-    // }
-
 
     // Event callback to notify parent about counter value change
     [Parameter] public EventCallback<int> counterValueChanged { get; set; }
@@ -169,7 +174,6 @@
     {
         // Start the stopwatch initially
         ToggleTimer();
-
         // Start a timer to update currentDateTime every second
         var updateTimer = new Timer(1000); // Update every 1000 milliseconds (1 second)
         updateTimer.Elapsed += UpdateTimerElapsed;
@@ -222,13 +226,31 @@
     }
 
     // Method to reset and start the stopwatch
-    public void ResetAndStartStopwatch()
+    public async Task ResetAndStartStopwatch()
     {
         isRunning = false;
         elapsedTime = TimeSpan.Zero;
         startTime = DateTime.Now;
         ToggleTimer();
     }
+
+
+    public async Task ResetAll()
+    {
+        isRunning = false;
+        elapsedTime = TimeSpan.Zero;
+        startTime = DateTime.Now;
+        ToggleTimer();
+        startTimeStatic = DateTime.Now;
+        sessionTime = DateTime.Now - startTimeStatic;
+        errorValue = 0;
+        counterValue = 0;
+        WrongAnswerFlag = false;
+        await sessionStorage.SetItemAsync("counterValue", counterValue.ToString());
+        await sessionStorage.SetItemAsync("errorValue", errorValue.ToString());
+        await InvokeAsync(() => StateHasChanged());
+    }
+
 
     // Handle Enter key press from parent to reset and start stopwatch
     [JSInvokable]
@@ -242,6 +264,8 @@
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
-        StateHasChanged();
+        await InvokeAsync(() => StateHasChanged());
     }
+
+
 }

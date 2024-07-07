@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿@* @page "/" *@
 @page "/add"
 @using Alis4Ops2024.Web.Core
 @using Alis4Ops2024.Web.Models
@@ -7,21 +7,28 @@
 @inject IJSRuntime JSRuntime
 @inject NavigationManager _navigationManager
 <link href="css/site.css" rel="stylesheet" />
-
 <PageTitle>Add</PageTitle>
 
 <div class="container col-12">
-    <div>
-        <AddRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
-                      @bind-SelectedItem=@SelectedItem ParametersChanged="GenerateNewQuestion" />
+    <div class="row gx-0 align-items-center" style="font-size: 60%;">
+        <div class="col-auto">
+            <AddRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
+                          @bind-SelectedItem=@SelectedItem ParametersChanged="GenerateNewQuestion" />
+        </div>
+
+        <div class="col-auto">
+            <div class="d-flex align-items-center" style="margin-left: 15px; color:gray">
+                <Date />
+            </div>
+        </div>
+    </div>
+
+    <div style="font-size: 60%;">
+        <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" />
     </div>
 
     <div>
-    <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" />
-    </div>
-
-    <div>
-        <AddMathQuiz Question="@Question" AnsweredCorrectly="HandleAnsweredCorrectly" AnsweredWrongly="HandleAnsweredWrongly"  Answer=@Question.Answer />
+        <AddMathQuiz Question="@Question" AnsweredCorrectly="HandleAnsweredCorrectly" AnsweredWrongly="HandleAnsweredWrongly" Answer=@Question.Answer GenerateNewQuestion="GenerateNewQuestion"/>
     </div>
 
     <div>
@@ -35,6 +42,7 @@
     [Parameter] public BaseQuestion Question { get; set; }
     [Parameter] public EventCallback AnsweredCorrectly { get; set; }
     [Parameter] public EventCallback AnsweredWrongly { get; set; }
+    private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
 
     private int _upperRange = 5;
 
@@ -69,7 +77,7 @@
         set { _selectedItem = value; }
     }
 
-    private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
+
 
     protected override void OnInitialized()
     {
@@ -80,17 +88,28 @@
         GenerateNewQuestion();
     }
 
-    private async void HandleAnsweredCorrectly()
+    private async Task HandleAnsweredCorrectly()
     {
-        GenerateNewQuestion();
-        await AnsweredCorrectly.InvokeAsync();
-        dateTimeCounterStopWatch.ResetAndStartStopwatch();
-        await dateTimeCounterStopWatch.IncrementCounter();
+
+        if (dateTimeCounterStopWatch != null)
+        {
+            await dateTimeCounterStopWatch.ResetAndStartStopwatch();
+            await dateTimeCounterStopWatch.IncrementCounter();
+            await AnsweredCorrectly.InvokeAsync();
+            GenerateNewQuestion();
+
+        }
+        
     }
 
-    private async void HandleAnsweredWrongly()
+    private async Task HandleAnsweredWrongly()
     {
-        await dateTimeCounterStopWatch.IncrementErrorCount();
+
+        if (dateTimeCounterStopWatch != null)
+        {
+            await dateTimeCounterStopWatch.IncrementErrorCount();
+            // await AnsweredWrongly.InvokeAsync();
+        }
     }
 
     private void GenerateNewQuestion()
@@ -100,12 +119,6 @@
             return;
         }
         Question = QuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem);
-    }
-
-    public void ReloadPage()
-    {
-        _navigationManager.NavigateTo($"Add", forceLoad: true);
-
     }
 }
 

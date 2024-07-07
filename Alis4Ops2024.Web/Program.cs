@@ -23,11 +23,12 @@ builder.Services.AddSingleton<IAddQuestionGeneratorService, AddQuestionGenerator
 builder.Services.AddSingleton<ISubtractQuestionGeneratorService, SubtractQuestionGeneratorService>();
 builder.Services.AddSingleton<IMultiplyQuestionGeneratorService, MultiplyQuestionGeneratorService>();
 builder.Services.AddSingleton<IDivideQuestionGeneratorService, DivideQuestionGeneratorService>();
+builder.Services.AddSingleton<IArithmeticService, ArithmeticService>();
 // Register Blazor.Extensions.Storage
 builder.Services.AddStorage();
 builder.Services.AddBlazoredSessionStorageAsSingleton();
 // Register services
 builder.Services.AddSingleton<IScreenSizeService, ScreenSizeService>();
-
+builder.Services.AddSingleton<DateTimeCounterStopWatch>();
 await builder.Build().RunAsync();
 

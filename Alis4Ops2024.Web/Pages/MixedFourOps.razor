@@ -9,7 +9,7 @@
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage
 <link href="css/site.css" rel="stylesheet" />
 
-@switch (selectedItem)
+@* @switch (selectedItem)
 
 {
 
@@ -46,7 +46,7 @@
     case "MissingFourOps":
         break;
 
-}
+} *@
 
 <PageTitle>Add</PageTitle>
 
@@ -56,49 +56,61 @@
     @if (Num == 0)
     {
         <div>
-            <Add AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Add-Missing" LowerRange="1" UpperRange="20" />
+            <Add AnsweredCorrectly="GenerateNewQuestion" AnsweredWrongly="HandleAnsweredWrongly" SelectedItem="Add-Missing" LowerRange="1" UpperRange="20" />
         </div>
     }
     else if (Num == 1)
     {
         <div>
-            <Subtract AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Subtract-Missing" LowerRange="1" UpperRange="20" />
+            <Subtract AnsweredCorrectly="GenerateNewQuestion" AnsweredWrongly="HandleAnsweredWrongly" SelectedItem="Subtract-Missing" LowerRange="1" UpperRange="20" />
         </div>
     }
     else if (Num == 2)
     {
         <div>
-            <Multiply AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Multiply-Missing" LowerRange="1" UpperRange="12" />
+            <Multiply AnsweredCorrectly="GenerateNewQuestion" AnsweredWrongly="HandleAnsweredWrongly" SelectedItem="Multiply-Missing" LowerRange="1" UpperRange="12" />
         </div>
     }
     else if (Num == 3)
     {
         <div>
-            <Divide AnsweredCorrectly="HandleGenerateQuestion" SelectedItem="Divide-Missing" LowerRange="1" UpperRange="12" />
+            <Divide AnsweredCorrectly="GenerateNewQuestion" AnsweredWrongly="HandleAnsweredWrongly" SelectedItem="Divide-Missing" LowerRange="1" UpperRange="12" />
+        </div>
+    }
+    else
+    {
+        <div>
+            <Add AnsweredCorrectly="GenerateNewQuestion" AnsweredWrongly="HandleAnsweredWrongly" SelectedItem="Add-Missing" LowerRange="1" UpperRange="20" />
         </div>
     }
 
 </div>
 
 @code {
-    string selectedItem = "Add";
-
     private Random random = new Random();
 
     private int Num { get; set; } = 0;
 
-    [Parameter]
-    public EventCallback AnsweredCorrectly { get; set; }
+    private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
+
+    [Parameter] public EventCallback AnsweredCorrectly { get; set; }
+    [Parameter] public EventCallback AnsweredWrongly { get; set; }
 
     protected override void OnInitialized()
     {
-        HandleGenerateQuestion();
+        GenerateNewQuestion();
     }
 
-    private void HandleGenerateQuestion()
+
+    private async Task HandleAnsweredWrongly()
+    {
+
+    }
+
+
+    private void GenerateNewQuestion()
     {
         Num = random.Next(0, 4);
-
     }
 
 }

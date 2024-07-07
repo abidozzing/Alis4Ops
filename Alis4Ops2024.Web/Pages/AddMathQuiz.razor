@@ -4,13 +4,18 @@
 @inject IJSRuntime JSRuntime
 @using System
 <link href="css/site.css" rel="stylesheet" />
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
 
 <PageTitle>AddMathQuiz</PageTitle>
 
-<div class="row">
-</div>
+@* @if (i == "")
+{
+    <div style="font-size: 60%;">
+        <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" />
+    </div>
+} *@
 
-@if (Question.InputPosition <= 0 || Question.InputPosition > 3)
+@if (Question != null && (Question.InputPosition <= 0 || Question.InputPosition > 3))
 {
     Question.InputPosition = 3;
 }
@@ -27,7 +32,7 @@
 
         <!--  Add Operand1 Vertical -->
         <div class="row gx-0" style="padding:0px;">
-            <div class="col-12 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">?</div>
+            <div class="col-12 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@displayedValue</div>
         </div>
 
         <!-- Add Operator Symbol and Operand2 Vertical -->
@@ -39,7 +44,7 @@
         <div class="row gx-0" style="padding:0px;">
             <!-- InputBox userInput -->
             <div class="col-3 d-flex text-dark">
-                <input class="input-box" placeholder="?" style="background-color: lightgreen;  color: mediumblue; font-weight: bold; text-align: center; align-content: center; border: 0;" @bind-value="userInput" @bind-value:event="oninput" @onkeydown="HandleKeydown" @ref="inputElement" />
+                <input class="input-box" placeholder="?" style="background-color: lightgreen;  color: mediumblue; font-weight: bold; text-align: center; align-content: center; border: 0;" @bind-value="userInput" @oninput="HandleInput" @onkeydown="HandleKeydown" @ref="inputElement" />
             </div>
 
             <!-- Switch case for Operator -->
@@ -95,7 +100,7 @@
 
         <!-- Add Operator Symbol and Operand2 Vertical -->
         <div class="row gx-0" style="padding:0px;">
-            <div class="col-12 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@Question.OperatorAsSymbol ?</div>
+            <div class="col-12 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@Question.OperatorAsSymbol @displayedValue </div>
         </div>
 
         <div class="row gx-0" style="padding:0px;">
@@ -128,7 +133,7 @@
 
             <!-- InputBox userInput -->
             <div class="col-3 d-flex text-dark">
-                <input class="input-box" placeholder="?" style="background-color: lightgreen; color:mediumblue; font-weight: bold; text-align: center; align-content: center;  border: 0" @bind-value="userInput" @bind-value:event="oninput" @onkeydown="HandleKeydown" @ref="inputElement" />
+                <input class="input-box" placeholder="?" style="background-color: lightgreen; color:mediumblue; font-weight: bold; text-align: center; align-content: center;  border: 0" @bind-value="userInput" @oninput="HandleInput" @onkeydown="HandleKeydown" @ref="inputElement" />
             </div>
 
             <div class="col p-1 d-flex justify-content-center align-items-center text-dark" style="text-align: center;">
@@ -210,13 +215,46 @@
 
 
 @code {
-    // private int counterValue=1;
+    // string i = "";
+    // private bool isFirstRender = true; // Flag to track first render
+    // protected override void OnAfterRender(bool firstRender)
+    // {
+    //     if (firstRender && isFirstRender)
+    //     {
+    //         i = "1"; // Set `i` to "1" after the first render
+    //         isFirstRender = false; // Update flag to indicate first render is completed
+    //     }
+    // }
+
+    private string displayedValue = "?"; // Displayed value synced with user input
+
+    private async Task HandleInput(ChangeEventArgs args)
+    {
+        userInput = args.Value?.ToString(); // Update userInput from event args
+        displayedValue = userInput; // Sync displayed value with userInput
+
+        await InvokeAsync(() => StateHasChanged()); // Refresh UI after input change
+    }
+
 
     [Parameter] public BaseQuestion Question { get; set; }
     [Parameter] public EventCallback AnsweredCorrectly { get; set; }
     [Parameter] public EventCallback AnsweredWrongly { get; set; }
+    [Parameter] public EventCallback GenerateNewQuestion { get; set; }
     [Parameter] public int Answer { get; set; }
     private ElementReference inputElement;
+
+    // private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
+
+    // protected override void OnInitialized()
+    // {
+    //     if (dateTimeCounterStopWatch is null)
+    //     {
+    //         dateTimeCounterStopWatch = new DateTimeCounterStopWatch();
+    //     }
+    //     GenerateNewQuestion.InvokeAsync();
+    // }
+
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -224,19 +262,11 @@
         inputElement.FocusAsync();
     }
 
-    // The key to binding is:
-    // 1. @bind-value="userInput"
-    // This means bind the value of the property called value
 
-    // 2. @bind-value:event="oninput"
-    // This means bind the
-
-    //@bind-{HTMLElementPropertyName}="{variable}"
     private string? userInput = "";
     private bool showResult;
     private string resultMessage = "";
     private string resultColor = "White";
-
 
     private async Task HandleKeydown(KeyboardEventArgs args)
     {
@@ -264,23 +294,31 @@
                 userInput = ""; // Clear input after correct answer
                 resultMessage = "";
                 resultColor = "white"; // Reset color
+                displayedValue = "?";
+                // await dateTimeCounterStopWatch.ResetAndStartStopwatch();
+                // await dateTimeCounterStopWatch.IncrementCounter();
                 await AnsweredCorrectly.InvokeAsync();
-                StateHasChanged();
             }
             else
             {
                 resultMessage = "Please Try Again.";
                 resultColor = "red";
                 await JSRuntime.InvokeVoidAsync("eval", "document.activeElement.select()");
+                // await dateTimeCounterStopWatch.IncrementErrorCount();
                 await AnsweredWrongly.InvokeAsync();
-                StateHasChanged();
             }
 
             showResult = true;
-            StateHasChanged();
+            await InvokeAsync(() => StateHasChanged());
         }
+        // else
+        // {
+        //     // Method to update displayedValue synchronously with userInput
+        //     displayedValue = displayedValue + args.Key; // Optionally, manipulate or format the value as needed
+        //     StateHasChanged();
+        // }
+
+
     }
-
-
 }
 
