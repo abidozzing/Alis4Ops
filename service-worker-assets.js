@@ -33,11 +33,11 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-+Lf\/5lB+95nuAj\/on5mendtjGoUlHn7qqpW\/bKOHviw=",
+      "hash": "sha256-5XVf6NwIS4kUPdl9Vs8Nm8UkAs\/+EwlfB03N+LFIxbs=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-UbyoVaXzC1PTWqJKP9vkJTO7ooDQPRFUiVZtDVA8m9c=",
+      "hash": "sha256-3Eb0AUUd8sAfQ71HlwSqsURnljL1FIRvTVkJqsawA8c=",
       "url": "_framework\/Alis4Ops2024.Web.wasm"
     },
     {
@@ -53,7 +53,7 @@
       "url": "_framework\/Blazored.SessionStorage.wasm"
     },
     {
-      "hash": "sha256-8\/0LQF2uZb27NamiG1Z4EfXPlTWeqO9O9qEDjGq6RDY=",
+      "hash": "sha256-d0n2NKIs+3sTfns+nu7k3Lq+WYMNOTn63vDXDA4DtuU=",
       "url": "_framework\/Microsoft.AspNetCore.Components.wasm"
     },
     {
@@ -157,7 +157,7 @@
       "url": "_framework\/System.ObjectModel.wasm"
     },
     {
-      "hash": "sha256-xp7ZeQce4ahiFlLlf3OSXQ6JcsIZZCeFoUgVo5ysuFQ=",
+      "hash": "sha256-eTuhC32XV3DptZNyzGoBZkBi0Kb4cP5AGFrouGzVdCg=",
       "url": "_framework\/System.Private.CoreLib.wasm"
     },
     {
@@ -169,7 +169,7 @@
       "url": "_framework\/System.Runtime.InteropServices.JavaScript.wasm"
     },
     {
-      "hash": "sha256-pLyhtpgKAnsAOsipiRj7PjLwvTbKbY303jNUASeBjRQ=",
+      "hash": "sha256-eVJp7cdM+L\/0eaQL1aOu5Pfww1NsgkRgm3PxspFiu1c=",
       "url": "_framework\/System.Runtime.wasm"
     },
     {
@@ -206,6 +206,14 @@
     },
     {
       "hash": "sha256-93nWMS6ybdBCpM7ghv\/AZLPyIAZRjzKUkS8qXca874I=",
+      "url": "css\/bootstrap.min.css"
+    },
+    {
+      "hash": "sha256-gBwg2tmA0Ci2u54gMF1jNCVku6vznarkLS6D76htNNQ=",
+      "url": "css\/bootstrap.min.css.map"
+    },
+    {
+      "hash": "sha256-93nWMS6ybdBCpM7ghv\/AZLPyIAZRjzKUkS8qXca874I=",
       "url": "css\/bootstrap\/bootstrap.min.css"
     },
     {
@@ -213,7 +221,7 @@
       "url": "css\/bootstrap\/bootstrap.min.css.map"
     },
     {
-      "hash": "sha256-RflG9grM6132+VVQcpOuu2lGVUhMfweF2sam4qxzVC4=",
+      "hash": "sha256-4QkD1Nus+fOcBULLIQbQSidopniLjzCV5vXvwFjDAvg=",
       "url": "css\/dropbutton.css"
     },
     {
@@ -8753,6 +8761,10 @@
       "url": "css\/fontawesome\/webfonts\/fa-v4compatibility.woff2"
     },
     {
+      "hash": "sha256-jz0CUkd4XPS+GXXQwEgalqNHAp2qHrl\/lmrkXkEj4vM=",
+      "url": "css\/rangemenu.css"
+    },
+    {
       "hash": "sha256-d28RCktgcPB\/oDov21bwkJh2IBNsWh5TLBWS1Qa267g=",
       "url": "css\/site.css"
     },
@@ -8797,5 +8809,5 @@
       "url": "windowSizeInterop.js"
     }
   ],
-  "version": "i9lvc2QH"
+  "version": "oSG1tuVE"
 };
