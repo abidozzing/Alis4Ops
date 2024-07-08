@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "Alis4Ops2024.Web",
   "resources": {
-    "hash": "sha256-zvBjOniD8v3R8vd7IvPFN8ba771lZryjiwcDdCy3lyM=",
+    "hash": "sha256-PtofZHK5LUIt3BxWecLy/796Rm7od++V/4ZY4IjPo5s=",
     "jsModuleNative": {
       "dotnet.native.8.0.6.suuomc2hr0.js": "sha256-YU6M9+jtDVnB8/wtrgIndOstzNh778Ls8g9XnbjorSk="
     },
@@ -17,7 +17,7 @@
       "icudt_no_CJK.dat": "sha256-L7sV7NEYP37/Qr2FPCePo5cJqRgTXRwGHuwF5Q+0Nfs="
     },
     "assembly": {
-      "Alis4Ops2024.Web.wasm": "sha256-Jl7Y5/0fwEZulc4kasg9i4kBaPEmY5cZkBl8w6AQiPk=",
+      "Alis4Ops2024.Web.wasm": "sha256-kPVTs9bRads9mRa5g1elBrylXYAyBYiT9IzK63Z5rcA=",
       "Blazor.Extensions.Storage.JS.wasm": "sha256-ZS6VcHQFGUG2UwqInNVYfl5VgjUfi6p5A3X/saUuGfc=",
       "Blazor.Extensions.Storage.wasm": "sha256-GQH966qoaPjs9s8Jb5RIHGg3IJKSdX4h8RJenIE+59c=",
       "Blazored.SessionStorage.wasm": "sha256-nQXuCGHos7iwp2WxRUgarKmWgJYChaVQp2NajgNU3V8=",
