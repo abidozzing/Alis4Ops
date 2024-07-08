@@ -16,7 +16,7 @@ namespace Alis4Ops2024.Web.Core
         // Add upper and lower
         public int Upper { get; set; } = 5;
         public int Lower { get; set; } = 1;
-        public string Operator { get; set; } = "Add";
+        public string Operator { get; set; } = "Subtract";
         public string SelectedItem { get; set; } = "1-5";
         public SubtractQuestionGeneratorService()
         {

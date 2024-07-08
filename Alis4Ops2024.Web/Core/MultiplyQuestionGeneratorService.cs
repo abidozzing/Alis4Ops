@@ -14,10 +14,10 @@ namespace Alis4Ops2024.Web.Core
     public class MultiplyQuestionGeneratorService : IMultiplyQuestionGeneratorService
     {
         // Add upper and lower
-        public int Upper { get; set; } = 5;
+        public int Upper { get; set; } = 12;
         public int Lower { get; set; } = 1;
-        public string Operator { get; set; } = "Add";
-        public string SelectedItem { get; set; } = "1-5";
+        public string Operator { get; set; } = "Multiply";
+        public string SelectedItem { get; set; } = "1";
         public MultiplyQuestionGeneratorService()
         {
 
