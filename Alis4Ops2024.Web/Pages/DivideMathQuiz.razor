@@ -62,7 +62,7 @@
         <div class="row gx-0" style="padding:0px;">
             <!-- InputBox userInput -->
             <div class="col-3 d-flex text-dark">
-                <input class="input-box" style="background-color: lightgreen;  color: mediumblue; font-weight: bold; text-align: center; align-content: center; border: 0;" @bind-value="userInput" @oninput="HandleInput" @onkeydown="HandleKeydown" @ref="inputElement" />
+                <input class="input-box" id="AnswerNumber" pattern="[0-9]*" type="number" placeholder="?" style="background-color: lightgreen;  color: mediumblue; font-weight: bold; text-align: center; align-content: center; border: 0;" @bind-value="userInput" @oninput="HandleInput" @onkeydown="HandleKeydown" @ref="inputElement" />
             </div>
 
             <!-- Switch case for Operator -->
@@ -174,7 +174,7 @@
 
             <!-- InputBox userInput -->
             <div class="col-3 d-flex text-dark">
-                <input class="input-box" style="background-color: lightgreen; color:mediumblue; font-weight: bold; text-align: center; align-content: center;  border: 0" @bind-value="userInput" @oninput="HandleInput" @onkeydown="HandleKeydown" @ref="inputElement" />
+                <input class="input-box" id="AnswerNumber" pattern="[0-9]*" type="number" placeholder="?" style="background-color: lightgreen; color:mediumblue; font-weight: bold; text-align: center; align-content: center;  border: 0" @bind-value="userInput" @oninput="HandleInput" @onkeydown="HandleKeydown" @ref="inputElement" />
             </div>
 
             <div class="col p-1 d-flex justify-content-center align-items-center text-dark" style="text-align: center;">
@@ -265,12 +265,21 @@
 
             <!-- InputBox userInput -->
             <div class="col-3 d-flex text-dark">
-                <input class="input-box" placeholder="?" style="background-color: lightgreen; color:mediumblue; font-weight: bold; text-align: right; border: 0;  border: 2px solid green;" @bind-value="userInput" @oninput="HandleInput" @onkeydown="HandleKeydown" @ref="inputElement" />
+                <input class="input-box" id="AnswerNumber" pattern="[0-9]*" type="number" placeholder="?" style="background-color: lightgreen; color:mediumblue; font-weight: bold; text-align: right; border: 0;  border: 2px solid green;" @bind-value="userInput" @oninput="HandleInput" @onkeydown="HandleKeydown" @ref="inputElement" />
             </div>
         </div>
 
         break;
 }
+
+<style>
+    /* Remove spinner buttons for number inputs in WebKit browsers */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+</style>
 
 
 @code {

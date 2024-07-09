@@ -8,6 +8,8 @@
 @using System.Timers
 @using System
 
+@* @if (ShowDropdownButton)
+{ *@
 <div class="dropdown">
     <!-- Added d-flex and align-items-center for vertical centering -->
     <button class="dropbtn" @onclick="ToggleDropdown">Add</button>
@@ -18,9 +20,12 @@
         }
     </div>
 </div>
-
+@* } *@
 
 @code {
+
+
+    [Parameter] public bool ShowDropdownButton { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

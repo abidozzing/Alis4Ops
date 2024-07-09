@@ -24,7 +24,7 @@
     <Content Update="Pages\MultiplyDivide.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
-    <Content Update="Pages\Home.razor">
+    <Content Update="Pages\Main.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
     <Content Update="Pages\AddMathQuiz.razor">

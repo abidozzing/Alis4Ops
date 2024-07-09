@@ -1,394 +1,96 @@
-﻿@page "/home/{topic}"
-@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+﻿@* @page "/" *@
+@page "/home"
 @using Alis4Ops2024.Web.Core
 @using Alis4Ops2024.Web.Models
 @using Alis4Ops2024.Web.Layout
 @using Alis4Ops2024.Web.Pages
 @using Microsoft.JSInterop
 @inject IJSRuntime JSRuntime
-@inject NavigationManager _navigationManager
+@inject NavigationManager NavigationManager
 @using Microsoft.AspNetCore.Components
 
-
-@* <h1>Main Page</h1> *@
-<h2>Selected Operation: @SelectedItem</h2>
-<div style="font-size: 120%;">
-    <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" />
+<div class="menu-block">
+    <ul>
+        <li><a href="#" @onclick="@(() => NavigateToMain("Add"))" class="@GetMenuItemClass("Add")">Add</a></li>
+        <li><a href="#" @onclick="@(() => NavigateToMain("Subtract"))" class="@GetMenuItemClass("Subtract")">Subtract</a></li>
+        <li><a href="#" @onclick="@(() => NavigateToMain("Multiply"))" class="@GetMenuItemClass("Multiply")">Multiply</a></li>
+        <li><a href="#" @onclick="@(() => NavigateToMain("Divide"))" class="@GetMenuItemClass("Divide")">Divide</a></li>
+        <li><a href="#" @onclick="@(() => NavigateToMain("AddSubtract"))" class="@GetMenuItemClass("AddSubtract")">AddSubtract</a></li>
+        <li><a href="#" @onclick="@(() => NavigateToMain("MultiplyDivide"))" class="@GetMenuItemClass("MultiplyDivide")">MultiplyDivide</a></li>
+        <li><a href="#" @onclick="@(() => NavigateToMain("MixedFourOps"))" class="@GetMenuItemClass("MixedFourOps")">MixedFourOps</a></li>
+        <!-- Add more links as needed -->
+    </ul>
 </div>
-@if (!string.IsNullOrEmpty(topic))
-{
 
-    <div>
-        @switch (topic)
-        {
-            case "Add":
-                @* <p>Addition Component</p> *@
-                <PageTitle>Add</PageTitle>
-
-                <div class="container col-12">
-                    <div class="row gx-0 align-items-center" style="font-size: 60%;">
-                        <div class="col-auto">
-                            <AddRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
-                                          @bind-SelectedItem=@SelectedItem ParametersChanged="GenerateNewQuestion" />
-                        </div>
-
-                        <div class="col-auto">
-                            <div class="d-flex align-items-center" style="margin-left: 15px; color:gray">
-                                <Date />
-                            </div>
-                        </div>
-                    </div>
-
-                    @* <div style="font-size: 60%;">
-        <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" />
-        </div> *@
-
-                    <div>
-                        <AddMathQuiz Question="@Question" AnsweredCorrectly="HandleAnsweredCorrectly" AnsweredWrongly="HandleAnsweredWrongly" Answer=@Question.Answer />
-                    </div>
-
-                    <div>
-                        <AddModel Question="@Question" />
-                    </div>
-                </div>
-                break;
-            case "Subtract":
-                @* <p>Subtraction Component</p> *@
-                <div class="container col-12">
-                    <div class="row gx-0 align-items-center" style="font-size: 60%;">
-                        <div class="col-auto">
-                            <SubtractRangeMenu @bind-UpperRange="@UpperRange" @bind-LowerRange="@LowerRange" @bind-Operator="@Operator"
-                                               @bind-SelectedItem="@SelectedItem" ParametersChanged="GenerateNewQuestion" />
-                        </div>
-
-                        <div class="col-auto">
-                            <div class="d-flex align-items-center" style="margin-left: 15px; color:gray">
-                                <Date />
-                            </div>
-                        </div>
-                    </div>
-
-                    @*                     <div style="font-size: 60%;">
-        <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" />
-        </div> *@
-
-                    <div>
-                        <SubtractMathQuiz Question="@Question" AnsweredCorrectly="HandleAnsweredCorrectly" AnsweredWrongly="HandleAnsweredWrongly" Answer="@Question.Answer" />
-                    </div>
-                    <div>
-                        <SubtractModel Question="@Question" />
-                    </div>
-
-                </div>
-                break;
-            case "Multiply":
-                @* <p>Multiplication Component</p> *@
-                <div class="container col-12">
-                    <div class="row gx-0 align-items-center" style="font-size: 60%;">
-                        <div class="col-auto">
-                            <MultiplyRangeMenu @bind-UpperRange="@UpperRange" @bind-LowerRange="@LowerRange" @bind-Operator="@Operator"
-                                               @bind-SelectedItem="@SelectedItem" ParametersChanged="GenerateNewQuestion" />
-                        </div>
-
-                        <div class="col-auto">
-                            <div class="d-flex align-items-center" style="margin-left: 15px; color:gray">
-                                <Date />
-                            </div>
-                        </div>
-                    </div>
-
-                    @*                     <div style="font-size: 60%;">
-        <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" />
-        </div> *@
-
-                    <div>
-                        <MultiplyMathQuiz Question="@Question" AnsweredCorrectly="HandleAnsweredCorrectly" AnsweredWrongly="HandleAnsweredWrongly" Answer="@Question.Answer" />
-                    </div>
-
-                    <div>
-                        <MultiplyModel Question="@Question" />
-                    </div>
-                </div>
-                break;
-            case "Divide":
-                @* <p>Division Component</p> *@
-                <div class="container col-12">
-                    <div class="row gx-0 align-items-center" style="font-size: 60%;">
-                        <div class="col-auto">
-                            <DivideRangeMenu @bind-UpperRange="@UpperRange" @bind-LowerRange="@LowerRange" @bind-Operator="@Operator"
-                                             @bind-SelectedItem="@SelectedItem" ParametersChanged="GenerateNewQuestion" />
-                        </div>
-
-                        <div class="col-auto">
-                            <div class="d-flex align-items-center" style="margin-left: 15px; color:gray">
-                                <Date />
-                            </div>
-                        </div>
-                    </div>
-
-                    @*                     <div style="font-size: 60%;">
-        <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" />
-        </div> *@
-
-                    <div>
-                        <DivideMathQuiz Question="@Question" AnsweredCorrectly="HandleAnsweredCorrectly" AnsweredWrongly="HandleAnsweredWrongly" Answer="@Question.Answer" />
-                    </div>
-
-                    <div>
-                        <DivideModel Question="@Question" />
-                    </div>
-                </div>
-                break;
-            case "AddSubtract":
-                @* <p>Add Subtract Component</p> *@
-                break;
-            case "MultiplyDivide":
-                @* <p>Multiply Divide Component</p> *@
-                break;
-            case "MixedFourOps":
-                @* <p>Mixed Four Operations Component</p> *@
-                break;
-            default:
-                @* <p>Invalid Operation: @topic</p> *@
-                break;
-        }
-    </div>
-}
-else
-{
-    <p>No operation selected. Defaulting to Addition Component.</p>
-    topic = "add"; // Set default operation to "add"
-    UpperRange = 5;
-    LowerRange = 1;
-    Operator = "add";
-    SelectedItem = "1-5";
-}
+<!-- Main Content -->
+<div class="main-content">
+    @if (!string.IsNullOrEmpty(currentTopic))
+    {
+        <Main Topic="@currentTopic" />
+    }
+    else
+    {
+        <p><Main Topic="Add" /></p>
+    }
+</div>
 
 @code {
-    [Inject] private IAddQuestionGeneratorService AddQuestionGenerator { get; set; }
-    [Inject] private ISubtractQuestionGeneratorService SubtractQuestionGenerator { get; set; }
-    [Inject] private IMultiplyQuestionGeneratorService MultiplyQuestionGenerator { get; set; }
-    [Inject] private IDivideQuestionGeneratorService DivideQuestionGenerator { get; set; }
+    private string currentTopic;
+    private string clickedMenuItem = "Add"; // Initialize with "Add" to highlight by default
 
-    [Parameter] public BaseQuestion Question { get; set; }
-    [Parameter] public EventCallback AnsweredCorrectly { get; set; }
-    [Parameter] public EventCallback AnsweredWrongly { get; set; }
-    private DateTimeCounterStopWatch dateTimeCounterStopWatch;
-
-    private string message;
-    [Parameter] public string topicSelected { get; set; }
-    [Parameter] public string topic { get; set; }
-    [Parameter] public int UpperRange { get; set; }
-    [Parameter] public int LowerRange { get; set; }
-    [Parameter] public string Operator { get; set; }
-    [Parameter] public string SelectedItem { get; set; }
-
-
-    public async Task SaveTopic()
+    private void NavigateToMain(string topic)
     {
-        await sessionStorage.SetItemAsync("topic", topic);
+        currentTopic = topic;
+        clickedMenuItem = topic; // Set clicked menu item
     }
 
-
-    protected override void OnInitialized()
+    // Function to get CSS class based on clicked menu item
+    private string GetMenuItemClass(string menuItem)
     {
-        
-        SaveTopic();
-
-        if (string.IsNullOrEmpty(topic))
-        {
-            message = "No operation selected. Defaulting to Addition Component.";
-            topic = "Add"; // Set default operation to "add"
-        }
-
-        // Set default values based on the default or selected topic
-        SetDefaultValues(topic);
-
-        if (dateTimeCounterStopWatch is null)
-        {
-            dateTimeCounterStopWatch = new DateTimeCounterStopWatch();
-        }
-
-        // Generate initial question based on default values
-        GenerateNewQuestion();
-    }
-
-    private void SetDefaultValues(string selectedTopic)
-    {
-        switch (selectedTopic)
-        {
-            case "Add":
-                message = "Addition Component";
-                UpperRange = 5;
-                LowerRange = 1;
-                Operator = "Add";
-                SelectedItem = "1-5";
-                break;
-            case "Subtract":
-                message = "Subtraction Component";
-                UpperRange = 5;
-                LowerRange = 1;
-                Operator = "Subtract";
-                SelectedItem = "1-5";
-                break;
-            case "Multiply":
-                message = "Multiplication Component";
-                UpperRange = 12;
-                LowerRange = 1;
-                Operator = "Multiply";
-                SelectedItem = "1";
-                break;
-            case "Divide":
-                message = "Division Component";
-                UpperRange = 12;
-                LowerRange = 1;
-                Operator = "Divide";
-                SelectedItem = "1";
-                break;
-            case "AddSubtract":
-                message = "Subtraction Component";
-                UpperRange = 20;
-                LowerRange = 1;
-                
-                Random AddSubtractRandom = new Random();
-                topic = AddSubtractRandom.Next(2) == 0 ? "Add" : "Subtract";
-
-                // Assign SelectedItem based on topic
-                if (topic == "Add")
-                {
-                    SelectedItem = "Add-Missing";
-                    Operator = "Add";
-                }
-                else if (topic == "Subtract")
-                {
-                    SelectedItem = "Subtract-Missing";
-                    Operator = "Subtract";
-                }
-                break;
-            case "MultiplyDivide":
-                message = "Multiplication Component";
-                UpperRange = 12;
-                LowerRange = 1;
-
-                Random MultiplyDivideRandom = new Random();
-                topic = MultiplyDivideRandom.Next(2) == 0 ? "Multiply" : "Divide";
-
-                // Assign SelectedItem based on topic
-                if (topic == "Multiply")
-                {
-                    SelectedItem = "Multiply-Missing";
-                    Operator = "Multiply";
-                }
-                else if (topic == "Divide")
-                {
-                    SelectedItem = "Divide-Missing";
-                    Operator = "Divide";
-                }
-                break;
-            case "MixedFourOps":
-                message = "MixedFourOps Component";
-                Random MixedFourOpsRandom = new Random();
-                int mixedFourOpsRandom = MixedFourOpsRandom.Next(4);
-
-                // Assign topic based on the random number generated
-                switch (mixedFourOpsRandom)
-                {
-                    case 0:
-                        topic = "Add";
-                        UpperRange = 20;
-                        LowerRange = 1;
-                        SelectedItem = "Add-Missing";
-                        Operator = "Add";
-                        break;
-                    case 1:
-                        topic = "Subtract";
-                        UpperRange = 20;
-                        LowerRange = 1;
-                        SelectedItem = "Subtract-Missing";
-                        Operator = "Subtract";
-                        break;
-                    case 2:
-                        topic = "Multiply";
-                        UpperRange = 12;
-                        LowerRange = 1;
-                        SelectedItem = "Multiply-Missing";
-                        Operator = "Multiply";
-                        break;
-                    case 3:
-                        topic = "Divide";
-                        UpperRange = 12;
-                        LowerRange = 1;
-                        SelectedItem = "Divide-Missing";
-                        Operator = "Divide";
-                        break;
-                }
-                break;
-            default:
-                message = $"Invalid Operation: {selectedTopic}";
-                break;
-        }
-    }
-
-
-
-    private async Task HandleAnsweredCorrectly()
-    {
-        if (dateTimeCounterStopWatch != null)
-        {
-            await dateTimeCounterStopWatch.ResetAndStartStopwatch();
-            await dateTimeCounterStopWatch.IncrementCounter();
-            await AnsweredCorrectly.InvokeAsync();
-
-            // Generate new question after correct answer
-            string topicValue = await GetTopicAsync();
-            // Now you have the topicValue, which you can use in your application logic
-            Console.WriteLine($"Retrieved topic value: {topicValue}");
-
-            // Assign topic to a class-level variable or use it as needed
-            topic = topicValue;
-            SetDefaultValues(topic);
-
-            GenerateNewQuestion();
-        }
-    }
-
-    private async Task<string> GetTopicAsync()
-    {
-        var storedTopicValue = await sessionStorage.GetItemAsync<string>("topic");
-        return storedTopicValue;
-    }
-
-    private async Task HandleAnsweredWrongly()
-    {
-        if (dateTimeCounterStopWatch != null)
-        {
-            await dateTimeCounterStopWatch.IncrementErrorCount();
-            // await AnsweredWrongly.InvokeAsync();
-
-            // Generate new question after wrong answer (optional)
-            GenerateNewQuestion();
-        }
-    }
-
-    private void GenerateNewQuestion()
-    {
-        switch (topic)
-        {
-            case "Add":
-                Question = AddQuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem);
-                break;
-            case "Subtract":
-                Question = SubtractQuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem);
-                break;
-            case "Multiply":
-                Question = MultiplyQuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem);
-                break;
-            case "Divide":
-                Question = DivideQuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem);
-                break;
-            // Handle additional cases as needed
-            default:
-                break;
-        }
+        return menuItem == clickedMenuItem ? "active" : ""; // Apply 'active' class if menu item is clicked
     }
 }
+
+<style>
+    .menu-block {
+        background-color: #f0f0f0;
+        padding: 10px;
+        margin-bottom: 20px;
+        font-size: 14px; /* Adjust font size as needed */
+    }
+
+        .menu-block ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+            .menu-block ul li {
+                display: inline-block;
+                margin-right: 10px;
+            }
+
+                .menu-block ul li a {
+                    text-decoration: none;
+                    color: #333;
+                    font-weight: bold;
+                    padding: 5px 10px;
+                    border-radius: 5px;
+                    background-color: #ddd;
+                }
+
+                    .menu-block ul li a:hover {
+                        background-color: #ccc;
+                    }
+
+                    .menu-block ul li a.active {
+                        background-color: darkgreen; /* Highlight color for active menu item */
+                        color: white;
+                    }
+
+    .main-content {
+        padding: 20px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+    }
+</style>
