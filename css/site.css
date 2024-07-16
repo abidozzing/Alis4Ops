@@ -41,25 +41,25 @@
 
 @media screen and (max-width: 900px) {
     .container {
-        font-size: 28px;
+        font-size: 30px;
     }
 }
 
 @media screen and (max-width: 769px) {
     .container {
-        font-size: 20px;
+        font-size: 22px;
     }
 }
 
 @media screen and (max-width: 420px) {
     .container {
-        font-size:14px;
+        font-size:16px;
     }
 }
 
 @media screen and (max-width: 360px) {
     .container {
-        font-size: 14px;
+        font-size: 16px;
     }
 }
 
