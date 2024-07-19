@@ -1,5 +1,6 @@
 ﻿@* @page "/" *@
 @page "/home"
+@* home *@
 @using Alis4Ops2024.Web.Core
 @using Alis4Ops2024.Web.Models
 @using Alis4Ops2024.Web.Layout
@@ -14,6 +15,7 @@
 <PageTitle>Home</PageTitle>
 
 <div class="menu-block">
+  
     <ul>
         <li><a href="#" @onclick="@(() => NavigateToMain("Add"))" class="@GetMenuItemClass("Add")">Add</a></li>
         <li><a href="#" @onclick="@(() => NavigateToMain("Subtract"))" class="@GetMenuItemClass("Subtract")">Subtract</a></li>
