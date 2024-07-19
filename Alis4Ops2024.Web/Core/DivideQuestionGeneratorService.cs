@@ -18,11 +18,12 @@ namespace Alis4Ops2024.Web.Core
         public int Lower { get; set; } = 1;
         public string Operator { get; set; } = "Divide";
         public string SelectedItem { get; set; } = "1";
+        public String Topic { get; set; } = "Divide";
         public DivideQuestionGeneratorService()
         {
 
         }
-        public BaseQuestion GenerateQuestion(int upperRange, int lowerRange, string _operator, string selectedItem)
+        public BaseQuestion GenerateQuestion(int upperRange, int lowerRange, string _operator, string selectedItem, string topic)
         {
             int minInputNumber = 1;
             int maxInputNumber = 3; // Change this value as needed if equation has more than 2 operands
@@ -30,40 +31,66 @@ namespace Alis4Ops2024.Web.Core
             var question = new BaseQuestion(); // maxInputNumber for (1 + 2 = 3) is 3. maxInputNumber for (1 + 2 + 4 = 7) is 4 
             int Operand2Temp = 0;
             string SelectedItemTemp = selectedItem;
-            switch (selectedItem)
-            { 
-                    case "Divide-Missing":  // To write code logic for Divide Missing ?/6 = 5, 40/? = 10, 42/7 = ?
-                        _operator = "Divide";
-                        question.Operator = _operator;
-                        question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange);
-                        question.Operand1 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange) * question.Operand2;
-                        question.Answer = GetAnswer(question);
-                        // Call the GetRandomNumber method with the desired maximum number
-                        question.InputPosition = randomNumberGenerator.GetRandomNumber(minInputNumber,maxInputNumber);
-                        int DivideMissingTemp;
-                        switch (question.InputPosition)
-                        {
-                            case 1:
-                                DivideMissingTemp = question.Answer;
-                                question.Answer = question.Operand1;
-                                question.Operand1 = DivideMissingTemp;
-                                break;
-                            case 2:
-                                DivideMissingTemp = question.Answer;
-                                question.Answer = question.Operand2;
-                                question.Operand2 = DivideMissingTemp;
-                                break;
-                    }
+            Topic = topic;
+            int TempNumber = 1;
+            SelectedItem = selectedItem;
+            _operator = "Divide";
+            question.Operator = _operator;
+            bool PositionFlag = true; // Flag to determine whether to execute inner switch
+
+            switch (Topic)
+            {
+                case "DivideMissing":
+                    question.Operand2 = lowerRange;
+                    question.Operand1 = randomNumberGenerator.GetRandomNumber(1, upperRange) * question.Operand2;
+                    question.Answer = GetAnswer(question);
+                    question.InputPosition = randomNumberGenerator.GetRandomNumber(minInputNumber, maxInputNumber);
+                    break;
+
+                case "MultiplyDivide":
+                case "MixedFourOps":
+                    question.Operand2 = randomNumberGenerator.GetRandomNumber(1, lowerRange);
+                    question.Operand1 = randomNumberGenerator.GetRandomNumber(1, upperRange) * question.Operand2;
+                    question.Answer = GetAnswer(question);
+                    question.InputPosition = randomNumberGenerator.GetRandomNumber(minInputNumber, maxInputNumber);
+                    break;
+
+                default:
+                    // Default case logic if Topic does not match any specified cases
+                    PositionFlag = false; // Set flag to false to skip inner switch
+                    question.Operand2 = lowerRange;
+                    question.Operand1 = randomNumberGenerator.GetRandomNumber(1, upperRange) * lowerRange;
+                    question.Answer = GetAnswer(question);
+                    break;
+            }
+
+            // Execute inner switch only if executeInnerSwitch flag is true
+            if (PositionFlag)
+            {
+                switch (question.InputPosition)
+                {
+                    case 1:
+                        // Swap Operand1 and Answer
+                        TempNumber = question.Answer;
+                        question.Answer = question.Operand1;
+                        question.Operand1 = TempNumber;
                         break;
+
+                    case 2:
+                        // Swap Operand2 and Answer
+                        TempNumber = question.Answer;
+                        question.Answer = question.Operand2;
+                        question.Operand2 = TempNumber;
+                        break;
+
                     default:
-                        question.Operator = _operator;
-                        question.Operand2 = lowerRange;
-                        question.Operand1 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange) * lowerRange;
-                        question.Answer = GetAnswer(question);
+                        // Default case for InputPosition
+                        // Handle other cases if needed
                         break;
                 }
+            }
 
-                return question;
+            return question;
 
         }
         public BaseQuestion GenerateQuestion()
@@ -82,32 +109,9 @@ namespace Alis4Ops2024.Web.Core
 
         private int GetAnswer(BaseQuestion question)
         {
-            switch (question.Operator)
-            {
-                case "Add":
-                    return question.Operand1 + question.Operand2;
-                case "Subtract":
-                    if (question.Operand1 < question.Operand2)
-                    {
-                        int operandTemp = question.Operand1;
-                        question.Operand1 = question.Operand2;
-                        question.Operand2 = operandTemp;
-                    }
-                    return question.Operand1 - question.Operand2;
-                case "Multiply":
-                    return question.Operand1 * question.Operand2;
-                case "Divide":
-                    {
 
-                    }
-                    return question.Operand1 / question.Operand2;
+            return question.Operand1 / question.Operand2;
 
-                default:
-                    question.Operator = "Add";
-                    return question.Operand1 + question.Operand2;
-                    //throw new InvalidOperationException($"Operator is not valid {question.Operator}");
-                    break;
-            }
         }
 
         // Create an instance of RandomNumberGenerator
@@ -115,11 +119,17 @@ namespace Alis4Ops2024.Web.Core
 
         public class RandomNumberGenerator
         {
-            private static Random random = new Random();
+            private static Random random;
 
-            public int GetRandomNumber(int minNumber,int maxNumber)
+            public RandomNumberGenerator()
             {
-                // Generate a random number between 1 and maxNumber (inclusive)
+                // Seed the random number generator with current time ticks
+                random = new Random((int)DateTime.UtcNow.Ticks);
+            }
+
+            public int GetRandomNumber(int minNumber, int maxNumber)
+            {
+                // Generate a random number between minNumber and maxNumber (inclusive)
                 int randomNumber = random.Next(minNumber, maxNumber + 1);
                 return randomNumber;
             }

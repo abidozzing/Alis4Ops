@@ -1,17 +1,18 @@
-﻿@* @page "/subtractrangemenu" *@
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 @inject IJSRuntime JSRuntime
 @using Alis4Ops2024.Web.Core
 @using Alis4Ops2024.Web.Models
 @using Alis4Ops2024.Web.Layout
 <link href="css/site.css" rel="stylesheet" />
 <link href="css/dropbutton.css" rel="stylesheet" />
+@using System.Timers
+@using System
 
-<PageTitle>SubtractRangeMenu</PageTitle>
+<PageTitle>AddMissingRangeMenu</PageTitle>
 
         <div class="dropdown">
             <!-- Added d-flex and align-items-center for vertical centering -->
-            <button class="dropbtn" @onclick="ToggleDropdown">Subtract: @SelectedItem</button>
+            <button class="dropbtn" @onclick="ToggleDropdown">Add-Missing: @SelectedItem</button>
             <div class="dropdown-content" style="@dropdownStyle">
                 @foreach (var item in MenuItems)
                 {
@@ -22,9 +23,24 @@
 
 @code {
 
+
+    [Parameter] public bool ShowDropdownButton { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Update time every second
+        while (true)
+        {
+            await Task.Delay(1000); // Delay for one second
+            await InvokeAsync(() => StateHasChanged()); // Notify Blazor to re-render the UI
+        }
+    }
+
+
     protected override void OnInitialized()
     {
         SelectedMenuItem = MenuItems.FirstOrDefault(item => item.Text == "1-5");
+
     }
 
     public List<MenuItem> MenuItems { get; set; } = new List<MenuItem>
@@ -35,11 +51,6 @@
         new MenuItem { Text = "10-50"},
         new MenuItem { Text = "10-100"},
         new MenuItem { Text = "100-1000"},
-        new MenuItem { Text = "From 5"},
-        new MenuItem { Text = "From 10"},
-        new MenuItem { Text = "From 20"},
-        new MenuItem { Text = "From 50"},
-        new MenuItem { Text = "From 100"}
     };
 
     private string dropdownStyle => isDropdownOpen ? "display: block;" : "display: none;";
@@ -55,7 +66,6 @@
     [Parameter] public EventCallback<int> LowerRangeChanged { get; set; }
     [Parameter] public EventCallback<string> SelectedItemChanged { get; set; }
     [Parameter] public EventCallback<string> TopicChanged { get; set; }
-
 
     private string ClickedMenuItem = "";
 
@@ -81,7 +91,7 @@
         }
     }
 
-    private string _operator = "Subtract";
+    private string _operator = "Add";
     [Parameter]
     public string Operator
     {
@@ -103,7 +113,7 @@
         }
     }
 
-    private string _topic = "Subtract";
+    private string _topic = "AddMissing";
     [Parameter]
     public string Topic
     {
@@ -114,14 +124,15 @@
         }
     }
 
+
     public MenuItem SelectedMenuItem { get; set; } = null;
 
     void HandleClickedItem(MenuItem clickedItem)
     {
         SelectedMenuItem = clickedItem;
 
-        Operator = "Subtract";
-        Topic = "Subtract";
+        Operator = "Add";
+        Topic = "AddMissing";
         SelectedItem = SelectedMenuItem.Text;
         switch (SelectedItem)
         {
@@ -149,27 +160,8 @@
                 LowerRange = 100;
                 UpperRange = 1000;
                 break;
-            case "From 5":
-                LowerRange = 0;
-                UpperRange = 5;
-                break;
-            case "From 10":
-                LowerRange = 1;
-                UpperRange = 10;
-                break;
-            case "From 20":
-                LowerRange = 1;
-                UpperRange = 20;
-                break;
-            case "From 50":
-                LowerRange = 10;
-                UpperRange = 50;
-                break;
-            case "From 100":
-                LowerRange = 10;
-                UpperRange = 100;
-                break;
         }
+
 
         // Call the asynchronous method here
         _ = HandleParametersChangedAsync();
@@ -198,6 +190,7 @@
         await LowerRangeChanged.InvokeAsync(LowerRange);
         await OperatorChanged.InvokeAsync(Operator);
         await SelectedItemChanged.InvokeAsync(SelectedItem);
+        await TopicChanged.InvokeAsync(Topic);
         await ParametersChanged.InvokeAsync();
     }
 

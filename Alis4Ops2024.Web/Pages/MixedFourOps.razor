@@ -5,116 +5,368 @@
 @using Microsoft.JSInterop
 @inject IJSRuntime JSRuntime
 @inject NavigationManager _navigationManager
-@using System
-@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+@using Microsoft.AspNetCore.WebUtilities
+@inject RefreshService RefreshService
+@inject NavigationManager NavigationHelper
 <link href="css/site.css" rel="stylesheet" />
+<link href="css/dropbutton.css" rel="stylesheet" />
 
-@* @switch (selectedItem)
+<link href="css/site.css" rel="stylesheet" />
+<link href="css/dropbutton.css" rel="stylesheet" />
 
-{
-
-    case "Add":
-        break;
-
-    case "Add-Missing":
-        break;
-
-    case "Subtract":
-        break;
-
-    case "Subtract-Missing":
-        break;
-
-    case "Multiply":
-        break;
-
-    case "Multiply-Missing":
-        break;
-
-    case "Divide":
-        break;
-
-    case "Divide-Missing":
-        break;
-
-    case "Add:Subtract":
-        break;
-
-    case "Multiply:Divide":
-        break;
-
-    case "MissingFourOps":
-        break;
-
-} *@
-
-<PageTitle>Add</PageTitle>
+<PageTitle>MixedFourOps</PageTitle>
 
 <div class="container col-12">
+    <div class="row gx-0 align-items-center" style="font-size: 60%;">
+        <div class="col-auto">
+            <MixedFourOpsRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
+                                   @bind-SelectedItem=@SelectedItem @bind-Topic=@Topic ParametersChanged="GenerateNewQuestion" />
+        </div>
 
+        @*         <div class="col-auto">
+        <div class="d-flex align-items-center" style="margin-left: 15px; color:gray">
+        <Date />
+        </div>
+        </div> *@
+        <div class="col-auto ms-auto">
+            <!-- Right aligned content -->
+            <SubmitButton SubmitAnswer="HandleSubmitAnswerAsync" @ref="submitButton" />
+        </div>
+    </div>
 
-    @if (Num == 0)
+    <div>
+        <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" />
+    </div>
+
+    @if (Operator == "Add" || Operator == "Subtract" || Operator == "Multiply")
     {
         <div>
-            <Add AnsweredCorrectly="GenerateNewQuestion" AnsweredWrongly="HandleAnsweredWrongly" SelectedItem="Add-Missing" LowerRange="1" UpperRange="20" />
+            <MathQuiz Question="@Question" AnsweredCorrectly="HandleAnsweredCorrectly" AnsweredWrongly="HandleAnsweredWrongly" Answer=@Question.Answer @ref="mathQuiz" />
         </div>
-    }
-    else if (Num == 1)
-    {
-        <div>
-            <Subtract AnsweredCorrectly="GenerateNewQuestion" AnsweredWrongly="HandleAnsweredWrongly" SelectedItem="Subtract-Missing" LowerRange="1" UpperRange="20" />
-        </div>
-    }
-    else if (Num == 2)
-    {
-        <div>
-            <Multiply AnsweredCorrectly="GenerateNewQuestion" AnsweredWrongly="HandleAnsweredWrongly" SelectedItem="Multiply-Missing" LowerRange="1" UpperRange="12" />
-        </div>
-    }
-    else if (Num == 3)
-    {
-        <div>
-            <Divide AnsweredCorrectly="GenerateNewQuestion" AnsweredWrongly="HandleAnsweredWrongly" SelectedItem="Divide-Missing" LowerRange="1" UpperRange="12" />
-        </div>
+
+        @if (Operator == "Add")
+        {
+            <div>
+                <AddModel Question="@Question" />
+            </div>
+        }
+        else if (Operator == "Subtract")
+        {
+            <div>
+                <SubtractModel Question="@Question" />
+            </div>
+
+        }
+        else if (Operator == "Multiply")
+        {
+            <div>
+                <MultiplyModel Question="@Question" />
+            </div>
+
+        }
     }
     else
     {
         <div>
-            <Add AnsweredCorrectly="GenerateNewQuestion" AnsweredWrongly="HandleAnsweredWrongly" SelectedItem="Add-Missing" LowerRange="1" UpperRange="20" />
+            <DivideMathQuiz Question="@Question" AnsweredCorrectly="HandleAnsweredCorrectly" AnsweredWrongly="HandleAnsweredWrongly" Answer=@Question.Answer @ref="divideMathQuiz" />
+        </div>
+        <div>
+            <DivideModel Question="@Question" />
         </div>
     }
-
 </div>
 
+
 @code {
-    private Random random = new Random();
 
-    private int Num { get; set; } = 0;
 
-    private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
 
+    [Inject] private IAddQuestionGeneratorService AddQuestionGenerator { get; set; }
+    [Inject] private ISubtractQuestionGeneratorService SubtractQuestionGenerator { get; set; }
+    [Inject] private IMultiplyQuestionGeneratorService MultiplyQuestionGenerator { get; set; }
+    [Inject] private IDivideQuestionGeneratorService DivideQuestionGenerator { get; set; }
+    [Parameter] public BaseQuestion Question { get; set; }
     [Parameter] public EventCallback AnsweredCorrectly { get; set; }
     [Parameter] public EventCallback AnsweredWrongly { get; set; }
+    private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
+    private MathQuiz mathQuiz; // Reference to child component
+    private DivideMathQuiz divideMathQuiz; // Reference to child component
+    private SubmitButton submitButton;
+    [Parameter] public EventCallback SubmitAnswer { get; set; }
+
+    [Parameter] public string topicSelected { get; set; }
+    [Parameter] public string Topic { get; set; }
+    [Parameter] public int UpperRange { get; set; }
+    [Parameter] public int LowerRange { get; set; }
+    [Parameter] public string Operator { get; set; }
+    [Parameter] public string SelectedItem { get; set; }
+    private int Num { get; set; } = 0;
 
     protected override void OnInitialized()
     {
+        var uri = NavigationHelper.ToAbsoluteUri
+    (NavigationHelper.Uri);
+
+        if (QueryHelpers.ParseQuery(uri.Query).
+    TryGetValue("Topic", out var navTopic))
+            // Topic = "MixedFourOps";
+            if (dateTimeCounterStopWatch is null)
+            {
+                dateTimeCounterStopWatch = new DateTimeCounterStopWatch();
+
+            }
+        Topic = "MixedFourOps";
+        Operator = "Add";
+        UpperRange = 5;
+        LowerRange = 1;
+        SelectedItem = "Level1";
+
+        Num = random.Next(4);
+        switch (Num)
+        {
+            case 0:
+                mathQuiz = new MathQuiz();
+                Operator = "Add";
+                break;
+            case 1:
+                mathQuiz = new MathQuiz();
+                Operator = "Subtract";
+                break;
+            case 2:
+                mathQuiz = new MathQuiz();
+                Operator = "Multiply";
+                break;
+            case 3:
+                divideMathQuiz = new DivideMathQuiz();
+                Operator = "Divide";
+                break;
+            default:
+                // Handle unexpected cases if necessary
+                Topic = "MixedFourOps";
+                Operator = "Add";
+                LowerRange = 1;
+                UpperRange = 5;
+                SelectedItem = "Level1";
+
+                break;
+        }
+
+        // Generate new question based on Topic and Operator
         GenerateNewQuestion();
+
+        // Notify Blazor to update the component's state
+        StateHasChanged();
     }
 
+    async Task HandleSubmitAnswerAsync()
+    {
+        @if (Operator == "Divide")
+        {
+            await divideMathQuiz.inputElement.FocusAsync();
+
+            // Assuming HandleKeydown method doesn't return a Task and doesn't need await
+            await divideMathQuiz.HandleKeydown(new KeyboardEventArgs { Key = "Enter" });
+        }
+        else
+        {
+            await mathQuiz.inputElement.FocusAsync();
+
+            // Assuming HandleKeydown method doesn't return a Task and doesn't need await
+            mathQuiz.HandleKeydown(new KeyboardEventArgs { Key = "Enter" });
+        }
+    }
+    private Random random = new Random();
+
+    private async Task HandleAnsweredCorrectly()
+    {
+        if (dateTimeCounterStopWatch != null)
+        {
+            await dateTimeCounterStopWatch.ResetAndStartStopwatch();
+            await dateTimeCounterStopWatch.IncrementCounter();
+            await AnsweredCorrectly.InvokeAsync();
+            int Num = random.Next(4);
+            // Determine Topic and Operator based on Num1
+            Topic = "MixedFourOps"; // Assuming this is common for all cases
+
+            switch (Num)
+            {
+                case 0:
+                    Operator = "Add";
+                    break;
+                case 1:
+                    Operator = "Subtract";
+                    break;
+                case 2:
+                    Operator = "Multiply";
+                    break;
+                case 3:
+                    Operator = "Divide";
+                    break;
+                default:
+                    // Handle unexpected cases if necessary
+                    Topic = "MixedFourOps";
+                    Operator = "Add";
+                    LowerRange = 1;
+                    UpperRange = 5;
+                    SelectedItem = "Level1";
+                    break;
+            }
+
+            switch (SelectedItem)
+            {
+                case "Level1":
+                    switch (Operator)
+                    {
+                        case "Add":
+                            LowerRange = 1;
+                            UpperRange = 5;
+                            break;
+                        case "Subtract":
+                            LowerRange = 1;
+                            UpperRange = 5;
+                            break;
+                        case "Multiply":
+                            LowerRange = 1;
+                            UpperRange = 5;
+                            break;
+                        case "Divide":
+                            LowerRange = 1;
+                            UpperRange = 5;
+                            break;
+                    }
+                    break;
+                case "Level2":
+                    switch (Operator)
+                    {
+                        case "Add":
+                            LowerRange = 1;
+                            UpperRange = 10;
+                            break;
+                        case "Subtract":
+                            LowerRange = 1;
+                            UpperRange = 10;
+                            break;
+                        case "Multiply":
+                            LowerRange = 2;
+                            UpperRange = 6;
+                            break;
+                        case "Divide":
+                            LowerRange = 2;
+                            UpperRange = 6;
+                            break;
+                    }
+                    break;
+                case "Level3":
+                    switch (Operator)
+                    {
+                        case "Add":
+                            LowerRange = 1;
+                            UpperRange = 20;
+                            break;
+                        case "Subtract":
+                            LowerRange = 1;
+                            UpperRange = 20;
+                            break;
+                        case "Multiply":
+                            LowerRange = 3;
+                            UpperRange = 7;
+                            break;
+                        case "Divide":
+                            LowerRange = 3;
+                            UpperRange = 7;
+                            break;
+                    }
+                    break;
+                case "Level4":
+                    switch (Operator)
+                    {
+                        case "Add":
+                            LowerRange = 10;
+                            UpperRange = 50;
+                            break;
+                        case "Subtract":
+                            LowerRange = 10;
+                            UpperRange = 50;
+                            break;
+                        case "Multiply":
+                            LowerRange = 4;
+                            UpperRange = 10;
+                            break;
+                        case "Divide":
+                            LowerRange = 4;
+                            UpperRange = 10;
+                            break;
+                    }
+                    break;
+                case "Level5":
+                    switch (Operator)
+                    {
+                        case "Add":
+                            LowerRange = 10;
+                            UpperRange = 100;
+                            break;
+                        case "Subtract":
+                            LowerRange = 10;
+                            UpperRange = 100;
+                            break;
+                        case "Multiply":
+                            LowerRange = 5;
+                            UpperRange = 12;
+                            break;
+                        case "Divide":
+                            LowerRange = 5;
+                            UpperRange = 12;
+                            break;
+                    }
+                    break;
+                default:
+                    // Handle unexpected cases if necessary
+                    Topic = "MixedFourOps";
+                    Operator = "Add";
+                    LowerRange = 1;
+                    UpperRange = 5;
+                    SelectedItem = "Level1";
+                    break;
+            }
+
+            GenerateNewQuestion();
+            await InvokeAsync(() => StateHasChanged());
+        }
+
+    }
 
     private async Task HandleAnsweredWrongly()
     {
 
+        if (dateTimeCounterStopWatch != null)
+        {
+            await dateTimeCounterStopWatch.IncrementErrorCount();
+            // await AnsweredWrongly.InvokeAsync();
+        }
     }
-
 
     private void GenerateNewQuestion()
     {
-        Num = random.Next(0, 4);
+        switch (Operator)
+        {
+            case "Add":
+                Question = AddQuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem, Topic);
+                break;
+            case "Subtract":
+                Question = SubtractQuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem, Topic);
+                break;
+            case "Multiply":
+                Question = MultiplyQuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem, Topic);
+                break;
+            case "Divide":
+                Question = DivideQuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem, Topic);
+                break;
+            // Handle additional cases as needed
+            default:
+                break;
+        }
     }
-
 }
-
 
 
 

@@ -4,16 +4,17 @@
 @inject IJSRuntime JSRuntime
 @using System
 <link href="css/site.css" rel="stylesheet" />
+<link href="css/dropbutton.css" rel="stylesheet" />
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage
 
 <PageTitle>AddMathQuiz</PageTitle>
 
-@* @if (i == "")
-{
-    <div style="font-size: 60%;">
-        <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" />
+<div class="row  gx-0">
+    <!-- Message Good Job! or Please try again. -->
+    <div class="col-12 p-1 d-flex text-dark justify-content-center align-items-center" style="height: 30px; box-sizing: border-box;">
+        <div style="color: @resultColor;">@resultMessage</div>
     </div>
-} *@
+</div>
 
 @if (Question != null && (Question.InputPosition <= 0 || Question.InputPosition > 3))
 {
@@ -23,13 +24,6 @@
 @switch (Question.InputPosition)
 {
     case 1:
-        <div class="row  gx-0">
-            <!-- Message Good Job! or Please try again. -->
-            <div class="col-12 p-1 d-flex text-dark justify-content-center align-items-center" style="height: 30px; box-sizing: border-box;">
-                <div style="color: @resultColor;">@resultMessage</div>
-            </div>
-        </div>
-
         <!--  Add Operand1 Vertical -->
         <div class="row gx-0" style="padding:0px;">
             <div class="col-12 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@displayedValue</div>
@@ -86,13 +80,6 @@
         break;
 
     case 2:
-        <div class="row  gx-0">
-            <!-- Message Good Job! or Please try again. -->
-            <div class="col-12 p-1 d-flex text-dark justify-content-center align-items-center" style="height: 30px; box-sizing: border-box;">
-                <div style="color: @resultColor;">@resultMessage</div>
-            </div>
-        </div>
-
         <!--  Add Operand1 Vertical -->
         <div class="row gx-0" style="padding:0px;">
             <div class="col-12 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@Question.Operand1</div>
@@ -148,13 +135,6 @@
         break;
 
     case 3:
-        <!-- Result Message - Message Good Job! or Please try again. -->
-        <div class="row  gx-0">
-            <div class="col-12 p-1 d-flex text-dark justify-content-center align-items-center" style="height: 30px; box-sizing: border-box;">
-                <div style="color: @resultColor;">@resultMessage</div>
-            </div>
-        </div>
-
         <!-- Add Operand1 Vertical -->
         <div class="row gx-0" style="padding:0px;">
             <div class="col-12 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@Question.Operand1</div>
@@ -222,46 +202,13 @@
 </style>
 
 @code {
-    // string i = "";
-    // private bool isFirstRender = true; // Flag to track first render
-    // protected override void OnAfterRender(bool firstRender)
-    // {
-    //     if (firstRender && isFirstRender)
-    //     {
-    //         i = "1"; // Set `i` to "1" after the first render
-    //         isFirstRender = false; // Update flag to indicate first render is completed
-    //     }
-    // }
-
-    private string displayedValue = "?"; // Displayed value synced with user input
-
-    private async Task HandleInput(ChangeEventArgs args)
-    {
-        userInput = args.Value?.ToString(); // Update userInput from event args
-        displayedValue = userInput; // Sync displayed value with userInput
-
-        await InvokeAsync(() => StateHasChanged()); // Refresh UI after input change
-    }
-
-
     [Parameter] public BaseQuestion Question { get; set; }
     [Parameter] public EventCallback AnsweredCorrectly { get; set; }
     [Parameter] public EventCallback AnsweredWrongly { get; set; }
-    [Parameter] public EventCallback GenerateNewQuestion { get; set; }
+    // [Parameter] public EventCallback GenerateNewQuestion { get; set; }
     [Parameter] public int Answer { get; set; }
-    private ElementReference inputElement;
-
-    // private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
-
-    // protected override void OnInitialized()
-    // {
-    //     if (dateTimeCounterStopWatch is null)
-    //     {
-    //         dateTimeCounterStopWatch = new DateTimeCounterStopWatch();
-    //     }
-    //     GenerateNewQuestion.InvokeAsync();
-    // }
-
+    public ElementReference inputElement;
+    private string displayedValue = "?"; // Displayed value synced with user input
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -269,13 +216,30 @@
         inputElement.FocusAsync();
     }
 
+    protected override void OnInitialized()
+    {
+        
+    }
 
     private string? userInput = "";
     private bool showResult;
     private string resultMessage = "";
     private string resultColor = "White";
 
-    private async Task HandleKeydown(KeyboardEventArgs args)
+    public async Task HandleInput(ChangeEventArgs args)
+    {
+        userInput = args.Value?.ToString(); // Update userInput from event args
+        displayedValue = userInput; // Sync displayed value with userInput
+
+        if (displayedValue == "")
+        {
+            displayedValue = "?";
+        }
+
+        await InvokeAsync(() => StateHasChanged()); // Refresh UI after input change
+    }
+
+    public async Task HandleKeydown(KeyboardEventArgs args)
     {
         if (args.Key == "Enter")
         {
@@ -318,14 +282,6 @@
             showResult = true;
             await InvokeAsync(() => StateHasChanged());
         }
-        // else
-        // {
-        //     // Method to update displayedValue synchronously with userInput
-        //     displayedValue = displayedValue + args.Key; // Optionally, manipulate or format the value as needed
-        //     StateHasChanged();
-        // }
-
-
     }
 }
 

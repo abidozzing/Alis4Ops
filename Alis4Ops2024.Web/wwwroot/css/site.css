@@ -35,31 +35,31 @@
 /* Media queries for smaller screens */
 @media screen and (max-width: 1200) {
     .container {
-        font-size: 32px;
+        font-size: 36px;
     }
 }
 
 @media screen and (max-width: 900px) {
     .container {
-        font-size: 28px;
+        font-size: 36px;
     }
 }
 
 @media screen and (max-width: 769px) {
     .container {
-        font-size: 24px;
+        font-size: 32px;
     }
 }
 
 @media screen and (max-width: 420px) {
     .container {
-        font-size:20px;
+        font-size:28px;
     }
 }
 
 @media screen and (max-width: 360px) {
     .container {
-        font-size: 18px;
+        font-size: 24px;
     }
 }
 
@@ -87,3 +87,9 @@
     --bs-gutter-x: 0;
 }
 
+.bordered-component {
+    border: 3px solid lightgray; /* Border width and color */
+    padding: 15px; /* Optional: Add padding inside the border */
+    /* Other styles as needed */
+    padding-bottom: 100px;
+}

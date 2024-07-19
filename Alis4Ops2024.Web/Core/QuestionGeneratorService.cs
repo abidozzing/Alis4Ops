@@ -18,11 +18,12 @@ namespace Alis4Ops2024.Web.Core
         public int Lower { get; set; } = 1;
         public string Operator { get; set; } = "Add";
         public string SelectedItem { get; set; } = "1-5";
+        public String Topic { get; set; } = "Add";
         public QuestionGeneratorService()
         {
 
         }
-        public BaseQuestion GenerateQuestion(int upperRange, int lowerRange, string _operator, string selectedItem)
+        public BaseQuestion GenerateQuestion(int upperRange, int lowerRange, string _operator, string selectedItem, string topic)
         {
             int maxInputNumber = 3; // Change this value as needed if equation has more than 2 operands
             var random = new Random(); // InputNumber is the number of Operands plus Answer. 

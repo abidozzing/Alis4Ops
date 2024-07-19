@@ -1,0 +1,150 @@
+﻿@inject NavigationManager _navigationManager
+@using Microsoft.AspNetCore.WebUtilities
+
+@page "/addpage"
+<h3>QueryParametersFromLink</h3>
+
+@* =========================================================================== *@
+@* Format for Parameters in NavLink
+Assume you have a navigation link (NavLink) that navigates to a page 
+with three parameters (param1, param2, and param3): *@
+<div class="nav-item px-3">
+    <NavLink class="nav-link" href="add?param1=value1&amp;param2=value2&amp;param3=value3">
+        <span class="" aria-hidden="true"></span> Add-Missing
+    </NavLink>
+</div>
+
+@* =========================================================================== *@
+
+@code {
+    protected override void OnInitialized()
+    {
+        // Get the full URI including query string
+        var uri = new Uri(_navigationManager.Uri);
+
+        // Parse the query string into a dictionary
+        var queryParameters = QueryHelpers.ParseQuery(uri.Query);
+
+        // Example: Retrieve value of "param1", "param2", and "param3" parameters
+        if (queryParameters.TryGetValue("param1", out var param1Value))
+        {
+            Console.WriteLine($"Value of 'param1' parameter: {param1Value}");
+        }
+        if (queryParameters.TryGetValue("param2", out var param2Value))
+        {
+            Console.WriteLine($"Value of 'param2' parameter: {param2Value}");
+        }
+        if (queryParameters.TryGetValue("param3", out var param3Value))
+        {
+            Console.WriteLine($"Value of 'param3' parameter: {param3Value}");
+        }
+    }
+}
+
+
+@* <!-- NavMenu.razor -->
+
+<div class="nav-item px-3">
+    <NavLink class="nav-link" href="add?param1=value1&amp;param2=value2&amp;param3=value3">
+        <span class="" aria-hidden="true"></span> Add-Missing
+    </NavLink>
+</div> *@
+
+
+@* In Add.razor, you can dynamically loop through all query parameters and their values using C# code: *@
+@*@page "/add"
+@using Microsoft.AspNetCore.WebUtilities
+@inject NavigationManager Navigation
+
+<h3>Add Page</h3>
+
+@if (QueryParameters != null && QueryParameters.Count > 0)
+{
+    <h4>Query Parameters:</h4>
+    <ul>
+        @foreach (var param in QueryParameters)
+        {
+            <li>@param.Key: @param.Value</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No query parameters found.</p>
+}
+
+@code {
+    Dictionary<string, string> QueryParameters;
+
+    protected override void OnInitialized()
+    {
+        // Get the full URI including query string
+        var uri = new Uri(Navigation.Uri);
+
+        // Parse the query string into a dictionary
+        QueryParameters = QueryHelpers.ParseQuery(uri.Query)
+                                      .ToDictionary(x => x.Key, x => x.Value);
+    }
+} *@
+
+
+@* @page "/navmenu"
+@using Microsoft.AspNetCore.WebUtilities
+@inject NavigationManager Navigation
+
+<div class="nav-item px-3">
+    <!-- Example: Dynamically change parameters based on component state or logic -->
+    <NavLink class="nav-link" href="@GetNavLinkUrl()">
+        <span class="" aria-hidden="true"></span> Add-Missing
+    </NavLink>
+</div>
+
+@code {
+    // Method to dynamically generate NavLink URL with parameters
+    private string GetNavLinkUrl()
+    {
+        // Example: Generate parameters dynamically (replace with your logic)
+        string param1Value = "value1";
+        string param2Value = "value2";
+        string param3Value = "value3";
+
+        // Construct the href attribute with dynamic parameters
+        return $"add?param1={param1Value}&param2={param2Value}&param3={param3Value}";
+    }
+} *@
+
+@* @page "/add"
+@using Microsoft.AspNetCore.WebUtilities
+@inject NavigationManager Navigation
+
+<h3>Add Page</h3>
+
+@if (QueryParameters != null && QueryParameters.Count > 0)
+{
+    <h4>Query Parameters:</h4>
+    <ul>
+        @foreach (var param in QueryParameters)
+        {
+            <li>@param.Key: @param.Value</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No query parameters found.</p>
+}
+
+@code {
+    Dictionary<string, string> QueryParameters;
+
+    protected override void OnInitialized()
+    {
+        // Get the full URI including query string
+        var uri = new Uri(Navigation.Uri);
+
+        // Parse the query string into a dictionary
+        QueryParameters = QueryHelpers.ParseQuery(uri.Query)
+                                      .ToDictionary(x => x.Key, x => x.Value);
+    }
+} *@
+

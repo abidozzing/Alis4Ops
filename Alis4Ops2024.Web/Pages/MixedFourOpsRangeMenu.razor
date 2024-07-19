@@ -1,0 +1,278 @@
+﻿@inherits LayoutComponentBase
+@inject IJSRuntime JSRuntime
+@using Alis4Ops2024.Web.Core
+@using Alis4Ops2024.Web.Models
+@using Alis4Ops2024.Web.Layout
+<link href="css/site.css" rel="stylesheet" />
+<link href="css/dropbutton.css" rel="stylesheet" />
+
+<PageTitle>MixedFourOpsRangeMenu</PageTitle>
+
+        <div class="dropdown">
+            <!-- Added d-flex and align-items-center for vertical centering -->
+            <button class="dropbtn" @onclick="ToggleDropdown">Mixed4Ops: @SelectedItem</button>
+            <div class="dropdown-content" style="@dropdownStyle">
+                @foreach (var item in MenuItems)
+                {
+                    <a @onclick="(() => { HandleClickedItem(item); ToggleDropdown(); })">@item.Text</a>
+                }
+            </div>
+        </div>
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        SelectedMenuItem = MenuItems.FirstOrDefault(item => item.Text == "1");
+    }
+
+    public List<MenuItem> MenuItems { get; set; } = new List<MenuItem>
+    {
+        new MenuItem { Text = "Level1"},
+        new MenuItem { Text = "Level2"},
+        new MenuItem { Text = "Level3"},
+        new MenuItem { Text = "Level4"},
+        new MenuItem { Text = "Level5"}
+    };
+
+    private string dropdownStyle => isDropdownOpen ? "display: block;" : "display: none;";
+
+    private bool isDropdownOpen = false;
+    private void ToggleDropdown()
+    {
+        isDropdownOpen = !isDropdownOpen;
+    }
+
+    [Parameter]public EventCallback<string> OperatorChanged { get; set; }
+    [Parameter]public EventCallback<int> UpperRangeChanged { get; set; }
+    [Parameter]public EventCallback<int> LowerRangeChanged { get; set; }
+    [Parameter]public EventCallback<string> SelectedItemChanged { get; set; }
+    [Parameter] public EventCallback<string> TopicChanged { get; set; }
+
+    private string ClickedMenuItem = "";
+
+    private int _upperRange = 12;
+    [Parameter]
+    public int UpperRange
+    {
+        get { return _upperRange; }
+        set
+        {
+            _upperRange = value;
+        }
+    }
+
+    private int _lowerRange = 1;
+    [Parameter]
+    public int LowerRange
+    {
+        get { return _lowerRange; }
+        set
+        {
+            _lowerRange = value;
+        }
+    }
+
+    private string _operator = "Add";
+    [Parameter]
+    public string Operator
+    {
+        get { return _operator; }
+        set
+        {
+            _operator = value;
+        }
+    }
+
+    private string _selectedItem = "Level 1";
+    [Parameter]
+    public string SelectedItem
+    {
+        get { return _selectedItem; }
+        set
+        {
+            _selectedItem = value;
+        }
+    }
+
+    private string _topic = "MixedFourOps";
+    [Parameter]
+    public string Topic
+    {
+        get { return _topic; }
+        set
+        {
+            _topic = value;
+        }
+    }
+
+
+    public MenuItem SelectedMenuItem { get; set; } = null;
+    private Random random = new Random();
+
+    void HandleClickedItem(MenuItem clickedItem)
+    {
+        SelectedMenuItem = clickedItem;
+        int Num = random.Next(4);
+        switch (Num)
+        {
+            case 1:
+                Operator = "Add";
+                break;
+            case 2:
+                Operator = "Subtract";
+                break;
+            case 3:
+                Operator = "Multiply";
+                break;
+            case 4:
+                Operator = "Divide";
+                break;
+        }
+
+        
+        SelectedItem = SelectedMenuItem.Text;
+        switch (SelectedItem)
+        {
+            case "Level1":
+                switch (Operator)
+                {
+                    case "Add":
+                        LowerRange = 1;
+                        UpperRange = 5;
+                        break;
+                    case "Subtract":
+                        LowerRange = 1;
+                        UpperRange = 5;
+                        break;
+                    case "Multiply":
+                        LowerRange = 1;
+                        UpperRange = 5;
+                        break;
+                    case "Divide":
+                        LowerRange = 1;
+                        UpperRange = 5;
+                        break;
+                }
+                break;
+            case "Level2":
+                switch (Operator)
+                {
+                    case "Add":
+                        LowerRange = 1;
+                        UpperRange = 10;
+                        break;
+                    case "Subtract":
+                        LowerRange = 1;
+                        UpperRange = 10;
+                        break;
+                    case "Multiply":
+                        LowerRange = 2;
+                        UpperRange = 6;
+                        break;
+                    case "Divide":
+                        LowerRange = 2;
+                        UpperRange = 6;
+                        break;
+                }
+                break;
+            case "Level3":
+                switch (Operator)
+                {
+                    case "Add":
+                        LowerRange = 1;
+                        UpperRange = 20;
+                        break;
+                    case "Subtract":
+                        LowerRange = 1;
+                        UpperRange = 20;
+                        break;
+                    case "Multiply":
+                        LowerRange = 3;
+                        UpperRange = 7;
+                        break;
+                    case "Divide":
+                        LowerRange = 3;
+                        UpperRange = 7;
+                        break;
+                }
+                break;
+            case "Level4":
+                switch (Operator)
+                {
+                    case "Add":
+                        LowerRange = 10;
+                        UpperRange = 50;
+                        break;
+                    case "Subtract":
+                        LowerRange = 10;
+                        UpperRange = 50;
+                        break;
+                    case "Multiply":
+                        LowerRange = 4;
+                        UpperRange = 10;
+                        break;
+                    case "Divide":
+                        LowerRange = 4;
+                        UpperRange = 10;
+                        break;
+                }
+                break;
+            case "Level5":
+                switch (Operator)
+                {
+                    case "Add":
+                        LowerRange = 10;
+                        UpperRange = 100;
+                        break;
+                    case "Subtract":
+                        LowerRange = 10;
+                        UpperRange = 100;
+                        break;
+                    case "Multiply":
+                        LowerRange = 5;
+                        UpperRange = 12;
+                        break;
+                    case "Divide":
+                        LowerRange = 5;
+                        UpperRange = 12;
+                        break;
+                }
+                break;
+        }
+
+
+        // Call the asynchronous method here
+        _ = HandleParametersChangedAsync();
+
+    }
+
+
+    string GetItemClass(MenuItem item)
+    {
+        return item == SelectedMenuItem ? "selected" : "";
+    }
+
+    public class MenuItem
+    {
+        public string Text { get; set; }
+    }
+
+
+
+    [Parameter]
+    public EventCallback ParametersChanged { get; set; }
+
+    async Task HandleParametersChangedAsync()
+    {
+        await UpperRangeChanged.InvokeAsync(UpperRange);
+        await LowerRangeChanged.InvokeAsync(LowerRange);
+        await OperatorChanged.InvokeAsync(Operator);
+        await SelectedItemChanged.InvokeAsync(SelectedItem);
+        await TopicChanged.InvokeAsync(Topic);
+        await ParametersChanged.InvokeAsync();
+    }
+
+
+}
+

@@ -1,5 +1,4 @@
-﻿@* @page "/subtractrangemenu" *@
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 @inject IJSRuntime JSRuntime
 @using Alis4Ops2024.Web.Core
 @using Alis4Ops2024.Web.Models
@@ -7,11 +6,11 @@
 <link href="css/site.css" rel="stylesheet" />
 <link href="css/dropbutton.css" rel="stylesheet" />
 
-<PageTitle>SubtractRangeMenu</PageTitle>
+<PageTitle>MixedFourOpsRangeMenu</PageTitle>
 
         <div class="dropdown">
             <!-- Added d-flex and align-items-center for vertical centering -->
-            <button class="dropbtn" @onclick="ToggleDropdown">Subtract: @SelectedItem</button>
+            <button class="dropbtn" @onclick="ToggleDropdown">Multiply-Divide: @SelectedItem</button>
             <div class="dropdown-content" style="@dropdownStyle">
                 @foreach (var item in MenuItems)
                 {
@@ -24,22 +23,23 @@
 
     protected override void OnInitialized()
     {
-        SelectedMenuItem = MenuItems.FirstOrDefault(item => item.Text == "1-5");
+        SelectedMenuItem = MenuItems.FirstOrDefault(item => item.Text == "1");
     }
 
     public List<MenuItem> MenuItems { get; set; } = new List<MenuItem>
     {
-        new MenuItem { Text = "1-5"},
-        new MenuItem { Text = "1-10"},
-        new MenuItem { Text = "1-20"},
-        new MenuItem { Text = "10-50"},
-        new MenuItem { Text = "10-100"},
-        new MenuItem { Text = "100-1000"},
-        new MenuItem { Text = "From 5"},
-        new MenuItem { Text = "From 10"},
-        new MenuItem { Text = "From 20"},
-        new MenuItem { Text = "From 50"},
-        new MenuItem { Text = "From 100"}
+        new MenuItem { Text = "1"},
+        new MenuItem { Text = "2"},
+        new MenuItem { Text = "3"},
+        new MenuItem { Text = "4"},
+        new MenuItem { Text = "5"},
+        new MenuItem { Text = "6"},
+        new MenuItem { Text = "7"},
+        new MenuItem { Text = "8"},
+        new MenuItem { Text = "9"},
+        new MenuItem { Text = "10"},
+        new MenuItem { Text = "11"},
+        new MenuItem { Text = "12"},
     };
 
     private string dropdownStyle => isDropdownOpen ? "display: block;" : "display: none;";
@@ -50,16 +50,15 @@
         isDropdownOpen = !isDropdownOpen;
     }
 
-    [Parameter] public EventCallback<string> OperatorChanged { get; set; }
-    [Parameter] public EventCallback<int> UpperRangeChanged { get; set; }
-    [Parameter] public EventCallback<int> LowerRangeChanged { get; set; }
-    [Parameter] public EventCallback<string> SelectedItemChanged { get; set; }
+    [Parameter]public EventCallback<string> OperatorChanged { get; set; }
+    [Parameter]public EventCallback<int> UpperRangeChanged { get; set; }
+    [Parameter]public EventCallback<int> LowerRangeChanged { get; set; }
+    [Parameter]public EventCallback<string> SelectedItemChanged { get; set; }
     [Parameter] public EventCallback<string> TopicChanged { get; set; }
-
 
     private string ClickedMenuItem = "";
 
-    private int _upperRange = 5;
+    private int _upperRange = 12;
     [Parameter]
     public int UpperRange
     {
@@ -81,7 +80,7 @@
         }
     }
 
-    private string _operator = "Subtract";
+    private string _operator = "Multiply";
     [Parameter]
     public string Operator
     {
@@ -92,7 +91,7 @@
         }
     }
 
-    private string _selectedItem = "1-5";
+    private string _selectedItem = "1";
     [Parameter]
     public string SelectedItem
     {
@@ -103,7 +102,7 @@
         }
     }
 
-    private string _topic = "Subtract";
+    private string _topic = "MultiplyDivide";
     [Parameter]
     public string Topic
     {
@@ -114,63 +113,30 @@
         }
     }
 
+
     public MenuItem SelectedMenuItem { get; set; } = null;
 
     void HandleClickedItem(MenuItem clickedItem)
     {
         SelectedMenuItem = clickedItem;
 
-        Operator = "Subtract";
-        Topic = "Subtract";
+        Operator = "Multiply";
         SelectedItem = SelectedMenuItem.Text;
-        switch (SelectedItem)
+        if (SelectedItem != null)
         {
-            case "1-5":
+            if (int.TryParse(SelectedItem, out int parsedUpperRangeMultiply))
+            {
+                // Conversion successful, use the 'number' variable
+                LowerRange = parsedUpperRangeMultiply;
+                UpperRange = 12;
+            }
+            else
+            {
+                // Conversion failed "Multiply-Missing"
                 LowerRange = 1;
-                UpperRange = 5;
-                break;
-            case "1-10":
-                LowerRange = 1;
-                UpperRange = 10;
-                break;
-            case "1-20":
-                LowerRange = 1;
-                UpperRange = 20;
-                break;
-            case "10-50":
-                LowerRange = 10;
-                UpperRange = 50;
-                break;
-            case "10-100":
-                LowerRange = 10;
-                UpperRange = 100;
-                break;
-            case "100-1000":
-                LowerRange = 100;
-                UpperRange = 1000;
-                break;
-            case "From 5":
-                LowerRange = 0;
-                UpperRange = 5;
-                break;
-            case "From 10":
-                LowerRange = 1;
-                UpperRange = 10;
-                break;
-            case "From 20":
-                LowerRange = 1;
-                UpperRange = 20;
-                break;
-            case "From 50":
-                LowerRange = 10;
-                UpperRange = 50;
-                break;
-            case "From 100":
-                LowerRange = 10;
-                UpperRange = 100;
-                break;
+                parsedUpperRangeMultiply = 12;
+            }
         }
-
         // Call the asynchronous method here
         _ = HandleParametersChangedAsync();
 
@@ -198,6 +164,7 @@
         await LowerRangeChanged.InvokeAsync(LowerRange);
         await OperatorChanged.InvokeAsync(Operator);
         await SelectedItemChanged.InvokeAsync(SelectedItem);
+        await TopicChanged.InvokeAsync(Topic);
         await ParametersChanged.InvokeAsync();
     }
 

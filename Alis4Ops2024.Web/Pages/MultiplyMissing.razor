@@ -1,8 +1,8 @@
-﻿@page "/"
-@page "/add"
+﻿@page "/multiplymissing"
 @using Alis4Ops2024.Web.Core
 @using Alis4Ops2024.Web.Models
 @using Alis4Ops2024.Web.Layout
+@using Alis4Ops2024.Web.Pages
 @using Microsoft.JSInterop
 @inject IJSRuntime JSRuntime
 @inject NavigationManager _navigationManager
@@ -12,13 +12,14 @@
 <link href="css/site.css" rel="stylesheet" />
 <link href="css/dropbutton.css" rel="stylesheet" />
 
-<PageTitle>Add</PageTitle>
+
+<PageTitle>MultiplyMissing</PageTitle>
 
 <div class="container col-12">
     <div class="row gx-0 align-items-center" style="font-size: 60%;">
         <div class="col-auto">
-            <AddRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
-                          @bind-SelectedItem=@SelectedItem ParametersChanged="GenerateNewQuestion" />
+            <MultiplyMissingRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
+                               @bind-SelectedItem=@SelectedItem ParametersChanged="GenerateNewQuestion" />
         </div>
 
 @*         <div class="col-auto">
@@ -41,44 +42,65 @@
     </div>
 
     <div>
-        <AddModel Question="@Question" />
+        <MultiplyModel Question="@Question" />
     </div>
 </div>
 
-
 @code {
-    [Inject] private IAddQuestionGeneratorService QuestionGenerator { get; set; }
+
+    [Inject] private IMultiplyQuestionGeneratorService QuestionGenerator { get; set; }
     [Parameter] public BaseQuestion Question { get; set; }
     [Parameter] public EventCallback AnsweredCorrectly { get; set; }
     [Parameter] public EventCallback AnsweredWrongly { get; set; }
-    private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
     private MathQuiz mathQuiz; // Reference to child component
     private SubmitButton submitButton;
     [Parameter] public EventCallback SubmitAnswer { get; set; }
 
-    private int _upperRange = 5;
-    [Parameter] public int UpperRange
-    { get { return _upperRange; } set { _upperRange = value; } }
+    private int _upperRange = 12;
+
+    [Parameter]
+    public int UpperRange
+    {
+        get { return _upperRange; }
+        set { _upperRange = value; }
+    }
 
     private int _lowerRange = 1;
     [Parameter]
     public int LowerRange
-    { get { return _lowerRange; } set { _lowerRange = value; } }
+    {
+        get { return _lowerRange; }
+        set { _lowerRange = value; }
+    }
 
-    private string _operator = "Add";
+    private string _operator = "Multiply";
     [Parameter]
     public string Operator
-    { get { return _operator; } set { _operator = value; } }
+    {
+        get { return _operator; }
+        set { _operator = value; }
+    }
 
-    private string _selectedItem = "1-5";
+    private string _selectedItem = "1";
     [Parameter]
     public string SelectedItem
-    { get { return _selectedItem; } set { _selectedItem = value; } }
+    {
+        get { return _selectedItem; }
+        set { _selectedItem = value; }
+    }
 
-    private string _topic = "Add";
+    private string _topic = "MultiplyMissing";
     [Parameter]
     public string Topic
-    { get { return _topic; } set { _topic = value; } }
+    {
+        get { return _topic; }
+        set
+        {
+            _topic = value;
+        }
+    }
+
+    private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
 
     protected override void OnInitialized()
     {
@@ -88,7 +110,7 @@
         if (QueryHelpers.ParseQuery(uri.Query).
     TryGetValue("Topic", out var navTopic))
             // RefreshService.RefreshRequested += RefreshPage;
-        Topic = "Add";
+            Topic = "MultiplyMissing";
 
         if (dateTimeCounterStopWatch is null)
         {
@@ -106,31 +128,22 @@
 
         // Assuming HandleKeydown method doesn't return a Task and doesn't need await
          mathQuiz.HandleKeydown(new KeyboardEventArgs { Key = "Enter" });
-
     }
 
-    private async Task HandleAnsweredCorrectly()
+    private async void HandleAnsweredCorrectly()
     {
-
-        if (dateTimeCounterStopWatch != null)
-        {
-            await dateTimeCounterStopWatch.ResetAndStartStopwatch();
-            await dateTimeCounterStopWatch.IncrementCounter();
-            await AnsweredCorrectly.InvokeAsync();
-            GenerateNewQuestion();
-            // await InvokeAsync(() => StateHasChanged());
-        }
-
+        dateTimeCounterStopWatch.ResetAndStartStopwatch();
+        await dateTimeCounterStopWatch.IncrementCounter();
+        await AnsweredCorrectly.InvokeAsync();
+        GenerateNewQuestion();
+        await InvokeAsync(() => StateHasChanged());
     }
 
-    private async Task HandleAnsweredWrongly()
+    private async void HandleAnsweredWrongly()
     {
 
-        if (dateTimeCounterStopWatch != null)
-        {
-            await dateTimeCounterStopWatch.IncrementErrorCount();
-            await AnsweredWrongly.InvokeAsync();
-        }
+        await dateTimeCounterStopWatch.IncrementErrorCount();
+        // await AnsweredWrongly.InvokeAsync();
     }
 
     private void GenerateNewQuestion()
@@ -139,20 +152,12 @@
         {
             return;
         }
-        // Topic = topic;
         Question = QuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem, Topic);
     }
 
-    private void RefreshPage()
-    {
-        _navigationManager.NavigateTo(_navigationManager.Uri, forceLoad: true);
-    }
-
-    public void Dispose()
-    {
-        RefreshService.RefreshRequested -= RefreshPage;
-    }
+    // public void ReloadPage()
+    // {
+    //     _navigationManager.NavigateTo($"Subtract", forceLoad: true);
+    //}
 
 }
-
-

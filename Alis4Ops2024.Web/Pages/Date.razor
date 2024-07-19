@@ -2,18 +2,12 @@
 @using System.Timers
 @using System
 
+<PageTitle>Date</PageTitle>
 
-@* <div class="row gx-0 align-items-center" style="font-size: 60%;">
-    <div class="col-auto">
-        <div class="d-flex align-items-center" style="margin-left: 15px;"> *@
-            <div>
-                <!-- Adjust font size if needed -->
-                @DateTime.Now.ToString("ddd dd MMM yyyy hh:mm:ss tt")
-            </div>
-@*         </div>
-    </div>
-</div> *@
-
+<div>
+    <!-- Adjust font size if needed -->
+    @DateTime.Now.ToString("dd MMM yyyy")
+</div>
 
 @code {
     private string currentDateTime = DateTime.Now.ToString("ddd dd MMM yyyy");

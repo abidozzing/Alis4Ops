@@ -7,11 +7,11 @@
 <link href="css/site.css" rel="stylesheet" />
 <link href="css/dropbutton.css" rel="stylesheet" />
 
-<PageTitle>SubtractRangeMenu</PageTitle>
+<PageTitle>SubtractMissingRangeMenu</PageTitle>
 
         <div class="dropdown">
             <!-- Added d-flex and align-items-center for vertical centering -->
-            <button class="dropbtn" @onclick="ToggleDropdown">Subtract: @SelectedItem</button>
+            <button class="dropbtn" @onclick="ToggleDropdown">Subtract Missing: @SelectedItem</button>
             <div class="dropdown-content" style="@dropdownStyle">
                 @foreach (var item in MenuItems)
                 {
@@ -35,11 +35,6 @@
         new MenuItem { Text = "10-50"},
         new MenuItem { Text = "10-100"},
         new MenuItem { Text = "100-1000"},
-        new MenuItem { Text = "From 5"},
-        new MenuItem { Text = "From 10"},
-        new MenuItem { Text = "From 20"},
-        new MenuItem { Text = "From 50"},
-        new MenuItem { Text = "From 100"}
     };
 
     private string dropdownStyle => isDropdownOpen ? "display: block;" : "display: none;";
@@ -103,7 +98,7 @@
         }
     }
 
-    private string _topic = "Subtract";
+    private string _topic = "SubtractMissing";
     [Parameter]
     public string Topic
     {
@@ -121,7 +116,7 @@
         SelectedMenuItem = clickedItem;
 
         Operator = "Subtract";
-        Topic = "Subtract";
+        Topic = "SubtractMissing";
         SelectedItem = SelectedMenuItem.Text;
         switch (SelectedItem)
         {
@@ -148,26 +143,6 @@
             case "100-1000":
                 LowerRange = 100;
                 UpperRange = 1000;
-                break;
-            case "From 5":
-                LowerRange = 0;
-                UpperRange = 5;
-                break;
-            case "From 10":
-                LowerRange = 1;
-                UpperRange = 10;
-                break;
-            case "From 20":
-                LowerRange = 1;
-                UpperRange = 20;
-                break;
-            case "From 50":
-                LowerRange = 10;
-                UpperRange = 50;
-                break;
-            case "From 100":
-                LowerRange = 10;
-                UpperRange = 100;
                 break;
         }
 
@@ -198,6 +173,7 @@
         await LowerRangeChanged.InvokeAsync(LowerRange);
         await OperatorChanged.InvokeAsync(Operator);
         await SelectedItemChanged.InvokeAsync(SelectedItem);
+        await TopicChanged.InvokeAsync(Topic);
         await ParametersChanged.InvokeAsync();
     }
 

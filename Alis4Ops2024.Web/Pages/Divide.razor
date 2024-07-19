@@ -5,8 +5,12 @@
 @using Microsoft.JSInterop
 @inject IJSRuntime JSRuntime
 @inject NavigationManager _navigationManager
-<link href="css/rangemenu.css" rel="stylesheet" />
+@using Microsoft.AspNetCore.WebUtilities
+@inject RefreshService RefreshService
+@inject NavigationManager NavigationHelper
+<link href="css/site.css" rel="stylesheet" />
 <link href="css/dropbutton.css" rel="stylesheet" />
+
 <PageTitle>Divide</PageTitle>
 
 <div class="container col-12">
@@ -16,19 +20,23 @@
                              @bind-SelectedItem=@SelectedItem ParametersChanged="GenerateNewQuestion" />
         </div>
 
-        <div class="col-auto">
+@*         <div class="col-auto">
             <div class="d-flex align-items-center" style="margin-left: 15px; color:gray">
                 <Date />
             </div>
+        </div> *@
+        <div class="col-auto ms-auto">
+            <!-- Right aligned content -->
+            <SubmitButton SubmitAnswer="HandleSubmitAnswerAsync" @ref="submitButton" />
         </div>
     </div>
 
-    <div style="font-size: 60%;">
+    <div>
         <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" />
     </div>
 
     <div>
-        <DivideMathQuiz Question="@Question" AnsweredCorrectly="HandleAnsweredCorrectly" AnsweredWrongly="HandleAnsweredWrongly" Answer=@Question.Answer />
+        <DivideMathQuiz Question="@Question" AnsweredCorrectly="HandleAnsweredCorrectly" AnsweredWrongly="HandleAnsweredWrongly" Answer=@Question.Answer @ref="divideMathQuiz" />
     </div>
 
     <div>
@@ -43,7 +51,9 @@
     [Parameter] public BaseQuestion Question { get; set; }
     [Parameter] public EventCallback AnsweredCorrectly { get; set; }
     [Parameter] public EventCallback AnsweredWrongly { get; set; }
-
+    private DivideMathQuiz divideMathQuiz; // Reference to child component
+    private SubmitButton submitButton;
+    [Parameter] public EventCallback SubmitAnswer { get; set; }
     private int _upperRange = 12;
 
     [Parameter]
@@ -77,15 +87,46 @@
         set { _selectedItem = value; }
     }
 
+    private string _topic = "Divide";
+    [Parameter]
+    public string Topic
+    {
+        get { return _topic; }
+        set
+        {
+            _topic = value;
+        }
+    }
+
+
     private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
 
     protected override void OnInitialized()
     {
+        var uri = NavigationHelper.ToAbsoluteUri
+    (NavigationHelper.Uri);
+
+        if (QueryHelpers.ParseQuery(uri.Query).
+    TryGetValue("Topic", out var navTopic))
+            // RefreshService.RefreshRequested += RefreshPage;
+            Topic = "Divide";
+
         if (dateTimeCounterStopWatch is null)
         {
             dateTimeCounterStopWatch = new DateTimeCounterStopWatch();
+            submitButton = new SubmitButton();
+            divideMathQuiz = new DivideMathQuiz();
         }
         GenerateNewQuestion();
+        // StateHasChanged();
+    }
+
+    async Task HandleSubmitAnswerAsync()
+    {
+        await divideMathQuiz.inputElement.FocusAsync();
+
+        // Assuming HandleKeydown method doesn't return a Task and doesn't need await
+         divideMathQuiz.HandleKeydown(new KeyboardEventArgs { Key = "Enter" });
     }
 
     private async void HandleAnsweredCorrectly()
@@ -94,6 +135,7 @@
         await dateTimeCounterStopWatch.IncrementCounter();
         await AnsweredCorrectly.InvokeAsync();
         GenerateNewQuestion();
+        await InvokeAsync(() => StateHasChanged());
     }
 
     private async void HandleAnsweredWrongly()
@@ -108,7 +150,8 @@
         {
             return;
         }
-        Question = QuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem);
+        Question = QuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem, Topic);
+        StateHasChanged();
     }
 
     // public void ReloadPage()

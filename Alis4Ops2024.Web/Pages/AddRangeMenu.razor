@@ -3,24 +3,23 @@
 @using Alis4Ops2024.Web.Core
 @using Alis4Ops2024.Web.Models
 @using Alis4Ops2024.Web.Layout
-<link href="css/dropbutton.css" rel="stylesheet" />
 <link href="css/site.css" rel="stylesheet" />
+<link href="css/dropbutton.css" rel="stylesheet" />
 @using System.Timers
 @using System
 
-@* @if (ShowDropdownButton)
-{ *@
-<div class="dropdown">
-    <!-- Added d-flex and align-items-center for vertical centering -->
-    <button class="dropbtn" @onclick="ToggleDropdown">Add</button>
-    <div class="dropdown-content" style="@dropdownStyle">
-        @foreach (var item in MenuItems)
-        {
-            <a @onclick="(() => { HandleClickedItem(item); ToggleDropdown(); })">@item.Text</a>
-        }
-    </div>
-</div>
-@* } *@
+<PageTitle>AddRangeMenu</PageTitle>
+
+        <div class="dropdown">
+            <!-- Added d-flex and align-items-center for vertical centering -->
+            <button class="dropbtn" @onclick="ToggleDropdown">Add: @SelectedItem</button>
+            <div class="dropdown-content" style="@dropdownStyle">
+                @foreach (var item in MenuItems)
+                {
+                    <a @onclick="(() => { HandleClickedItem(item); ToggleDropdown(); })">@item.Text</a>
+                }
+            </div>
+        </div>
 
 @code {
 
@@ -51,8 +50,7 @@
         new MenuItem { Text = "1-20"},
         new MenuItem { Text = "10-50"},
         new MenuItem { Text = "10-100"},
-        new MenuItem { Text = "100-1,000"},
-        new MenuItem { Text = "Add-Missing"},
+        new MenuItem { Text = "100-1000"},
         new MenuItem { Text = "Make-5"},
         new MenuItem { Text = "Make-10"},
         new MenuItem { Text = "Make-20"},
@@ -72,6 +70,7 @@
     [Parameter] public EventCallback<int> UpperRangeChanged { get; set; }
     [Parameter] public EventCallback<int> LowerRangeChanged { get; set; }
     [Parameter] public EventCallback<string> SelectedItemChanged { get; set; }
+    [Parameter] public EventCallback<string> TopicChanged { get; set; }
 
     private string ClickedMenuItem = "";
 
@@ -119,6 +118,16 @@
         }
     }
 
+    private string _topic = "Add";
+    [Parameter]
+    public string Topic
+    {
+        get { return _topic; }
+        set
+        {
+            _topic = value;
+        }
+    }
 
     public MenuItem SelectedMenuItem { get; set; } = null;
 
@@ -150,13 +159,9 @@
                 LowerRange = 10;
                 UpperRange = 100;
                 break;
-            case "100-1,000":
+            case "100-1000":
                 LowerRange = 100;
                 UpperRange = 1000;
-                break;
-            case "Add-Missing":
-                LowerRange = 1;
-                UpperRange = 20;
                 break;
             case "Make-5":
                 LowerRange = 1;
@@ -208,6 +213,7 @@
         await LowerRangeChanged.InvokeAsync(LowerRange);
         await OperatorChanged.InvokeAsync(Operator);
         await SelectedItemChanged.InvokeAsync(SelectedItem);
+        await TopicChanged.InvokeAsync(Topic);
         await ParametersChanged.InvokeAsync();
     }
 

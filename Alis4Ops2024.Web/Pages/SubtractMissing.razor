@@ -1,7 +1,8 @@
-﻿@page "/addsubtract"
+﻿@page "/subtractmissing"
 @using Alis4Ops2024.Web.Core
 @using Alis4Ops2024.Web.Models
 @using Alis4Ops2024.Web.Layout
+@using Alis4Ops2024.Web.Pages
 @using Microsoft.JSInterop
 @inject IJSRuntime JSRuntime
 @inject NavigationManager _navigationManager
@@ -11,14 +12,13 @@
 <link href="css/site.css" rel="stylesheet" />
 <link href="css/dropbutton.css" rel="stylesheet" />
 
-<PageTitle>AddSubtract</PageTitle>
-@* <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" /> *@
+<PageTitle>SubtractMissing</PageTitle>
 
 <div class="container col-12">
     <div class="row gx-0 align-items-center" style="font-size: 60%;">
         <div class="col-auto">
-            <AddSubRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
-                             @bind-SelectedItem=@SelectedItem @bind-Topic=@Topic ParametersChanged="GenerateNewQuestion" />
+            <SubtractMissingRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
+                               @bind-SelectedItem=@SelectedItem ParametersChanged="GenerateNewQuestion" />
         </div>
 
 @*         <div class="col-auto">
@@ -35,33 +35,18 @@
     <div>
         <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" />
     </div>
+
     <div>
         <MathQuiz Question="@Question" AnsweredCorrectly="HandleAnsweredCorrectly" AnsweredWrongly="HandleAnsweredWrongly" Answer=@Question.Answer @ref="mathQuiz" />
     </div>
-    @if (Operator == "Add")
-    {
-        <div>
-            <AddModel Question="@Question" />
-        </div>
-    }
-    else
-    {
-        <div>
-            <SubtractModel Question="@Question" />
-        </div>
-    }
+    <div>
+        <SubtractModel Question="@Question" />
+    </div>
 
 </div>
-
-
 @code {
 
-    private Random random = new Random();
-
-    private int Num { get; set; } = 0;
-
-    [Inject] private IAddQuestionGeneratorService AddQuestionGenerator { get; set; }
-    [Inject] private ISubtractQuestionGeneratorService SubtractQuestionGenerator { get; set; }
+    [Inject] private ISubtractQuestionGeneratorService QuestionGenerator { get; set; }
     [Parameter] public BaseQuestion Question { get; set; }
     [Parameter] public EventCallback AnsweredCorrectly { get; set; }
     [Parameter] public EventCallback AnsweredWrongly { get; set; }
@@ -70,13 +55,49 @@
     private SubmitButton submitButton;
     [Parameter] public EventCallback SubmitAnswer { get; set; }
 
-    [Parameter] public string topicSelected { get; set; }
-    [Parameter] public string Topic { get; set; }
-    [Parameter] public int UpperRange { get; set; }
-    [Parameter] public int LowerRange { get; set; }
-    [Parameter] public string Operator { get; set; }
-    [Parameter] public string SelectedItem { get; set; }
+    private int _upperRange = 5;
 
+    [Parameter]
+    public int UpperRange
+    {
+        get { return _upperRange; }
+        set { _upperRange = value; }
+    }
+
+    private int _lowerRange = 1;
+    [Parameter]
+    public int LowerRange
+    {
+        get { return _lowerRange; }
+        set { _lowerRange = value; }
+    }
+
+    private string _operator = "Subtract";
+    [Parameter]
+    public string Operator
+    {
+        get { return _operator; }
+        set { _operator = value; }
+    }
+
+    private string _selectedItem = "1-5";
+    [Parameter]
+    public string SelectedItem
+    {
+        get { return _selectedItem; }
+        set { _selectedItem = value; }
+    }
+
+    private string _topic = "SubtractMissing";
+    [Parameter]
+    public string Topic
+    {
+        get { return _topic; }
+        set
+        {
+            _topic = value;
+        }
+    }
 
     protected override void OnInitialized()
     {
@@ -86,7 +107,7 @@
         if (QueryHelpers.ParseQuery(uri.Query).
     TryGetValue("Topic", out var navTopic))
             // RefreshService.RefreshRequested += RefreshPage;
-            Topic = "AddSubtract";
+            Topic = "SubtractMissing";
 
         if (dateTimeCounterStopWatch is null)
         {
@@ -94,22 +115,6 @@
             submitButton = new SubmitButton();
             mathQuiz = new MathQuiz();
         }
-        UpperRange = 5;
-        LowerRange = 1;
-        SelectedItem = "1-5";
-
-        Num = random.Next(2);
-        if (Num == 0)
-        {
-            Topic = "AddSubtract";
-            Operator = "Add";
-        }
-        else
-        {
-            Topic = "AddSubtract";
-            Operator = "Subtract";
-        }
-
         GenerateNewQuestion();
         // StateHasChanged();
     }
@@ -130,21 +135,8 @@
             await dateTimeCounterStopWatch.ResetAndStartStopwatch();
             await dateTimeCounterStopWatch.IncrementCounter();
             await AnsweredCorrectly.InvokeAsync();
-            Num = random.Next(2);
-            if (Num == 0)
-            {
-                Topic = "AddSubtract";
-                Operator = "Add";
-            }
-            else
-            {
-                Topic = "AddSubtract";
-                Operator = "Subtract";
-            }
             GenerateNewQuestion();
-            await InvokeAsync(() => StateHasChanged());
         }
-
     }
 
     private async Task HandleAnsweredWrongly()
@@ -159,22 +151,11 @@
 
     private void GenerateNewQuestion()
     {
-        switch (Operator)
+        if (Operator == null)
         {
-            case "Add":
-                Question = AddQuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem, Topic);
-                break;
-            case "Subtract":
-                Question = SubtractQuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem, Topic);
-                break;
-            // Handle additional cases as needed
-            default:
-                break;
+            return;
         }
+        Question = QuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem, Topic);
     }
 }
-
-
-
-
 

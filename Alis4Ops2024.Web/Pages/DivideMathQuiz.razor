@@ -4,13 +4,16 @@
 @inject IJSRuntime JSRuntime
 @using System
 <link href="css/site.css" rel="stylesheet" />
-
-
+<link href="css/dropbutton.css" rel="stylesheet" />
 
 <PageTitle>DivideMathQuiz</PageTitle>
 
-<title>Your Page Title</title>
-
+<div class="row  gx-0">
+    <!-- Message Good Job! or Please try again. -->
+    <div class="col-12 p-1 d-flex text-dark justify-content-center align-items-center" style="height: 30px; box-sizing: border-box; font-size: 60%;">
+        <div style="color: @resultColor;">@resultMessage</div>
+    </div>
+</div>
 
 @if (Question.InputPosition <= 0 || Question.InputPosition > 3)
 {
@@ -19,14 +22,6 @@
 @switch (Question.InputPosition)
 {
     case 1:
-
-        <div class="row  gx-0">
-            <!-- Message Good Job! or Please try again. -->
-            <div class="col-12 p-1 d-flex text-dark justify-content-center align-items-center" style="height: 30px; box-sizing: border-box;">
-                <div style="color: @resultColor;">@resultMessage</div>
-            </div>
-        </div>
-
         <!-- Divide Operand1 Vertical ? -->
 @*         <div class="row gx-0" style="padding:0px;">
             <div class="col-12 d-flex" style=" justify-content: flex-end; box-sizing: border-box; color:white;">.</div>
@@ -34,17 +29,17 @@
 
         <div class="row gx-0" style="padding:0px;">
             <div class="col-12 d-flex" style=" justify-content: flex-end; box-sizing: border-box;  color:black;">
-                <div class="box d-flex justify-content-right align-items-right" style="border-left: 4px solid white; border-top: 4px solid white; background-color: yellow; font-size: 75%; width: 12.5%; padding-left: 10px">
+                <div class="box d-flex justify-content-end align-items-right" style="border-left: 4px solid white; border-top: 4px solid white; background-color: yellow; font-size: 74.1%; width: 15%; padding-right: 10px;">
                     @Question.Operand1
                 </div>
             </div>
         </div>
         <div class="row gx-0" style="padding:0px;">
             <div class="col-12 d-flex" style=" justify-content: flex-end; box-sizing: border-box;  color:black;">
-                <div class="box" style="border-left: 4px solid white; border-top: 4px solid white; background-color: lightskyblue; font-size: 75%; width: 8%; padding-right: 6px; margin-bottom: 20px; text-align: right; padding-right: 6px;">
+                <div class="box d-flex justify-content-end align-items-right" style="border-left: 4px solid white; border-top: 4px solid white; background-color: lightskyblue; font-size: 74.1%; width: 10%; padding-right: 6px; margin-bottom: 20px; text-align: right;">
                     @Question.Operand2
                 </div>
-                <div class="box d-flex justify-content-right align-items-right" style="border-left: 4px solid black; border-top: 4px solid black; background-color: lightgreen; font-size: 75%; width: 12.5%; padding-left: 10px; margin-bottom: 20px;">
+                <div class="box d-flex justify-content-end align-items-right" style="border-left: 4px solid black; border-top: 4px solid black; background-color: lightgreen; font-size: 74.1%; width: 15%; padding-right: 10px; margin-bottom: 20px;">
                     @displayedValue
                 </div>
             </div>
@@ -105,14 +100,6 @@
         break;
 
     case 2:
-
-        <div class="row  gx-0">
-            <!-- Message Good Job! or Please try again. -->
-            <div class="col-12 p-1 d-flex text-dark justify-content-center align-items-center" style="height: 30px; box-sizing: border-box;">
-                <div style="color: @resultColor;">@resultMessage</div>
-            </div>
-        </div>
-
         <!-- Divide Operand1 Vertical -->
                     // @Question.Operand1 @displayedValue
         //
@@ -123,17 +110,17 @@
 
         <div class="row gx-0" style="padding:0px;">
             <div class="col-12 d-flex" style=" justify-content: flex-end; box-sizing: border-box;  color:black;">
-                <div class="box d-flex justify-content-right align-items-right" style="border-left: 4px solid white; border-top: 4px solid white; background-color: lightskyblue; font-size: 75%; width: 12.5%; padding-left: 10px">
+                <div class="box d-flex justify-content-end align-items-right" style="border-left: 4px solid white; border-top: 4px solid white; background-color: lightskyblue; font-size: 74.1%; width: 15%; padding-right: 10px;">
                     @Question.Operand2
                 </div>
             </div>
         </div>
         <div class="row gx-0" style="padding:0px;">
             <div class="col-12 d-flex" style=" justify-content: flex-end; box-sizing: border-box;  color:black;">
-                <div class="box" style="border-left: 4px solid white; border-top: 4px solid white; background-color: lightgreen; font-size: 75%; width: 6%; padding-right: 8px; margin-bottom: 20px; text-align: right; padding-right: 6px;">
+                <div class="box d-flex justify-content-end align-items-right" style="border-left: 4px solid white; border-top: 4px solid white; background-color: lightgreen; font-size: 74.1%; width: 10%; padding-right: 6px; margin-bottom: 20px; text-align: right;">
                     @displayedValue
                 </div>
-                <div class="box d-flex justify-content-right align-items-right" style="border-left: 4px solid black; border-top: 4px solid black; background-color: yellow; font-size: 75%; width: 12.5%; padding-left: 10px; margin-bottom: 20px;">
+                <div class="box d-flex justify-content-end align-items-right" style="border-left: 4px solid black; border-top: 4px solid black; background-color: yellow; font-size: 60%; width: 15%; padding-right: 10px; margin-bottom: 20px;">
                     @Question.Operand1
                 </div>
             </div>
@@ -189,14 +176,6 @@
         break;
 
     case 3:
-
-        <div class="row  gx-0">
-            <!-- Message Good Job! or Please try again. -->
-            <div class="col-12 p-1 d-flex text-dark justify-content-center align-items-center" style="height: 30px; box-sizing: border-box;">
-                <div style="color: @resultColor;">@resultMessage</div>
-            </div>
-        </div>
-
 @*         <!-- Divide Operand1 Vertical @Question.Operand1 -->
         <div class="row gx-0" style="padding:0px;">
             <div class="col-12 d-flex" style=" justify-content: flex-end; box-sizing: border-box; color:white;">.</div>
@@ -204,17 +183,17 @@
 
         <div class="row gx-0" style="padding:0px;">
             <div class="col-12 d-flex" style=" justify-content: flex-end; box-sizing: border-box;  color:black;">
-                <div class="box d-flex justify-content-right align-items-right" style="border-left: 4px solid white; border-top: 4px solid white; background-color: lightgreen; font-size: 75%; width: 12.5%; padding-left: 10px;">
+                <div class="box d-flex justify-content-end align-items-right" style="border-left: 4px solid white; border-top: 4px solid white; background-color: lightgreen; font-size: 74.1%; width: 15%; padding-right: 10px; text-align: right;">
                     @displayedValue
                 </div>
             </div>
         </div>
         <div class="row gx-0" style="padding:0px;">
             <div class="col-12 d-flex" style=" justify-content: flex-end; box-sizing: border-box;  color:black;">
-                <div class="box" style="border-left: 4px solid white; border-top: 4px solid white; background-color: lightskyblue; font-size: 75%; width: 8%; margin-bottom: 20px; text-align: right; padding-right: 6px;">
+                <div class="box d-flex justify-content-end align-items-right" style="border-left: 4px solid white; border-top: 4px solid white; background-color: lightskyblue; font-size: 74.1%; width: 10%; padding-right: 6px; margin-bottom: 20px;   text-align: right;">
                     @Question.Operand2
                 </div>
-                <div class="box d-flex justify-content-right align-items-right" style="border-left: 4px solid black; border-top: 4px solid black; background-color: yellow; font-size: 75%; width: 12.5%; padding-left: 10px; margin-bottom: 20px;">
+                <div class="box d-flex justify-content-end align-items-right" style="border-left: 4px solid black; border-top: 4px solid black; background-color: yellow; font-size: 74.1%; width: 15%; padding-right: 10px; margin-bottom: 20px; text-align: right;">
                     @Question.Operand1
                 </div>
             </div>
@@ -289,6 +268,10 @@
     {
         userInput = args.Value?.ToString(); // Update userInput from event args
         displayedValue = userInput; // Sync displayed value with userInput
+        if (displayedValue=="")
+        {
+            displayedValue = "?";
+        }
 
         await InvokeAsync(() => StateHasChanged()); // Refresh UI after input change
     }
@@ -296,41 +279,22 @@
     [Parameter] public EventCallback AnsweredCorrectly { get; set; }
     [Parameter] public EventCallback AnsweredWrongly { get; set; }
     [Parameter] public int Answer { get; set; }
-    private ElementReference inputElement;
-
-    // protected override void OnInitialized()
-    // {
-    //     base.OnInitialized();
-
-    //     // Initialize the Question property here
-    //     Question = new BaseQuestion();
-    //     //Question.Operator = "Add";
-    // }
+    public ElementReference inputElement;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // if (firstRender)
-        // {
+
         inputElement.FocusAsync();
-        // }
+
     }
-    // The key to binding is:
-    // 1. @bind-value="userInput"
-    // This means bind the value of the property called value
 
-    // 2. @bind-value:event="oninput"
-    // This means bind the
-
-    //@bind-{HTMLElementPropertyName}="{variable}"
     private string? userInput = "";
     private bool showResult;
     private string resultMessage = "";
     private string resultColor = "White";
     private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
-    // [Inject]
-    // private IQuestionGeneratorService QuestionGenerator { get; set; }
 
-    private async Task HandleKeydown(KeyboardEventArgs args)
+    public async Task HandleKeydown(KeyboardEventArgs args)
     {
         if (args.Key == "Enter")
         {
@@ -356,8 +320,6 @@
                 resultMessage = "";
                 resultColor = "white"; // Reset color
                 displayedValue = "?";
-                // dateTimeCounterStopWatch.ResetAndStartStopwatch();
-                // await dateTimeCounterStopWatch.IncrementCounter();
                 await AnsweredCorrectly.InvokeAsync();
                 ;
             }
@@ -366,7 +328,6 @@
                 resultMessage = "Please Try Again.";
                 resultColor = "red";
                 await JSRuntime.InvokeVoidAsync("eval", "document.activeElement.select()");
-                // await dateTimeCounterStopWatch.IncrementErrorCount();
                 await AnsweredWrongly.InvokeAsync();
                 ;
             }

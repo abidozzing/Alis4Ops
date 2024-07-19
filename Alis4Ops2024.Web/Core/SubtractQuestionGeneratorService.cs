@@ -18,68 +18,88 @@ namespace Alis4Ops2024.Web.Core
         public int Lower { get; set; } = 1;
         public string Operator { get; set; } = "Subtract";
         public string SelectedItem { get; set; } = "1-5";
+        public String Topic { get; set; } = "Subtract";
         public SubtractQuestionGeneratorService()
         {
 
         }
-        public BaseQuestion GenerateQuestion(int upperRange, int lowerRange, string _operator, string selectedItem)
+        public BaseQuestion GenerateQuestion(int upperRange, int lowerRange, string _operator, string selectedItem, string topic)
         {
             int maxInputNumber = 3; // Change this value as needed if equation has more than 2 operands
             int minInputNumber = 1;
-            var random = new Random(); // InputNumber is the number of Operands plus Answer. 
-            var question = new BaseQuestion(); // maxInputNumber for (1 + 2 = 3) is 3. maxInputNumber for (1 + 2 + 4 = 7) is 4 
             string SelectedItemTemp = selectedItem;
+            Topic = topic;
+            int TempNumber = 1;
+            SelectedItem = selectedItem;
+            var question = new BaseQuestion(); // maxInputNumber for (1 + 2 = 3) is 3. maxInputNumber for (1 + 2 + 4 = 7) is 4 
             // For the others besides the exception in the "case" statement below,
             // the Lower and Upper range received is used to generate the the numbers as operands and the answer. 
-            switch (selectedItem)
+            switch (Topic)
 
             {
+                case "Subtract":
+                    // Create equations with missing numbers in random positions.
+                    // To write code logic for Add Missing ? + 6 = 18, 4 + ? = 12, 2 + 7 = ?
+                    // Create addition questions that add up to a specified number
+                    switch (selectedItem)
+                    {
+                        // Create subtraction questions that add up to a specified number
+                        case "From 5":
+                        case "From 10":
+                        case "From 20":
+                        case "From 50":
+                        case "From 100":
+                            question.Operand1 = upperRange;
+                            question.Operand2 = randomNumberGenerator.GetRandomNumber(1, upperRange);
+                            question.Operator = _operator;
+                            question.Answer = GetAnswer(question);
+                            minInputNumber = 2;
+                            maxInputNumber = 3;
+                            question.InputPosition = randomNumberGenerator.GetRandomNumber(minInputNumber, maxInputNumber);
+                            switch (question.InputPosition)
+                            {
+                                case 2:
+                                    TempNumber = question.Answer;
+                                    question.Answer = question.Operand2;
+                                    question.Operand2 = TempNumber;
+                                    break;
+                            }
+                            break;
 
-                case "Subtract-Missing":  // To write code logic for Subtract Missing ? - 6 = 18, 4 - ? = 1, 21 - 7 = ?
+                        default:
+                            question.Operand1 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange);
+                            question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange);
+                            question.Operator = _operator;
+                            question.Answer = GetAnswer(question);
+                            break;
+                    }
+                    break;
+                //redo the logic
+                //AddMissing can select from menu 1 to 12
+                //AddSubtract will be random for both selected lower and upper values and displayed as missing
+                // To write code logic for Subtract Missing ? - 6 = 18, 4 - ? = 1, 21 - 7 = ?
+                case "SubtractMissing":
+                case "AddSubtract":
+                case "MixedFourOps":
                     question.Operand1 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange);
                     question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange);
                     question.Operator = _operator;
                     question.Answer = GetAnswer(question);
                     // Call the GetRandomNumber method with the desired maximum number
-                    question.InputPosition = randomNumberGenerator.GetRandomNumber(minInputNumber,maxInputNumber);
-                    int SubtractMissingTemp;
-                    switch (question.InputPosition)
-                    {
-                        case 1:
-                            SubtractMissingTemp = question.Answer;
-                            question.Answer = question.Operand1;
-                            question.Operand1 = SubtractMissingTemp;
-                            break;
-                        case 2:
-                            SubtractMissingTemp = question.Answer;
-                            question.Answer = question.Operand2;
-                            question.Operand2 = SubtractMissingTemp;
-                            break;
-                        case 3:
-                            break;
-                    }
-                    break;
-
-                // Create subtraction questions that add up to a specified number
-                case "Subtract-from-5":
-                case "Subtract-from-10":
-                case "Subtract-from-20":
-                case "Subtract-from-50":
-                case "Subtract-from-100":
-                    int SubtractTemp;
-                    question.Operand1 = upperRange;
-                    question.Operand2 = randomNumberGenerator.GetRandomNumber(1, upperRange);
-                    question.Operator = _operator;
-                    question.Answer = GetAnswer(question);
-                    minInputNumber = 2;
-                    maxInputNumber = 3;
                     question.InputPosition = randomNumberGenerator.GetRandomNumber(minInputNumber, maxInputNumber);
                     switch (question.InputPosition)
                     {
+                        case 1:
+                            TempNumber = question.Answer;
+                            question.Answer = question.Operand1;
+                            question.Operand1 = TempNumber;
+                            break;
                         case 2:
-                            SubtractTemp = question.Answer;
+                            TempNumber = question.Answer;
                             question.Answer = question.Operand2;
-                            question.Operand2 = SubtractTemp;
+                            question.Operand2 = TempNumber;
+                            break;
+                        case 3:
                             break;
                     }
                     break;
@@ -87,7 +107,6 @@ namespace Alis4Ops2024.Web.Core
                 default:
                     question.Operand1 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange);
                     question.Operand2 = randomNumberGenerator.GetRandomNumber(lowerRange, upperRange);
-
                     question.Operator = _operator;
                     question.Answer = GetAnswer(question);
                     break;

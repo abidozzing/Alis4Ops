@@ -1,7 +1,10 @@
 ﻿@using System.Timers
 @using System
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage
-<div class="container" style="color: gray; margin-top: 10px; font-size: 100%">
+
+<PageTitle>DateTimeCounterStopWatch</PageTitle>
+
+<div class="container" style="color: gray; margin-top: 10px; font-size: 40%">
     <div class="row gx-0 align-items-center">
         <div class="col">
             <div class="text-center">
@@ -40,11 +43,11 @@
             </div>
         </div>
 
-        <div class="col">
+@*         <div class="col">
             <div class="text-center">
                 <button class="btn btn-primary btn-sm" @onclick="ResetAll">Reset</button>
             </div>
-        </div>
+        </div> *@
     </div>
 </div>
 

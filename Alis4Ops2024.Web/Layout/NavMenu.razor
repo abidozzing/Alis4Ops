@@ -1,5 +1,6 @@
 ﻿@page "/navmenu"
-
+@using Alis4Ops2024.Web.Core
+@inject NavigationManager _navigationManager
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
@@ -11,44 +12,64 @@
 <input type="checkbox" title="navigation menu" class="navbar-toggler" />
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">@* 
-         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/">
-                <span class="" aria-hidden="true"></span> Home
+    <nav class="flex-column">
+@*          <div class="nav-item px-3">
+            <NavLink class="nav-link" href="add/?topic=Add">
+        <span class="" aria-hidden="true"></span> Main
             </NavLink>
-        </div *@
+        </div > *@
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/">
+            <NavLink class="nav-link" href="add/?topic=Add">
                 <span class="" aria-hidden="true"></span> Add
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="subtract">
+            <NavLink class="nav-link" href="subtract/?topic=Subtract">
                 <span class="" aria-hidden="true"></span> Subtract
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="multiply">
+            <NavLink class="nav-link" href="multiply/?topic=Multiply">
                 <span class="" aria-hidden="true"></span> Multiply
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="divide">
+            <NavLink class="nav-link" href="divide/?topic=Divide">
                 <span class="" aria-hidden="true"></span> Divide
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="addsubtract">
-                <span class="" aria-hidden="true"></span> Add:Subtract
+            <NavLink class="nav-link" href="addmissing/?topic=AddMissing">
+                <span class="" aria-hidden="true"></span> Add-Missing
+            </NavLink>
+        </div>
+                <div class="nav-item px-3">
+            <NavLink class="nav-link" href="subtractmissing/?topic=SubtractMissing">
+                <span class="" aria-hidden="true"></span> Subtract-Missing
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="multiplydivide">
-                <span class="" aria-hidden="true"></span> Multiply:Divide
+            <NavLink class="nav-link" href="addsubtract/?topic=AddSubtract">
+                <span class="" aria-hidden="true"></span> Add-Subtract
+            </NavLink>
+        </div>
+                <div class="nav-item px-3">
+            <NavLink class="nav-link" href="multiplymissing/?topic=MultiplyMissing">
+                <span class="" aria-hidden="true"></span> Multiply-Missing
+            </NavLink>
+        </div>
+                <div class="nav-item px-3">
+            <NavLink class="nav-link" href="dividemissing/?topic=DivideMissing">
+                <span class="" aria-hidden="true"></span> Divide-Missing
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="mixedfourops">
+            <NavLink class="nav-link" href="multiplydivide/?topic=MultiplyDivide">
+                <span class="" aria-hidden="true"></span> Multiply-Divide
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="mixedfourops/?topic=MixedFourOps">
                 <span class="" aria-hidden="true"></span> Mixed4Ops
             </NavLink>
         </div>
@@ -56,7 +77,7 @@
         <NavLink class="nav-link" href="numberpatterns">
         <span class="" aria-hidden="true"></span> Number-Patterns
         </NavLink>
-        </div> *@
+        </div>
         @*         <div class="nav-item px-3">
         <NavLink class="nav-link" href="Word-problem">
         <span class="" aria-hidden="true"></span> Word-problem
@@ -96,3 +117,18 @@
     </nav>
 </div>
 
+@code {
+
+    void NavigateToMainWithTopic(string topic)
+    {
+        _navigationManager.NavigateTo($"/main?topic={topic}", forceLoad: true);
+    }
+
+
+//     [Inject]  private RefreshService RefreshService { get; set; }
+
+//     private void InvokeRefresh()
+//     {
+//         RefreshService.RequestRefresh();
+//     }
+}

@@ -3,29 +3,21 @@
 @using Alis4Ops2024.Web.Core
 @using Alis4Ops2024.Web.Models
 @using Alis4Ops2024.Web.Layout
-<link href="css/dropbutton.css" rel="stylesheet" />
 <link href="css/site.css" rel="stylesheet" />
+<link href="css/dropbutton.css" rel="stylesheet" />
 
-<div class="row  gx-0">
-    <div class="dropdown">
-        <div class="flex-flow: row nowrap;  gx-0">
-            <div class="col-8">
-                <button class="dropbtn" @onclick="ToggleDropdown">Multiply</button>
-                <div class="dropdown-content" style="@dropdownStyle">
-                    @foreach (var item in MenuItems)
-                    {
-                        <a @onclick="(() => { HandleClickedItem(item); ToggleDropdown(); })">@item.Text</a> <!-- Toggle dropdown when item clicked -->
-                    }
-                </div>
+<PageTitle>MultiplyRangeMenu</PageTitle>
+
+        <div class="dropdown">
+            <!-- Added d-flex and align-items-center for vertical centering -->
+            <button class="dropbtn" @onclick="ToggleDropdown">Multiply: @SelectedItem</button>
+            <div class="dropdown-content" style="@dropdownStyle">
+                @foreach (var item in MenuItems)
+                {
+                    <a @onclick="(() => { HandleClickedItem(item); ToggleDropdown(); })">@item.Text</a>
+                }
             </div>
         </div>
-    </div>
-</div>
-
-@* <div style="font-size: 10px;">
-    <div>ClickedItem: @SelectedMenuItem?.Text LowerRange:@LowerRange UpperRange:@UpperRange Operator:@Operator</div>
-</div> *@
-
 
 @code {
 
@@ -48,7 +40,6 @@
         new MenuItem { Text = "10"},
         new MenuItem { Text = "11"},
         new MenuItem { Text = "12"},
-        new MenuItem { Text = "Multiply-Missing"}
     };
 
     private string dropdownStyle => isDropdownOpen ? "display: block;" : "display: none;";
@@ -59,15 +50,11 @@
         isDropdownOpen = !isDropdownOpen;
     }
 
-    [Parameter]
-    public EventCallback<string> OperatorChanged { get; set; }
-    [Parameter]
-    public EventCallback<int> UpperRangeChanged { get; set; }
-    [Parameter]
-    public EventCallback<int> LowerRangeChanged { get; set; }
-    [Parameter]
-    public EventCallback<string> SelectedItemChanged { get; set; }
-
+    [Parameter]public EventCallback<string> OperatorChanged { get; set; }
+    [Parameter]public EventCallback<int> UpperRangeChanged { get; set; }
+    [Parameter]public EventCallback<int> LowerRangeChanged { get; set; }
+    [Parameter]public EventCallback<string> SelectedItemChanged { get; set; }
+    [Parameter] public EventCallback<string> TopicChanged { get; set; }
 
     private string ClickedMenuItem = "";
 
@@ -112,6 +99,17 @@
         set
         {
             _selectedItem = value;
+        }
+    }
+
+    private string _topic = "Multiply";
+    [Parameter]
+    public string Topic
+    {
+        get { return _topic; }
+        set
+        {
+            _topic = value;
         }
     }
 
@@ -166,6 +164,7 @@
         await LowerRangeChanged.InvokeAsync(LowerRange);
         await OperatorChanged.InvokeAsync(Operator);
         await SelectedItemChanged.InvokeAsync(SelectedItem);
+        await TopicChanged.InvokeAsync(SelectedItem);
         await ParametersChanged.InvokeAsync();
     }
 

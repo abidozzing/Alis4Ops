@@ -8,7 +8,8 @@ namespace Alis4Ops2024.Web.Core
         int Lower { get; set; }
         string Operator { get; set; }
         String SelectedItem { get; set; }
-        BaseQuestion GenerateQuestion(int upperRange, int lowerRange, string _operator, String _selectedItem);
+        String Topic { get; set; }
+        BaseQuestion GenerateQuestion(int upperRange, int lowerRange, string _operator, String _selectedItem, String _topic);
         BaseQuestion GenerateQuestion();
     }
 }

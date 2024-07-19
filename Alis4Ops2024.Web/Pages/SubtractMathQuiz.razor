@@ -5,6 +5,7 @@
 @using System
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage
 <link href="css/site.css" rel="stylesheet" />
+<link href="css/dropbutton.css" rel="stylesheet" />
 
 <PageTitle>SubtractMathQuiz</PageTitle>
 
@@ -223,6 +224,11 @@
     {
         userInput = args.Value?.ToString(); // Update userInput from event args
         displayedValue = userInput; // Sync displayed value with userInput
+
+        if (displayedValue == "")
+        {
+            displayedValue = "?";
+        }
 
         await InvokeAsync(() => StateHasChanged()); // Refresh UI after input change
     }

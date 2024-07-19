@@ -24,6 +24,7 @@ builder.Services.AddSingleton<ISubtractQuestionGeneratorService, SubtractQuestio
 builder.Services.AddSingleton<IMultiplyQuestionGeneratorService, MultiplyQuestionGeneratorService>();
 builder.Services.AddSingleton<IDivideQuestionGeneratorService, DivideQuestionGeneratorService>();
 builder.Services.AddSingleton<IArithmeticService, ArithmeticService>();
+builder.Services.AddSingleton<RefreshService>();
 // Register Blazor.Extensions.Storage
 builder.Services.AddStorage();
 builder.Services.AddBlazoredSessionStorageAsSingleton();
