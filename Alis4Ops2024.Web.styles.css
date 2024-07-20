@@ -161,16 +161,16 @@ main[b-ebq8e0p4v0] {
     }
 
     .nav-item[b-j6n15gi7dk]  .nav-link {
-        color: #d7d7d7;
+        color: white;
         background: none;
         border: none;
         border-radius: 4px;
-        height: 3rem;
+        height: 1.8rem; /* Menu text spacing*/
         display: flex;
         align-items: center;
         line-height: 3rem;
         width: 100%;
-        font-size: 1.1rem; 
+        font-size: 0.9rem; 
         /* Correct place to adjust SideBar and Collapse SideBar DropDown font size. 
             It sets both the SideBar and Collapse SideBar DropDown font size.*/
     }
@@ -202,7 +202,7 @@ main[b-ebq8e0p4v0] {
     }
 
         .sidebar .nav-item[b-j6n15gi7dk] {
-            width: 250px; /* Correct place to adjust SideBar width*/
+            width: 180px; /* Correct place to adjust SideBar width*/
         }
 
         .navbar-toggler[b-j6n15gi7dk] {

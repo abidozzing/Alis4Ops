@@ -33,11 +33,11 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-cAwhBtCMhfX5Txw+COZDO7rsnBaI3iGAb2KLuMVbos0=",
+      "hash": "sha256-lB\/OnOIPmLawo8UBU0Fc5g0ciSdvNRraNRb6QpMwwuo=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-34mCW2FZU\/p0QhWko7frQYEAqD1CGhQfZmC74EtaF0A=",
+      "hash": "sha256-BPuarfXcVEoxbQh3lFIgndjNqc7j2USBs8+RVUpBagk=",
       "url": "_framework\/Alis4Ops2024.Web.wasm"
     },
     {
@@ -63,6 +63,10 @@
     {
       "hash": "sha256-9pa4TX6FPCR8IZ3hObhj8D\/J0Rp+4PZ1bfCK0WQAIZ8=",
       "url": "_framework\/Microsoft.AspNetCore.Components.WebAssembly.wasm"
+    },
+    {
+      "hash": "sha256-x2zd\/Ojl3PaxX1CyuhZqswNvppLjSLGIqSoTunu9GP0=",
+      "url": "_framework\/Microsoft.AspNetCore.WebUtilities.wasm"
     },
     {
       "hash": "sha256-87sn2TYqgdZ95sXmavjKEzoEfMgHnYQ9LOvnMX+aZcI=",
@@ -97,7 +101,7 @@
       "url": "_framework\/Microsoft.Extensions.Options.wasm"
     },
     {
-      "hash": "sha256-6187ynEahDlSLMBvD4vAmiLpZ3clRb5xu6rM7O8AxNo=",
+      "hash": "sha256-m57C2Zc37Fe3BLnuWV\/w\/P8x18vCCcU\/UxCMkAITQGM=",
       "url": "_framework\/Microsoft.Extensions.Primitives.wasm"
     },
     {
@@ -117,7 +121,7 @@
       "url": "_framework\/System.Collections.Concurrent.wasm"
     },
     {
-      "hash": "sha256-6XD3tpGMq1pHuuiP8fMHHRQG5zjDrEL60ijHLWVLlic=",
+      "hash": "sha256-ivNH+VDQytR+i\/bU17T6xLastcTamiGdYUSJxhHM3Jc=",
       "url": "_framework\/System.Collections.wasm"
     },
     {
@@ -133,7 +137,7 @@
       "url": "_framework\/System.ComponentModel.wasm"
     },
     {
-      "hash": "sha256-koKEwGPk0ZKjL8+2EMGtKLLKxpoZXI7zdImlJ1Lr+Mk=",
+      "hash": "sha256-kP6cLaO91sASmJQSca948LrvzLf6GuMGAAYbTWhv73E=",
       "url": "_framework\/System.Console.wasm"
     },
     {
@@ -157,11 +161,11 @@
       "url": "_framework\/System.ObjectModel.wasm"
     },
     {
-      "hash": "sha256-5YN9e\/MogRIajiiftor6eG196+FfakulOnHw8x+q4+8=",
+      "hash": "sha256-zUSG6zE2ih6tkYcAcwRKGfLxeTePhQWmPSn8\/tdKgH0=",
       "url": "_framework\/System.Private.CoreLib.wasm"
     },
     {
-      "hash": "sha256-sV0LSeK6V3InGMnjlb\/eT\/HiuiH68XgXKjlSJFTQnR4=",
+      "hash": "sha256-vjaiAz5aXncdUfgv3iAStKfOF2j+l\/CnsZOSSKce8bE=",
       "url": "_framework\/System.Private.Uri.wasm"
     },
     {
@@ -197,7 +201,7 @@
       "url": "_framework\/System.wasm"
     },
     {
-      "hash": "sha256-z9VT3nuPIL0D2uHrKgoRLoHFtv9l8xbBbRom+SyZxf8=",
+      "hash": "sha256-8sfwt1PMZEB1FzTdXidI4pieivCFOiPjWj5RZp4kGT0=",
       "url": "Alis4Ops2024.Web.styles.css"
     },
     {
@@ -221,7 +225,7 @@
       "url": "css\/bootstrap\/bootstrap.min.css.map"
     },
     {
-      "hash": "sha256-4QkD1Nus+fOcBULLIQbQSidopniLjzCV5vXvwFjDAvg=",
+      "hash": "sha256-yncVf73MXXnFNytgweTdinxh\/9V7yJwsmToYdtbA1Ns=",
       "url": "css\/dropbutton.css"
     },
     {
@@ -430,7 +434,7 @@
     },
     {
       "hash": "sha256-BlB7+goCJxXFHTKTw2Qp1iuQufP0qEs0SeZV1D5zv3Q=",
-      "url": "css\/fontawesome\/metadata\/categories.yml"
+      "url": "css\/fontawesome\/metadata\/categoriesError.yml"
     },
     {
       "hash": "sha256-LU0RfIm6AqUYfKXSn1U0DFRu4aK3+yIV6YslwsC5G1Y=",
@@ -8761,11 +8765,7 @@
       "url": "css\/fontawesome\/webfonts\/fa-v4compatibility.woff2"
     },
     {
-      "hash": "sha256-jz0CUkd4XPS+GXXQwEgalqNHAp2qHrl\/lmrkXkEj4vM=",
-      "url": "css\/rangemenu.css"
-    },
-    {
-      "hash": "sha256-J3buNZF03BUM7zy6q17KWzd+Mrmwen9pdcYDncbKtog=",
+      "hash": "sha256-c89BBhmfSAhKS8JhBFTFBV5aHK2NOo5TxxIEEPu5Pv4=",
       "url": "css\/site.css"
     },
     {
@@ -8805,5 +8805,5 @@
       "url": "manifest.webmanifest"
     }
   ],
-  "version": "HQGjr9x9"
+  "version": "jaOI+gJQ"
 };
