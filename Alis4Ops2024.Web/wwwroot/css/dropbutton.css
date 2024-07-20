@@ -15,18 +15,19 @@
     border: 1px solid black;
     cursor: pointer;
     border-radius: 4px; /* Adjust the border radius to make button rounded */
-    width: 260px;
+    width: 220px;
     height: 44px;
     align-content: center;
     align-items: center;
+    text-align: center; /* Align text*/
 }
 
     .dropbtn::after {
         content: "\f107"; /* Unicode for the caret-down icon */
         font-family: "Font Awesome 5 Free"; /* Ensure Font Awesome is loaded */
         font-weight: 900; /* Adjust font weight as needed */
-        position: absolute;
-        right: 10px; /* Adjust the position of the icon */
+        position:absolute;
+        right: 6px; /* Adjust the position of the icon */
         top: 50%;
         transform: translateY(-50%);
     }
