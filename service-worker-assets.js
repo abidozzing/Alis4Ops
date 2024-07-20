@@ -33,11 +33,11 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-GQFHmm4h7gJEHbXuc8n0Ir\/YIZnYqzZvWY8tiY93Y40=",
+      "hash": "sha256-1tLiStG+0+axyIfL9AKGj1v7LOVafngILOQkx7x4gMg=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-SLilXaKb7QNY3s3bG9lCfzFZtX8tmNf1NCqNIs4bgpg=",
+      "hash": "sha256-ECWfHTOudJ+wEs6VfkFDZEvzSJKJAmdbNAtmMHg9HxA=",
       "url": "_framework\/Alis4Ops2024.Web.wasm"
     },
     {
@@ -201,7 +201,7 @@
       "url": "_framework\/System.wasm"
     },
     {
-      "hash": "sha256-8sfwt1PMZEB1FzTdXidI4pieivCFOiPjWj5RZp4kGT0=",
+      "hash": "sha256-ewk43ebq4fsU0yjNAZ4p0HWsvasMYtwFmC6VdGW1Sos=",
       "url": "Alis4Ops2024.Web.styles.css"
     },
     {
@@ -225,7 +225,7 @@
       "url": "css\/bootstrap\/bootstrap.min.css.map"
     },
     {
-      "hash": "sha256-yncVf73MXXnFNytgweTdinxh\/9V7yJwsmToYdtbA1Ns=",
+      "hash": "sha256-hDASa\/FEjFWrkvmShiLmskdrquvaeyHgtFIdCP45LSI=",
       "url": "css\/dropbutton.css"
     },
     {
@@ -8805,5 +8805,5 @@
       "url": "manifest.webmanifest"
     }
   ],
-  "version": "iODlHYeS"
+  "version": "ag3\/ZSlV"
 };
