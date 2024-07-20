@@ -8,15 +8,15 @@
 .dropbtn {
     background-color: forestgreen;
     color: white;
-    padding: 0px 0px; /* Adjusted padding to fit aspect ratio */
+    padding: .375rem .75rem; /* Adjusted padding to fit aspect ratio */
     /*font-family: "Font Awesome 5 Free";*/
     font-size: 16px;
     font-weight: 600;
-    border: 1px solid black;
+    border: 0px solid black;
     cursor: pointer;
     border-radius: 4px; /* Adjust the border radius to make button rounded */
     width: 220px;
-    height: 44px;
+    height: 40px;
     align-content: center;
     align-items: center;
     text-align: center; /* Align text*/
