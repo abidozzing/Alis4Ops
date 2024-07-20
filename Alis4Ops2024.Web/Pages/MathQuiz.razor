@@ -9,12 +9,12 @@
 
 <PageTitle>MathQuiz</PageTitle>
 
-<div class="row  gx-0">
+@* <div class="row  gx-0">
     <!-- Message Good Job! or Please try again. -->
     <div class="col-12 p-1 d-flex text-dark justify-content-center align-items-center" style="height: 30px; box-sizing: border-box; font-size: 60%;">
         <div style="color: @resultColor;">@resultMessage</div>
     </div>
-</div>
+</div> *@
 
 @if (Question != null && (Question.InputPosition <= 0 || Question.InputPosition > 3))
 {
@@ -25,8 +25,17 @@
 {
     case 1:
         <!--  Add Operand1 Vertical -->
-        <div class="row gx-0" style="padding:0px;">
-            <div class="col-12 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@displayedValue</div>
+        <div class="row gx-0" style="padding: 0;">
+            <div class="col d-flex justify-content-start align-items-center text-dark" style="box-sizing: border-box;">
+                <span style="visibility: hidden;">Space</span>
+            </div>
+
+            <!-- Message Good Job! or Please try again. -->
+            <div class="col-6 d-flex flex-nowrap justify-content-center align-items-center text-center " style="color: @resultColor; font-size: 60%;">
+                @resultMessage
+            </div>
+            <div class="col d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@displayedValue</div>
+
         </div>
 
         <!-- Add Operator Symbol and Operand2 Vertical -->
@@ -81,8 +90,17 @@
 
     case 2:
         <!--  Add Operand1 Vertical -->
-        <div class="row gx-0" style="padding:0px;">
-            <div class="col-12 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@Question.Operand1</div>
+        <div class="row gx-0" style="padding: 0;">
+            <div class="col d-flex justify-content-start align-items-center text-dark" style="box-sizing: border-box;">
+                <span style="visibility: hidden;">Space</span>
+            </div>
+
+            <!-- Message Good Job! or Please try again. -->
+            <div class="col-6 d-flex flex-nowrap justify-content-center align-items-center text-center " style="color: @resultColor; font-size: 60%;">
+                @resultMessage
+            </div>
+
+            <div class="col d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@Question.Operand1</div>
         </div>
 
         <!-- Add Operator Symbol and Operand2 Vertical -->
@@ -136,9 +154,21 @@
 
     case 3:
         <!-- Add Operand1 Vertical -->
-        <div class="row gx-0" style="padding:0px;">
-            <div class="col-12 d-flex text-dark" style=" justify-content: flex-end; box-sizing: border-box;">@Question.Operand1</div>
+        <div class="row gx-0" style="padding: 0;">
+            <div class="col d-flex justify-content-start align-items-center text-dark" style="box-sizing: border-box;">
+                <span style="visibility: hidden;">Space</span>
+            </div>
+
+            <!-- Message Good Job! or Please try again. -->
+                <div class="col-6 d-flex flex-nowrap justify-content-center align-items-center text-center " style="color: @resultColor; font-size: 60%;">
+                    @resultMessage
+                </div>
+
+            <div class="col d-flex justify-content-end align-items-center text-dark" style="box-sizing: border-box;">
+                @Question.Operand1 <!-- Assuming this is dynamic content -->
+            </div>
         </div>
+
 
         <!-- Add Operator Symbol and Operand2 Vertical -->
         <div class="row gx-0" style="padding:0px;">
