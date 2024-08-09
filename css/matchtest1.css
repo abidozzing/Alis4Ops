@@ -1,0 +1,14 @@
+﻿.parent-container {
+    border: 2px dashed gray;
+    width: 200px;
+    height: 150px;
+}
+
+.digit {
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    text-align: center;
+    line-height: 30px;
+    cursor: move;
+}

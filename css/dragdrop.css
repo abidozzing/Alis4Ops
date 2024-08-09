@@ -1,0 +1,111 @@
+﻿/* General Body Styling */
+/*body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #eee;
+    color: #111;
+    margin: 0;*/ /* Remove default margin */
+    /*height: 100vh;*/ /* Full viewport height */
+    /*display: flex;*/
+    /*justify-content: center;*/ /* Center the game container horizontally */
+/*}*/
+
+/* Game Container Styling */
+#game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center horizontally */
+}
+
+/* Draggable Elements Container */
+#draggable-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center horizontally */
+    margin-bottom: 0rem; /* Space between draggable and droppable containers */
+}
+
+/* Droppable Elements Container */
+#droppable-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center horizontally */
+    max-width: 100%; /* Ensure container doesn’t exceed viewport width */
+}
+
+/* Draggable Element Styling */
+.draggable {
+    height: 5rem;
+    width: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.25rem;
+    margin: 0.2rem;
+    cursor: move;
+    transition: opacity 0.2s;
+    text-align: center;
+}
+
+/* Droppable Element Styling */
+.droppable {
+    height: 5rem;
+    width: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    background-color: #fff;
+    border: 3px dashed #111;
+    margin: 0.4rem;
+    transition: border-width 0.2s, transform 0.2s, background-color 0.4s;
+    border-radius: 1rem; /* Add this line for rounded corners */
+}
+
+    .droppable span {
+        font-size: 2.5rem;
+        pointer-events: none;
+    }
+
+    /* Drag and Drop Related Styling */
+    .droppable.droppable-hover {
+        border-width: 5px;
+        transform: scale(1.2);
+        border-color: red;
+        border: 3px solid red;
+        background-color: aqua
+    }
+
+    .droppable.dropped {
+        border-style: solid;
+        color: #fff;
+    }
+
+        .droppable.dropped span {
+            font-size: 3.25rem;
+            margin-top: 0.5rem;
+        }
+
+        .droppable.dropped i {
+            pointer-events: none;
+        }
+
+.draggable.dragged {
+    user-select: none;
+    opacity: 0.1;
+    cursor: default;
+}
+
+    .draggable.dragged:hover {
+        opacity: 0.1;
+    }
+
+@media (max-width: 600px) {
+    html {
+        font-size: 14px;
+    }
+}
+
+#play-again {
+    margin-top:10px;
+}
