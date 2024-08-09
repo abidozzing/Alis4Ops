@@ -1,0 +1,39 @@
+﻿@* @page "/" *@
+@page "/icon-display"
+@using System.Threading.Tasks
+@inject IJSRuntime JS
+<link rel="stylesheet" href="css/fontawesome/sprites/solid.svg" />
+<link rel="stylesheet" href="css/fontawesome/all.min.css" />
+@using System.Linq
+<link rel="icon" type="image/png" href="favicon.png" />
+
+<h3>Random SVG Icon</h3>
+<div class="fa-solid fa-arrow-down"></div>
+<button @onclick="StartLoop">Start</button>
+<button @onclick="StopLoop">Stop</button>
+
+<svg width="100" height="100">
+    <use xlink:href="@CurrentIconHref"></use>
+</svg>
+<div class=fa-arrow-down></div>
+@code {
+    private string[] iconIds = new[] { "virus-covid-slash", "cart-plus" }; // Update with your icon IDs
+    private string CurrentIconHref => $"/css/fontawesome/sprites/sprite.svg#{iconIds[currentIndex]}";
+    private int currentIndex;
+    private System.Threading.Timer timer;
+
+    private void StartLoop()
+    {
+        timer = new System.Threading.Timer(_ =>
+        {
+            currentIndex = new Random().Next(iconIds.Length);
+            InvokeAsync(StateHasChanged);
+        }, null, 0, 1000); // Change icon every second
+    }
+
+    private void StopLoop()
+    {
+        timer?.Dispose();
+    }
+}
+

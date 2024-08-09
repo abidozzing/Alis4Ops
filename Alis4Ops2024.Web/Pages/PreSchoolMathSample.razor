@@ -1,0 +1,118 @@
+﻿@page "/PreSchoolMathSample"
+@using Alis4Ops2024.Web.Core
+@using Alis4Ops2024.Web.Models
+@using Alis4Ops2024.Web.Layout
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
+@inject NavigationManager _navigationManager
+<link href="css/site.css" rel="stylesheet" />
+
+
+<PageTitle>Counting</PageTitle>
+@page "/mathapp"
+
+<h1>Welcome to Math Learning App!</h1>
+
+<div class="container">
+    <div class="header">
+        <h2>Explore Math Concepts</h2>
+    </div>
+    <div class="content">
+        <div class="activity">
+            <h3>Counting Game</h3>
+            <p>Can you count the animals?</p>
+            <button class="play-button" @onclick="StartCountingGame">Play</button>
+        </div>
+        <div class="activity">
+            <h3>Shapes Puzzle</h3>
+            <p>Drag and match the shapes!</p>
+            <button class="play-button" @onclick="StartShapesPuzzle">Play</button>
+        </div>
+        <div class="activity">
+            <h3>Addition Adventure</h3>
+            <p>Help the characters add the numbers!</p>
+            <button class="play-button" @onclick="StartAdditionGame">Play</button>
+        </div>
+    </div>
+    <div class="footer">
+        <p>Designed for preschoolers | Math Learning App</p>
+    </div>
+</div>
+
+@code {
+    private void StartCountingGame()
+    {
+        // Logic to navigate or start counting game
+    }
+
+    private void StartShapesPuzzle()
+    {
+        // Logic to navigate or start shapes puzzle
+    }
+
+    private void StartAdditionGame()
+    {
+        // Logic to navigate or start addition game
+    }
+}
+
+<style>
+    .container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        text-align: center;
+        background-color: #f1f1f1;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .content {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .activity {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+
+        .activity:hover {
+            transform: translateY(-5px);
+        }
+
+    .play-button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+        .play-button:hover {
+            background-color: #45a049;
+        }
+
+    .footer {
+        margin-top: 20px;
+        font-size: 12px;
+        color: #666;
+    }
+</style>

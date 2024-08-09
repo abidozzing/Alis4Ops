@@ -1,9 +1,18 @@
-﻿@page "/navmenu"
+﻿@* @page "/navmenu" *@
+@using Alis4Ops2024.Web.Pages
 @using Alis4Ops2024.Web.Core
+@using Alis4Ops2024.Web.Models
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
 @inject NavigationManager _navigationManager
+@using Microsoft.AspNetCore.WebUtilities
+@inject RefreshService RefreshService
+@inject NavigationManager NavigationHelper
+<link href="css/site.css" rel="stylesheet" />
+<link href="css/dropbutton.css" rel="stylesheet" />
 
 <div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
+    <div class="container-fluid ">
         <a class="navbar-brand" href="">Alis4Ops</a>
 
     </div>
@@ -13,13 +22,13 @@
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="flex-column">
-@*          <div class="nav-item px-3">
-            <NavLink class="nav-link" href="add/?topic=Add">
-        <span class="" aria-hidden="true"></span> Main
+@*         <div class="nav-item px-3">
+            <NavLink class="nav-link" href="match">
+                <span class="" aria-hidden="true"></span> Match Numbers
             </NavLink>
-        </div > *@
+        </div> *@
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="add">
+            <NavLink class="nav-link" href="add?LinkTopic=Add">
                 <span class="" aria-hidden="true"></span> Add
             </NavLink>
         </div>
@@ -39,11 +48,11 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="addmissing">
+            <NavLink class="nav-link" href="addmissing" >
                 <span class="" aria-hidden="true"></span> Add-Missing
             </NavLink>
         </div>
-                <div class="nav-item px-3">
+        <div class="nav-item px-3">
             <NavLink class="nav-link" href="subtractmissing">
                 <span class="" aria-hidden="true"></span> Subtract-Missing
             </NavLink>
@@ -53,12 +62,12 @@
                 <span class="" aria-hidden="true"></span> Add-Subtract
             </NavLink>
         </div>
-                <div class="nav-item px-3">
+        <div class="nav-item px-3">
             <NavLink class="nav-link" href="multiplymissing">
                 <span class="" aria-hidden="true"></span> Multiply-Missing
             </NavLink>
         </div>
-                <div class="nav-item px-3">
+        <div class="nav-item px-3">
             <NavLink class="nav-link" href="dividemissing">
                 <span class="" aria-hidden="true"></span> Divide-Missing
             </NavLink>
@@ -73,6 +82,31 @@
                 <span class="" aria-hidden="true"></span> Mixed4Ops
             </NavLink>
         </div>
+
+@*         <div class="nav-item px-3">
+            <NavLink class="nav-link" href="countinggame">
+                <span class="" aria-hidden="true"></span> Counting Game
+            </NavLink>
+        </div> *@
+
+@*         <div class="nav-item px-3">
+            <NavLink class="nav-link" href="count">
+                <span class="" aria-hidden="true"></span> Colours
+            </NavLink>
+        </div> *@
+
+@*         <div class="nav-item px-3">
+            <NavLink class="nav-link" href="shapespuzzle">
+                <span class="" aria-hidden="true"></span>Shapes Puzzle
+            </NavLink>
+        </div> *@
+
+@*         <div class="nav-item px-3">
+            <NavLink class="nav-link" href="dragdrop">
+                <span class="" aria-hidden="true"></span>Match Numbers
+            </NavLink>
+        </div> *@
+
         @*         <div class="nav-item px-3">
         <NavLink class="nav-link" href="numberpatterns">
         <span class="" aria-hidden="true"></span> Number-Patterns
@@ -115,20 +149,9 @@
         </NavLink>
         </div> *@
     </nav>
+
 </div>
 
 @code {
 
-    void NavigateToMainWithTopic(string topic)
-    {
-        _navigationManager.NavigateTo($"/main?topic={topic}", forceLoad: true);
-    }
-
-
-//     [Inject]  private RefreshService RefreshService { get; set; }
-
-//     private void InvokeRefresh()
-//     {
-//         RefreshService.RequestRefresh();
-//     }
 }

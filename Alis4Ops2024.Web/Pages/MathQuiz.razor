@@ -55,16 +55,16 @@
                 @switch (Question.Operator)
                 {
                     case "Add":
-                        <i class="fa-solid fa-add"></i>
+                        <i class="fas fa-solid fa-add"></i>
                         break;
                     case "Subtract":
-                        <i class="fa-solid fa-minus"></i>
+                        <i class="fas fa-solid fa-minus"></i>
                         break;
                     case "Multiply":
-                        <i class="fa-solid fa-times"></i>
+                        <i class="fas fa-solid fa-times"></i>
                         break;
                     case "Divide":
-                        <i class="fa-solid fa-divide"></i>
+                        <i class="fas fa-solid fa-divide"></i>
                         break;
                     default:
                         <strong>@Question.OperatorAsSymbol</strong>
@@ -119,16 +119,16 @@
                 @switch (Question.Operator)
                 {
                     case "Add":
-                        <i class="fa-solid fa-add"></i>
+                        <i class="fas fa-solid fa-add"></i>
                         break;
                     case "Subtract":
-                        <i class="fa-solid fa-minus"></i>
+                        <i class="fas fa-solid fa-minus"></i>
                         break;
                     case "Multiply":
-                        <i class="fa-solid fa-times"></i>
+                        <i class="fas fa-solid fa-times"></i>
                         break;
                     case "Divide":
-                        <i class="fa-solid fa-divide"></i>
+                        <i class="fas fa-solid fa-divide"></i>
                         break;
                     default:
                         <strong>@Question.OperatorAsSymbol</strong>
@@ -186,16 +186,16 @@
                 @switch (Question.Operator)
                 {
                     case "Add":
-                        <i class="fa-solid fa-add"></i>
+                        <i class="fas fa-solid fa-add"></i>
                         break;
                     case "Subtract":
-                        <i class="fa-solid fa-minus"></i>
+                        <i class="fas fa-solid fa-minus"></i>
                         break;
                     case "Multiply":
-                        <i class="fa-solid fa-times"></i>
+                        <i class="fas fa-solid fa-times"></i>
                         break;
                     case "Divide":
-                        <i class="fa-solid fa-divide"></i>
+                        <i class="fas fa-solid fa-divide"></i>
                         break;
                     default:
                         <strong>@Question.OperatorAsSymbol</strong>
@@ -245,6 +245,7 @@
     {
         // if (firstRender)
         inputElement.FocusAsync();
+        // await InvokeAsync(() => StateHasChanged());
     }
 
     protected override void OnInitialized()

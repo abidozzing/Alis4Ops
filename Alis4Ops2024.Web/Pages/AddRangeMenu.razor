@@ -3,6 +3,7 @@
 @using Alis4Ops2024.Web.Core
 @using Alis4Ops2024.Web.Models
 @using Alis4Ops2024.Web.Layout
+@inject NavigationManager _navigationManager
 <link href="css/site.css" rel="stylesheet" />
 <link href="css/dropbutton.css" rel="stylesheet" />
 @using System.Timers
@@ -10,9 +11,10 @@
 
 <PageTitle>AddRangeMenu</PageTitle>
 
+
         <div class="dropdown">
             <!-- Added d-flex and align-items-center for vertical centering -->
-            <button class="dropbtn" @onclick="ToggleDropdown">Add: @SelectedItem</button>
+            <button class="dropbtn" @onclick="ToggleDropdown">@Topic: @SelectedItem</button>
             <div class="dropdown-content" style="@dropdownStyle">
                 @foreach (var item in MenuItems)
                 {
@@ -43,6 +45,8 @@
 
     }
 
+    
+
     public List<MenuItem> MenuItems { get; set; } = new List<MenuItem>
     {
         new MenuItem { Text = "1-5"},
@@ -51,11 +55,11 @@
         new MenuItem { Text = "10-50"},
         new MenuItem { Text = "10-100"},
         new MenuItem { Text = "100-1000"},
-        new MenuItem { Text = "Make-5"},
-        new MenuItem { Text = "Make-10"},
-        new MenuItem { Text = "Make-20"},
-        new MenuItem { Text = "Make-50"},
-        new MenuItem { Text = "Make-100"}
+        new MenuItem { Text = "Make 5"},
+        new MenuItem { Text = "Make 10"},
+        new MenuItem { Text = "Make 20"},
+        new MenuItem { Text = "Make 50"},
+        new MenuItem { Text = "Make 100"}
     };
 
     private string dropdownStyle => isDropdownOpen ? "display: block;" : "display: none;";
@@ -135,7 +139,7 @@
     {
         SelectedMenuItem = clickedItem;
 
-        Operator = "Add";
+        // Operator = "Add";
         SelectedItem = SelectedMenuItem.Text;
         switch (SelectedItem)
         {
@@ -163,23 +167,23 @@
                 LowerRange = 100;
                 UpperRange = 1000;
                 break;
-            case "Make-5":
+            case "Make 5":
                 LowerRange = 1;
                 UpperRange = 5;
                 break;
-            case "Make-10":
+            case "Make 10":
                 LowerRange = 1;
                 UpperRange = 10;
                 break;
-            case "Make-20":
+            case "Make 20":
                 LowerRange = 1;
                 UpperRange = 20;
                 break;
-            case "Make-50":
+            case "Make 50":
                 LowerRange = 10;
                 UpperRange = 50;
                 break;
-            case "Make-100":
+            case "Make 100":
                 LowerRange = 10;
                 UpperRange = 100;
                 break;
@@ -207,7 +211,7 @@
     [Parameter]
     public EventCallback ParametersChanged { get; set; }
 
-    async Task HandleParametersChangedAsync()
+    public async Task HandleParametersChangedAsync()
     {
         await UpperRangeChanged.InvokeAsync(UpperRange);
         await LowerRangeChanged.InvokeAsync(LowerRange);
@@ -217,6 +221,11 @@
         await ParametersChanged.InvokeAsync();
     }
 
-
+    public async Task RefreshPage()
+    {
+        _navigationManager.NavigateTo(_navigationManager.Uri, forceLoad: true);
+        Topic = _topic;
+    }
 }
+
 

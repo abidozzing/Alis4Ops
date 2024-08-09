@@ -104,17 +104,31 @@
 
     protected override void OnInitialized()
     {
-        var uri = NavigationHelper.ToAbsoluteUri
-    (NavigationHelper.Uri);
+    //     var uri = NavigationHelper.ToAbsoluteUri
+    // (NavigationHelper.Uri);
 
-        if (QueryHelpers.ParseQuery(uri.Query).
-    TryGetValue("Topic", out var navTopic))
+    //     if (QueryHelpers.ParseQuery(uri.Query).
+    // TryGetValue("Topic", out var navTopic))
             // Topic = "MixedFourOps";
             if (dateTimeCounterStopWatch is null)
             {
                 dateTimeCounterStopWatch = new DateTimeCounterStopWatch();
 
             }
+
+        mathQuiz = new MathQuiz();
+        divideMathQuiz = new DivideMathQuiz();
+        SelectOperator();
+        SelectRange();
+        // Generate new question based on Topic and Operator
+        GenerateNewQuestion();
+
+        // Notify Blazor to update the component's state
+        StateHasChanged();
+    }
+
+    private void SelectOperator()
+    {
         Topic = "MixedFourOps";
         Operator = "Add";
         UpperRange = 5;
@@ -150,14 +164,126 @@
 
                 break;
         }
-
-        // Generate new question based on Topic and Operator
-        GenerateNewQuestion();
-
-        // Notify Blazor to update the component's state
-        StateHasChanged();
     }
-
+    private void SelectRange()
+    {
+        switch (SelectedItem)
+        {
+            case "Level 1":
+                switch (Operator)
+                {
+                    case "Add":
+                        LowerRange = 1;
+                        UpperRange = 5;
+                        break;
+                    case "Subtract":
+                        LowerRange = 1;
+                        UpperRange = 5;
+                        break;
+                    case "Multiply":
+                        LowerRange = 1;
+                        UpperRange = 5;
+                        break;
+                    case "Divide":
+                        LowerRange = 1;
+                        UpperRange = 5;
+                        break;
+                }
+                break;
+            case "Level 2":
+                switch (Operator)
+                {
+                    case "Add":
+                        LowerRange = 1;
+                        UpperRange = 10;
+                        break;
+                    case "Subtract":
+                        LowerRange = 1;
+                        UpperRange = 10;
+                        break;
+                    case "Multiply":
+                        LowerRange = 2;
+                        UpperRange = 6;
+                        break;
+                    case "Divide":
+                        LowerRange = 2;
+                        UpperRange = 6;
+                        break;
+                }
+                break;
+            case "Level 3":
+                switch (Operator)
+                {
+                    case "Add":
+                        LowerRange = 1;
+                        UpperRange = 20;
+                        break;
+                    case "Subtract":
+                        LowerRange = 1;
+                        UpperRange = 20;
+                        break;
+                    case "Multiply":
+                        LowerRange = 3;
+                        UpperRange = 7;
+                        break;
+                    case "Divide":
+                        LowerRange = 3;
+                        UpperRange = 7;
+                        break;
+                }
+                break;
+            case "Level 4":
+                switch (Operator)
+                {
+                    case "Add":
+                        LowerRange = 10;
+                        UpperRange = 50;
+                        break;
+                    case "Subtract":
+                        LowerRange = 10;
+                        UpperRange = 50;
+                        break;
+                    case "Multiply":
+                        LowerRange = 4;
+                        UpperRange = 10;
+                        break;
+                    case "Divide":
+                        LowerRange = 4;
+                        UpperRange = 10;
+                        break;
+                }
+                break;
+            case "Level 5":
+                switch (Operator)
+                {
+                    case "Add":
+                        LowerRange = 10;
+                        UpperRange = 100;
+                        break;
+                    case "Subtract":
+                        LowerRange = 10;
+                        UpperRange = 100;
+                        break;
+                    case "Multiply":
+                        LowerRange = 5;
+                        UpperRange = 12;
+                        break;
+                    case "Divide":
+                        LowerRange = 5;
+                        UpperRange = 12;
+                        break;
+                }
+                break;
+            default:
+                // Handle unexpected cases if necessary
+                Topic = "MixedFourOps";
+                Operator = "Add";
+                LowerRange = 1;
+                UpperRange = 5;
+                SelectedItem = "Level 1";
+                break;
+        }
+    }
     async Task HandleSubmitAnswerAsync()
     {
         @if (Operator == "Divide")
@@ -184,151 +310,8 @@
             await dateTimeCounterStopWatch.ResetAndStartStopwatch();
             await dateTimeCounterStopWatch.IncrementCounter();
             await AnsweredCorrectly.InvokeAsync();
-            int Num = random.Next(4);
-            // Determine Topic and Operator based on Num1
-            Topic = "MixedFourOps"; // Assuming this is common for all cases
-
-            switch (Num)
-            {
-                case 0:
-                    Operator = "Add";
-                    break;
-                case 1:
-                    Operator = "Subtract";
-                    break;
-                case 2:
-                    Operator = "Multiply";
-                    break;
-                case 3:
-                    Operator = "Divide";
-                    break;
-                default:
-                    // Handle unexpected cases if necessary
-                    Topic = "MixedFourOps";
-                    Operator = "Add";
-                    LowerRange = 1;
-                    UpperRange = 5;
-                    SelectedItem = "Level 1";
-                    break;
-            }
-
-            switch (SelectedItem)
-            {
-                case "Level 1":
-                    switch (Operator)
-                    {
-                        case "Add":
-                            LowerRange = 1;
-                            UpperRange = 5;
-                            break;
-                        case "Subtract":
-                            LowerRange = 1;
-                            UpperRange = 5;
-                            break;
-                        case "Multiply":
-                            LowerRange = 1;
-                            UpperRange = 5;
-                            break;
-                        case "Divide":
-                            LowerRange = 1;
-                            UpperRange = 5;
-                            break;
-                    }
-                    break;
-                case "Level 2":
-                    switch (Operator)
-                    {
-                        case "Add":
-                            LowerRange = 1;
-                            UpperRange = 10;
-                            break;
-                        case "Subtract":
-                            LowerRange = 1;
-                            UpperRange = 10;
-                            break;
-                        case "Multiply":
-                            LowerRange = 2;
-                            UpperRange = 6;
-                            break;
-                        case "Divide":
-                            LowerRange = 2;
-                            UpperRange = 6;
-                            break;
-                    }
-                    break;
-                case "Level 3":
-                    switch (Operator)
-                    {
-                        case "Add":
-                            LowerRange = 1;
-                            UpperRange = 20;
-                            break;
-                        case "Subtract":
-                            LowerRange = 1;
-                            UpperRange = 20;
-                            break;
-                        case "Multiply":
-                            LowerRange = 3;
-                            UpperRange = 7;
-                            break;
-                        case "Divide":
-                            LowerRange = 3;
-                            UpperRange = 7;
-                            break;
-                    }
-                    break;
-                case "Level 4":
-                    switch (Operator)
-                    {
-                        case "Add":
-                            LowerRange = 10;
-                            UpperRange = 50;
-                            break;
-                        case "Subtract":
-                            LowerRange = 10;
-                            UpperRange = 50;
-                            break;
-                        case "Multiply":
-                            LowerRange = 4;
-                            UpperRange = 10;
-                            break;
-                        case "Divide":
-                            LowerRange = 4;
-                            UpperRange = 10;
-                            break;
-                    }
-                    break;
-                case "Level 5":
-                    switch (Operator)
-                    {
-                        case "Add":
-                            LowerRange = 10;
-                            UpperRange = 100;
-                            break;
-                        case "Subtract":
-                            LowerRange = 10;
-                            UpperRange = 100;
-                            break;
-                        case "Multiply":
-                            LowerRange = 5;
-                            UpperRange = 12;
-                            break;
-                        case "Divide":
-                            LowerRange = 5;
-                            UpperRange = 12;
-                            break;
-                    }
-                    break;
-                default:
-                    // Handle unexpected cases if necessary
-                    Topic = "MixedFourOps";
-                    Operator = "Add";
-                    LowerRange = 1;
-                    UpperRange = 5;
-                    SelectedItem = "Level 1";
-                    break;
-            }
-
+            SelectOperator();
+            SelectRange();
             GenerateNewQuestion();
             await InvokeAsync(() => StateHasChanged());
         }
@@ -337,7 +320,6 @@
 
     private async Task HandleAnsweredWrongly()
     {
-
         if (dateTimeCounterStopWatch != null)
         {
             await dateTimeCounterStopWatch.IncrementErrorCount();
@@ -347,6 +329,124 @@
 
     private void GenerateNewQuestion()
     {
+        SelectOperator();
+        switch (SelectedItem)
+        {
+            case "Level 1":
+                switch (Operator)
+                {
+                    case "Add":
+                        LowerRange = 1;
+                        UpperRange = 5;
+                        break;
+                    case "Subtract":
+                        LowerRange = 1;
+                        UpperRange = 5;
+                        break;
+                    case "Multiply":
+                        LowerRange = 1;
+                        UpperRange = 5;
+                        break;
+                    case "Divide":
+                        LowerRange = 1;
+                        UpperRange = 5;
+                        break;
+                }
+                break;
+            case "Level 2":
+                switch (Operator)
+                {
+                    case "Add":
+                        LowerRange = 1;
+                        UpperRange = 10;
+                        break;
+                    case "Subtract":
+                        LowerRange = 1;
+                        UpperRange = 10;
+                        break;
+                    case "Multiply":
+                        LowerRange = 2;
+                        UpperRange = 6;
+                        break;
+                    case "Divide":
+                        LowerRange = 2;
+                        UpperRange = 6;
+                        break;
+                }
+                break;
+            case "Level 3":
+                switch (Operator)
+                {
+                    case "Add":
+                        LowerRange = 1;
+                        UpperRange = 20;
+                        break;
+                    case "Subtract":
+                        LowerRange = 1;
+                        UpperRange = 20;
+                        break;
+                    case "Multiply":
+                        LowerRange = 3;
+                        UpperRange = 7;
+                        break;
+                    case "Divide":
+                        LowerRange = 3;
+                        UpperRange = 7;
+                        break;
+                }
+                break;
+            case "Level 4":
+                switch (Operator)
+                {
+                    case "Add":
+                        LowerRange = 10;
+                        UpperRange = 50;
+                        break;
+                    case "Subtract":
+                        LowerRange = 10;
+                        UpperRange = 50;
+                        break;
+                    case "Multiply":
+                        LowerRange = 4;
+                        UpperRange = 10;
+                        break;
+                    case "Divide":
+                        LowerRange = 4;
+                        UpperRange = 10;
+                        break;
+                }
+                break;
+            case "Level 5":
+                switch (Operator)
+                {
+                    case "Add":
+                        LowerRange = 10;
+                        UpperRange = 100;
+                        break;
+                    case "Subtract":
+                        LowerRange = 10;
+                        UpperRange = 100;
+                        break;
+                    case "Multiply":
+                        LowerRange = 5;
+                        UpperRange = 12;
+                        break;
+                    case "Divide":
+                        LowerRange = 5;
+                        UpperRange = 12;
+                        break;
+                }
+                break;
+            default:
+                // Handle unexpected cases if necessary
+                Topic = "MixedFourOps";
+                Operator = "Add";
+                LowerRange = 1;
+                UpperRange = 5;
+                SelectedItem = "Level 1";
+                break;
+        }
+
         switch (Operator)
         {
             case "Add":

@@ -1,0 +1,53 @@
+﻿@using Alis4Ops2024.Web.Core
+@using Alis4Ops2024.Web.Models
+@using Alis4Ops2024.Web.Layout
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
+@inject NavigationManager _navigationManager
+@using Microsoft.AspNetCore.WebUtilities
+@inject RefreshService RefreshService
+@inject NavigationManager NavigationHelper
+<link href="css/site.css" rel="stylesheet" />
+<link href="css/dropbutton.css" rel="stylesheet" />
+
+<h3>AddTopic</h3>
+
+@code {
+
+    [Inject] private IAddQuestionGeneratorService QuestionGenerator { get; set; }
+    [Parameter] public BaseQuestion Question { get; set; }
+    [Parameter] public EventCallback AnsweredCorrectly { get; set; }
+    [Parameter] public EventCallback AnsweredWrongly { get; set; }
+    private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
+    private MathQuiz mathQuiz; // Reference to child component
+    private SubmitButton submitButton;
+    [Parameter] public EventCallback SubmitAnswer { get; set; }
+    [Parameter] public EventCallback ClickedTopic { get; set; }
+
+
+    private int _upperRange = 5;
+    [Parameter]
+    public int UpperRange
+    { get { return _upperRange; } set { _upperRange = value; } }
+
+    private int _lowerRange = 1;
+    [Parameter]
+    public int LowerRange
+    { get { return _lowerRange; } set { _lowerRange = value; } }
+
+    private string _operator = "Add";
+    [Parameter]
+    public string Operator
+    { get { return _operator; } set { _operator = value; } }
+
+    private string _selectedItem = "1-5";
+    [Parameter]
+    public string SelectedItem
+    { get { return _selectedItem; } set { _selectedItem = value; } }
+
+    private string _topic = "Add";
+    [Parameter]
+    public string Topic
+    { get { return _topic; } set { _topic = value; } }
+
+}

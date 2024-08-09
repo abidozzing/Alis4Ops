@@ -11,7 +11,7 @@
 
         <div class="dropdown">
             <!-- Added d-flex and align-items-center for vertical centering -->
-            <button class="dropbtn" @onclick="ToggleDropdown">Subtract: @SelectedItem</button>
+    <button class="dropbtn" @onclick="ToggleDropdown">@Topic: @SelectedItem</button>
             <div class="dropdown-content" style="@dropdownStyle">
                 @foreach (var item in MenuItems)
                 {

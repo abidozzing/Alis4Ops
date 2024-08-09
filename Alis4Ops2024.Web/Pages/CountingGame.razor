@@ -1,0 +1,60 @@
+﻿@inject IJSRuntime JSRuntime
+@using Microsoft.JSInterop
+@using Alis4Ops2024.Web.Core
+@using Alis4Ops2024.Web.Models
+@using Microsoft.JSInterop
+@inject NavigationManager _navigationManager
+@using Microsoft.AspNetCore.WebUtilities
+@inject RefreshService RefreshService
+@inject NavigationManager NavigationHelper
+@using Microsoft.AspNetCore.Components.Web
+@using Alis4Ops2024.Web.Pages
+
+<script src="/js/JavaScriptInterop.js" defer></script> <!-- Ensure JS file is included -->
+@page "/countinggame"
+
+<div style="position: relative; height: 400px; width: 100%;">
+    @foreach (var icon in Icons)
+    {
+        <img src="@icon.Url" style="position: relative; left: @icon.X}px; top: @icon.Y}px; width: 50px; height: 50px; cursor: pointer;"
+             @ondragstart="@(e => StartDrag(icon.Id, e))" @ondragend="@(e => EndDrag(icon.Id, e))"
+             data-icon-id="@icon.Id" />
+    }
+
+    <div id="drop-zone" style="position: absolute; top: 200px; left: 200px; width: 200px; height: 200px; border: 1px solid black;">
+        Drop Zone
+    </div>
+</div>
+
+@code {
+    public class Icon
+    {
+        public int Id { get; set; }
+        public string Url { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+    }
+
+    private List<Icon> Icons = new List<Icon>
+    {
+        new Icon { Id = 1, Url = "/images/elephant-gray.png", X = 10, Y = 10 },
+        new Icon { Id = 2, Url = "/images/cat-orange.png", X = 70, Y = 30 },
+        new Icon { Id = 3, Url = "/images/chicken.png", X = 130, Y = 50 },
+        new Icon { Id = 4, Url = "/images/dog.png", X = 190, Y = 70 },
+        new Icon { Id = 5, Url = "/images/giraffe.png", X = 250, Y = 90 },
+    };
+
+    private async Task StartDrag(int iconId, DragEventArgs e)
+    {
+        var clientX = e.ClientX;
+        var clientY = e.ClientY;
+        await JSRuntime.InvokeVoidAsync("dragDropFunction.startDrag", iconId, clientX, clientY);
+    }
+
+    private async Task EndDrag(int iconId, DragEventArgs e)
+    {
+        var clientX = e.ClientX;
+        var clientY = e.ClientY;
+        await JSRuntime.InvokeVoidAsync("dragDropFunction.dropIcon", iconId, clientX, clientY);
+    }
+}

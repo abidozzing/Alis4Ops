@@ -1,0 +1,79 @@
+﻿@page "/shapespuzzle"
+@using Alis4Ops2024.Web.Core
+@using Alis4Ops2024.Web.Models
+@using Alis4Ops2024.Web.Layout
+@using Microsoft.AspNetCore.Components
+@using Microsoft.JSInterop
+
+<h1>Shapes Puzzle</h1>
+
+<div class="container">
+    <div class="puzzle-area">
+        <h3>Match the Shapes</h3>
+        <p>Drag and drop each shape to its matching outline.</p>
+        <div class="shapes">
+            <div class="shape" draggable="true" @ondragstart="@(async () => await DragStart(1))"></div>
+            <div class="outline" @ondragover="@(async () => await DragOver())" @ondrop="@(async () => await Drop(1))"></div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Inject]
+    private IJSRuntime JSRuntime { get; set; }
+
+    private async Task DragStart(int shapeId)
+    {
+        await JSRuntime.InvokeVoidAsync("blazorDragDrop.dragStart", shapeId);
+    }
+
+    private async Task DragOver()
+    {
+        await JSRuntime.InvokeVoidAsync("blazorDragDrop.dragOver");
+    }
+
+    private async Task Drop(int outlineId)
+    {
+        await JSRuntime.InvokeVoidAsync("blazorDragDrop.drop", outlineId);
+    }
+}
+<style>
+    /* Styles for shapes puzzle */
+    .container {
+        margin: 20px;
+    }
+
+    .puzzle-area {
+        background-color: #f0f0f0;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .shapes {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .shape {
+        width: 50px;
+        height: 50px;
+        background-color: #2196F3;
+        border-radius: 50%;
+        cursor: move;
+    }
+
+    .outline {
+        width: 80px;
+        height: 80px;
+        border: 2px dashed #ccc;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+</style>
+
+

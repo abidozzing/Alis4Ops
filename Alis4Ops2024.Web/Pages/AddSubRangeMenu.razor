@@ -3,6 +3,7 @@
 @using Alis4Ops2024.Web.Core
 @using Alis4Ops2024.Web.Models
 @using Alis4Ops2024.Web.Layout
+@inject NavigationManager _navigationManager
 <link href="css/site.css" rel="stylesheet" />
 <link href="css/dropbutton.css" rel="stylesheet" />
 @using System.Timers
@@ -10,9 +11,10 @@
 
 <PageTitle>AddSubRangeMenu</PageTitle>
 
+
         <div class="dropdown">
             <!-- Added d-flex and align-items-center for vertical centering -->
-            <button class="dropbtn" @onclick="ToggleDropdown">Add-Sub: @SelectedItem</button>
+            <button class="dropbtn" @onclick="ToggleDropdown">@Topic: @SelectedItem</button>
             <div class="dropdown-content" style="@dropdownStyle">
                 @foreach (var item in MenuItems)
                 {
@@ -36,12 +38,14 @@
         }
     }
 
-    public MenuItem SelectedMenuItem { get; set; } = null;
+
     protected override void OnInitialized()
     {
         SelectedMenuItem = MenuItems.FirstOrDefault(item => item.Text == "1-5");
 
     }
+
+    
 
     public List<MenuItem> MenuItems { get; set; } = new List<MenuItem>
     {
@@ -50,7 +54,7 @@
         new MenuItem { Text = "1-20"},
         new MenuItem { Text = "10-50"},
         new MenuItem { Text = "10-100"},
-        new MenuItem { Text = "100-1000"},
+        new MenuItem { Text = "100-1000"}
     };
 
     private string dropdownStyle => isDropdownOpen ? "display: block;" : "display: none;";
@@ -113,7 +117,7 @@
         }
     }
 
-    private string _topic = "AddSubtract";
+    private string _topic = "AddSub";
     [Parameter]
     public string Topic
     {
@@ -124,16 +128,13 @@
         }
     }
 
-
-
-
+    public MenuItem SelectedMenuItem { get; set; } = null;
 
     void HandleClickedItem(MenuItem clickedItem)
     {
         SelectedMenuItem = clickedItem;
 
-        Operator = "Add";
-        Topic = "AddSubtract";
+        // Operator = "Add";
         SelectedItem = SelectedMenuItem.Text;
         switch (SelectedItem)
         {
@@ -185,7 +186,7 @@
     [Parameter]
     public EventCallback ParametersChanged { get; set; }
 
-    async Task HandleParametersChangedAsync()
+    public async Task HandleParametersChangedAsync()
     {
         await UpperRangeChanged.InvokeAsync(UpperRange);
         await LowerRangeChanged.InvokeAsync(LowerRange);
@@ -195,6 +196,6 @@
         await ParametersChanged.InvokeAsync();
     }
 
-
 }
+
 

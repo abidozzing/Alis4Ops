@@ -19,8 +19,9 @@
 <div class="container col-12">
     <div class="row gx-0 align-items-center" style="font-size: 60%;">
         <div class="col-auto">
-            <MultiplyDivideRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
-                                     @bind-SelectedItem=@SelectedItem @bind-Topic=@Topic ParametersChanged="GenerateNewQuestion" />
+            <MultiplyRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange
+                               @bind-Operator=@Operator @bind-SelectedItem=@SelectedItem
+                               @bind-Topic=@Topic ParametersChanged="GenerateNewQuestion" />
         </div>
 
         @*         <div class="col-auto">
@@ -75,23 +76,40 @@
     private SubmitButton submitButton;
     [Parameter] public EventCallback SubmitAnswer { get; set; }
 
-    [Parameter] public string topicSelected { get; set; }
-    [Parameter] public string Topic { get; set; }
-    [Parameter] public int UpperRange { get; set; }
-    [Parameter] public int LowerRange { get; set; }
-    [Parameter] public string Operator { get; set; }
-    [Parameter] public string SelectedItem { get; set; }
+    private int _upperRange = 12;
+    [Parameter]
+    public int UpperRange
+    { get { return _upperRange; } set { _upperRange = value; } }
+
+    private int _lowerRange = 1;
+    [Parameter]
+    public int LowerRange
+    { get { return _lowerRange; } set { _lowerRange = value; } }
+
+    private string _operator = "Multiply";
+    [Parameter]
+    public string Operator
+    { get { return _operator; } set { _operator = value; } }
+
+    private string _selectedItem = "1";
+    [Parameter]
+    public string SelectedItem
+    { get { return _selectedItem; } set { _selectedItem = value; } }
+
+    private string _topic = "MultiplyDivide";
+    [Parameter]
+    public string Topic
+    { get { return _topic; } set { _topic = value; } }
+
     private int Num { get; set; } = 0;
 
     protected override void OnInitialized()
     {
-        var uri = NavigationHelper.ToAbsoluteUri
-    (NavigationHelper.Uri);
+    //     var uri = NavigationHelper.ToAbsoluteUri
+    // (NavigationHelper.Uri);
 
-        if (QueryHelpers.ParseQuery(uri.Query).
-    TryGetValue("Topic", out var navTopic))
-            // RefreshService.RefreshRequested += RefreshPage;
-            Topic = "MultiplyDivide";
+    //     if (QueryHelpers.ParseQuery(uri.Query).
+    // TryGetValue("Topic", out var navTopic))
 
         if (dateTimeCounterStopWatch is null)
         {
@@ -100,25 +118,38 @@
             mathQuiz = new MathQuiz();
             divideMathQuiz = new DivideMathQuiz();
         }
+        SelectOperator();
+        GenerateNewQuestion();
+    }
+
+    private void SelectOperator()
+    {
         Topic = "MultiplyDivide";
+        Operator = "Multiply";
         UpperRange = 12;
         LowerRange = 1;
         SelectedItem = "1";
 
         Num = random.Next(2);
-        if (Num == 0)
+        switch (Num)
         {
-            mathQuiz = new MathQuiz();
-            Operator = "Multiply";
+            case 0:
+                // mathQuiz = new MathQuiz();
+                Operator = "Multiply";
+                break;
+            case 1:
+                // divideMathQuiz = new DivideMathQuiz();
+                Operator = "Divide";
+                break;
+            default:
+                // Handle unexpected cases if necessary
+                Topic = "MultiplyDivide";
+                Operator = "Multiply";
+                LowerRange = 1;
+                UpperRange = 5;
+                SelectedItem = "Level 1";
+                break;
         }
-        else
-        {
-            divideMathQuiz = new DivideMathQuiz();
-            Operator = "Divide";
-        }
-
-        GenerateNewQuestion();
-        // StateHasChanged();
     }
 
     async Task HandleSubmitAnswerAsync()
@@ -141,22 +172,12 @@
 
     private async Task HandleAnsweredCorrectly()
     {
-        Topic = "MultiplyDivide";
         if (dateTimeCounterStopWatch != null)
         {
             await dateTimeCounterStopWatch.ResetAndStartStopwatch();
             await dateTimeCounterStopWatch.IncrementCounter();
             await AnsweredCorrectly.InvokeAsync();
-            int Num1 = random.Next(2);
-            if (Num1 == 0)
-            {
-                Operator = "Multiply";
-            }
-            else
-            {
-                Operator = "Divide";
-            }
-
+            SelectOperator();
             GenerateNewQuestion();
             await InvokeAsync(() => StateHasChanged());
         }
@@ -175,17 +196,16 @@
 
     private void GenerateNewQuestion()
     {
-        switch (Operator)
+        Num = random.Next(2);
+        if (Num == 0)
         {
-            case "Multiply":
-                Question = MultiplyQuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem, Topic);
-                break;
-            case "Divide":
-                Question = DivideQuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem, Topic);
-                break;
-            // Handle additional cases as needed
-            default:
-                break;
+            Operator = "Multiply";
+            Question = MultiplyQuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem, Topic);
+        }
+        else
+        {
+            Operator = "Divide";
+            Question = DivideQuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem, Topic);
         }
     }
 }

@@ -1,21 +1,52 @@
-﻿@page "/counting"
-@using Alis4Ops2024.Web.Core
-@using Alis4Ops2024.Web.Models
-@using Alis4Ops2024.Web.Layout
-@using Microsoft.JSInterop
+﻿@page "/count"
 @inject IJSRuntime JSRuntime
-@inject NavigationManager _navigationManager
-<link href="css/site.css" rel="stylesheet" />
 
+<h3>Change Button Color</h3>
 
-<PageTitle>Counting</PageTitle>
-<h3>Counting</h3>
-
-<button type="button" class="btn btn-primary" data-bs-toggle="button" autocomplete="off">Toggle button</button>
-<button type="button" class="btn btn-primary active" data-bs-toggle="button" autocomplete="off" aria-pressed="true">Active toggle button</button>
-<button type="button" class="btn btn-primary" disabled data-bs-toggle="button" autocomplete="off">Disabled toggle button</button>
-
+<div>
+    <button @onclick="ChangeColor" id="changeColorButton">Change Color</button>
+</div>
+<div>
+    <button @onclick="ChangeColor1" id="changeColorButton1">Change Color</button>
+</div>
 
 @code {
+    private string[] colors = { "red", "blue", "green", "yellow", "purple" };
+    private int currentColorIndex = 0;
+
+    // JavaScript function embedded in @code using JSRuntime
+    private async Task ChangeColor()
+    {
+        var color = colors[currentColorIndex];
+
+        // Define the JavaScript function inline using JSRuntime
+        var script = $"var button = document.getElementById('changeColorButton'); " +
+                     $"if (button) button.style.backgroundColor = '{color}';";
+
+        // Invoke the JavaScript function
+        await JSRuntime.InvokeVoidAsync("eval", script);
+
+        // Increment the color index for the next click
+        currentColorIndex = (currentColorIndex + 1) % colors.Length;
+    }
+
+    private async Task ChangeColor1()
+    {
+        var color = colors[currentColorIndex];
+
+        // Inline JavaScript function definition
+        var script = @"
+            var button = document.getElementById('changeColorButton1');
+            if (button) {
+                button.style.backgroundColor = '" + color + @"';
+            }
+        ";
+
+        // Invoke the inline JavaScript using JSRuntime
+        await JSRuntime.InvokeVoidAsync("eval", script);
+
+        // Increment the color index for the next click
+        currentColorIndex = (currentColorIndex + 1) % colors.Length;
+    }
 
 }

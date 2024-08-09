@@ -5,41 +5,52 @@
 @using Alis4Ops2024.Web.Layout
 <link href="css/site.css" rel="stylesheet" />
 <link href="css/dropbutton.css" rel="stylesheet" />
+@using System.Timers
+@using System
 
-<PageTitle>MultiplyMissingRangeMenu</PageTitle>
+<PageTitle>AddSubRangeMenu</PageTitle>
 
-<div class="dropdown">
-    <!-- Added d-flex and align-items-center for vertical centering -->
-    <button class="dropbtn" @onclick="ToggleDropdown">Multiply Missing: @SelectedItem</button>
-    <div class="dropdown-content" style="@dropdownStyle">
-        @foreach (var item in MenuItems)
-        {
-            <a @onclick="(() => { HandleClickedItem(item); ToggleDropdown(); })">@item.Text</a>
-        }
-    </div>
-</div>
+        <div class="dropdown">
+            <!-- Added d-flex and align-items-center for vertical centering -->
+    <button class="dropbtn" @onclick="ToggleDropdown">@Topic: @SelectedItem</button>
+            <div class="dropdown-content" style="@dropdownStyle">
+                @foreach (var item in MenuItems)
+                {
+                    <a @onclick="(() => { HandleClickedItem(item); ToggleDropdown(); })">@item.Text</a>
+                }
+            </div>
+        </div>
 
 @code {
 
+
+    [Parameter] public bool ShowDropdownButton { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Update time every second
+        while (true)
+        {
+            await Task.Delay(1000); // Delay for one second
+            await InvokeAsync(() => StateHasChanged()); // Notify Blazor to re-render the UI
+        }
+    }
+
+    public MenuItem SelectedMenuItem { get; set; } = null;
     protected override void OnInitialized()
     {
-        SelectedMenuItem = MenuItems.FirstOrDefault(item => item.Text == "1");
+        SelectedMenuItem = MenuItems.FirstOrDefault(item => item.Text == "1-5");
+
     }
 
     public List<MenuItem> MenuItems { get; set; } = new List<MenuItem>
     {
-        new MenuItem { Text = "1"},
-        new MenuItem { Text = "2"},
-        new MenuItem { Text = "3"},
-        new MenuItem { Text = "4"},
-        new MenuItem { Text = "5"},
-        new MenuItem { Text = "6"},
-        new MenuItem { Text = "7"},
-        new MenuItem { Text = "8"},
-        new MenuItem { Text = "9"},
-        new MenuItem { Text = "10"},
-        new MenuItem { Text = "11"},
-        new MenuItem { Text = "12"},
+        new MenuItem { Text = "1-5"},
+        new MenuItem { Text = "1-10"},
+        new MenuItem { Text = "1-20"},
+        new MenuItem { Text = "10-50"},
+        new MenuItem { Text = "10-100"},
+        new MenuItem { Text = "100-1000"},
     };
 
     private string dropdownStyle => isDropdownOpen ? "display: block;" : "display: none;";
@@ -58,7 +69,7 @@
 
     private string ClickedMenuItem = "";
 
-    private int _upperRange = 12;
+    private int _upperRange = 5;
     [Parameter]
     public int UpperRange
     {
@@ -80,7 +91,7 @@
         }
     }
 
-    private string _operator = "Multiply";
+    private string _operator = "Add";
     [Parameter]
     public string Operator
     {
@@ -91,7 +102,7 @@
         }
     }
 
-    private string _selectedItem = "1";
+    private string _selectedItem = "1-5";
     [Parameter]
     public string SelectedItem
     {
@@ -102,7 +113,7 @@
         }
     }
 
-    private string _topic = "MultiplyMissing";
+    private string _topic = "AddSubtract";
     [Parameter]
     public string Topic
     {
@@ -113,29 +124,46 @@
         }
     }
 
-    public MenuItem SelectedMenuItem { get; set; } = null;
+
+
+
 
     void HandleClickedItem(MenuItem clickedItem)
     {
         SelectedMenuItem = clickedItem;
 
-        Operator = "Multiply";
+        Operator = "Add";
+        Topic = "AddSubtract";
         SelectedItem = SelectedMenuItem.Text;
-        if (SelectedItem != null)
+        switch (SelectedItem)
         {
-            if (int.TryParse(SelectedItem, out int parsedUpperRangeMultiply))
-            {
-                // Conversion successful, use the 'number' variable
-                LowerRange = parsedUpperRangeMultiply;
-                UpperRange = 12;
-            }
-            else
-            {
-                // Conversion failed "Multiply-Missing"
+            case "1-5":
                 LowerRange = 1;
-                parsedUpperRangeMultiply = 12;
-            }
+                UpperRange = 5;
+                break;
+            case "1-10":
+                LowerRange = 1;
+                UpperRange = 10;
+                break;
+            case "1-20":
+                LowerRange = 1;
+                UpperRange = 20;
+                break;
+            case "10-50":
+                LowerRange = 10;
+                UpperRange = 50;
+                break;
+            case "10-100":
+                LowerRange = 10;
+                UpperRange = 100;
+                break;
+            case "100-1000":
+                LowerRange = 100;
+                UpperRange = 1000;
+                break;
         }
+
+
         // Call the asynchronous method here
         _ = HandleParametersChangedAsync();
 
@@ -151,6 +179,7 @@
     {
         public string Text { get; set; }
     }
+
 
 
     [Parameter]

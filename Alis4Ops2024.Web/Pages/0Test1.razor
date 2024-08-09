@@ -88,7 +88,7 @@
     <button @onclick="ClearInput">Clear</button>
     <button @onclick="Backspace">Backspace</button>
     <!--// JavaScriptInterop.js Custom delete button to delete characters of an inputBox-->
-    <button @onclick="DeleteCharacter">Delete</button>
+    <button @onclick="DeleteCharacter" id="changeColorButton">Delete</button>
 </div>
 <div style="display: flex;">
     <button @onclick="Submit">Enter</button>
@@ -173,9 +173,18 @@
     {
         // Invoke JavaScript function to delete the character
         await JSRuntime.InvokeVoidAsync("blazorFunctions.deleteCharacter", "numericInput");
+        await  ChangeColor();
     }
 
+    private string[] colors = { "red", "blue", "green", "yellow", "purple" };
+    private int currentColorIndex = 0;
 
+    private async Task ChangeColor()
+    {
+        await JSRuntime.InvokeVoidAsync("window.changeButtonColor", colors[currentColorIndex]);
+        currentColorIndex = (currentColorIndex + 1) % colors.Length;
+        StateHasChanged();
+    }
 
     private void Submit()
     {

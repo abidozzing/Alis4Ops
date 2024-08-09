@@ -1,0 +1,56 @@
+﻿@* @page "/" *@
+@page "/dragdropOld"
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
+<link rel="stylesheet" href="css/dragdrop.css" />
+<script src="/js/DragDrop.js" defer></script> <!-- Ensure JS file is included -->
+@* <h3>Drag and Drop Example</h3> *@
+<div class="col-12" id="game-container">
+    <div class="row gx-0" style="padding:0px; justify-content:center;">
+        <div class="draggable-elements" style="column-gap:1%; gap:1%;">
+            <div  class="fas fa-0 draggable" draggable="true" style="color: #ff6384;" id="0"></div>
+            <div  class="fas fa-1 draggable" draggable="true" style="color: #ff6384;" id="1"></div>
+            <div  class="fas fa-2 draggable" draggable="true" style="color: #36a2eb;" id="2"></div>
+            <div  class="fas fa-3 draggable" draggable="true" style="color: #ffce56;" id="3"></div>
+            <div  class="fas fa-4 draggable" draggable="true" style="color: #9966ff;" id="4"></div>
+            <div  class="fas fa-5 draggable" draggable="true" style="color: #4bc0c0;" id="5"></div>
+            <div  class="fas fa-6 draggable" draggable="true" style="color: #ff6384;" id="6"></div>
+            <div  class="fas fa-7 draggable" draggable="true" style="color: #36a2eb;" id="7"></div>
+            <div  class="fas fa-8 draggable" draggable="true" style="color: #ffce56;" id="8"></div>
+            <div  class="fas fa-9 draggable" draggable="true" style="color: #9966ff;" id="9"></div>
+
+        </div>
+    </div>
+
+    @* <div class="col"> *@
+    <div class="row gx-0" style="padding:0px; ">
+        <div class="droppable-elements" style="column-gap:1%; gap:1%; justify-content:center; align-content:center;">
+
+            <div class="droppable" data-draggable-id="4" data-original-text="4"><span>4</span></div>
+
+            <div class="droppable" data-draggable-id="8" data-original-text="8"><span>8</span></div>
+            <div class="droppable" data-draggable-id="1" data-original-text="1"><span>1</span></div>
+            <div class="droppable" data-draggable-id="0" data-original-text="0"><span>0</span></div>
+
+            <div class="droppable" data-draggable-id="5" data-original-text="5"><span>5</span></div>
+            <div class="droppable" data-draggable-id="9" data-original-text="9"><span>9</span></div>
+            <div class="droppable" data-draggable-id="3" data-original-text="3"><span>3</span></div>
+            <div class="droppable" data-draggable-id="7" data-original-text="7"><span>7</span></div>
+            <div class="droppable" data-draggable-id="6" data-original-text="6"><span>6</span></div>
+            <div class="droppable" data-draggable-id="2" data-original-text="2"><span>2</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- Play Again button -->
+<button id="play-again" style="display: none;">Play Again</button>
+
+@code {
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+            await JSRuntime.InvokeVoidAsync("resetGame");
+            }
+        }
+}

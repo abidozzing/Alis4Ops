@@ -14,81 +14,12 @@
 
 <PageTitle>SubtractMissing</PageTitle>
 
-<div class="container col-12">
-    <div class="row gx-0 align-items-center" style="font-size: 60%;">
-        <div class="col-auto">
-            <SubtractMissingRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange @bind-Operator=@Operator
-                               @bind-SelectedItem=@SelectedItem ParametersChanged="GenerateNewQuestion" />
-        </div>
+<Main @bind-Topic=@Topic />
 
-@*         <div class="col-auto">
-            <div class="d-flex align-items-center" style="margin-left: 15px; color:gray">
-                <Date />
-            </div>
-        </div> *@
-        <div class="col-auto ms-auto">
-            <!-- Right aligned content -->
-            <SubmitButton SubmitAnswer="HandleSubmitAnswerAsync" @ref="submitButton" />
-        </div>
-    </div>
 
-    <div>
-        <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" />
-    </div>
-
-    <div>
-        <MathQuiz Question="@Question" AnsweredCorrectly="HandleAnsweredCorrectly" AnsweredWrongly="HandleAnsweredWrongly" Answer=@Question.Answer @ref="mathQuiz" />
-    </div>
-    <div>
-        <SubtractModel Question="@Question" />
-    </div>
-
-</div>
-@code {
-
-    [Inject] private ISubtractQuestionGeneratorService QuestionGenerator { get; set; }
-    [Parameter] public BaseQuestion Question { get; set; }
-    [Parameter] public EventCallback AnsweredCorrectly { get; set; }
-    [Parameter] public EventCallback AnsweredWrongly { get; set; }
-    private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
-    private MathQuiz mathQuiz; // Reference to child component
-    private SubmitButton submitButton;
-    [Parameter] public EventCallback SubmitAnswer { get; set; }
-
-    private int _upperRange = 5;
-
-    [Parameter]
-    public int UpperRange
-    {
-        get { return _upperRange; }
-        set { _upperRange = value; }
-    }
-
-    private int _lowerRange = 1;
-    [Parameter]
-    public int LowerRange
-    {
-        get { return _lowerRange; }
-        set { _lowerRange = value; }
-    }
-
-    private string _operator = "Subtract";
-    [Parameter]
-    public string Operator
-    {
-        get { return _operator; }
-        set { _operator = value; }
-    }
-
-    private string _selectedItem = "1-5";
-    [Parameter]
-    public string SelectedItem
-    {
-        get { return _selectedItem; }
-        set { _selectedItem = value; }
-    }
-
-    private string _topic = "SubtractMissing";
+@code
+{
+    private string _topic = "SubMissing";
     [Parameter]
     public string Topic
     {
@@ -101,61 +32,14 @@
 
     protected override void OnInitialized()
     {
-        var uri = NavigationHelper.ToAbsoluteUri
-    (NavigationHelper.Uri);
-
-        if (QueryHelpers.ParseQuery(uri.Query).
-    TryGetValue("Topic", out var navTopic))
-            // RefreshService.RefreshRequested += RefreshPage;
-            Topic = "SubtractMissing";
-
-        if (dateTimeCounterStopWatch is null)
-        {
-            dateTimeCounterStopWatch = new DateTimeCounterStopWatch();
-            submitButton = new SubmitButton();
-            mathQuiz = new MathQuiz();
-        }
-        GenerateNewQuestion();
-        // StateHasChanged();
+        Topic = "SubMissing";
+        StateHasChanged();
     }
-
-    async Task HandleSubmitAnswerAsync()
+    [Parameter] public EventCallback<string> TopicChanged { get; set; }
+    [Parameter] public EventCallback ParametersChanged { get; set; }
+    public async Task HandleParametersChangedAsync()
     {
-        await mathQuiz.inputElement.FocusAsync();
-
-        // Assuming HandleKeydown method doesn't return a Task and doesn't need await
-         mathQuiz.HandleKeydown(new KeyboardEventArgs { Key = "Enter" });
-    }
-
-    private async Task HandleAnsweredCorrectly()
-    {
-
-        if (dateTimeCounterStopWatch != null)
-        {
-            await dateTimeCounterStopWatch.ResetAndStartStopwatch();
-            await dateTimeCounterStopWatch.IncrementCounter();
-            await AnsweredCorrectly.InvokeAsync();
-            GenerateNewQuestion();
-        }
-    }
-
-    private async Task HandleAnsweredWrongly()
-    {
-
-        if (dateTimeCounterStopWatch != null)
-        {
-            await dateTimeCounterStopWatch.IncrementErrorCount();
-            // await AnsweredWrongly.InvokeAsync();
-        }
-    }
-
-    private void GenerateNewQuestion()
-    {
-        if (Operator == null)
-        {
-            return;
-        }
-        Question = QuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem, Topic);
+        await TopicChanged.InvokeAsync(Topic);
+        await ParametersChanged.InvokeAsync();
     }
 }
-

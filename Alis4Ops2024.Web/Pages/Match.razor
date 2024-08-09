@@ -1,0 +1,235 @@
+﻿@* @page "/" *@
+@page "/match"
+@inject HttpClient Http
+@inherits BasePageComponent
+@using Alis4Ops2024.Web.Core
+@using Alis4Ops2024.Web.Models
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
+@inject NavigationManager _navigationManager
+@using Microsoft.AspNetCore.WebUtilities
+@inject RefreshService RefreshService
+@inject NavigationManager NavigationHelper
+<!-- CSS Reference -->
+<link rel="stylesheet" href="css/match.css" />
+
+<!-- JS Reference -->
+<script src="js/Match.js" defer></script>
+
+<!-- Markup -->
+<div class="col-12" id="game-container">
+    <div class="row gx-0" style="padding:0px; justify-content:center;">
+        <div class="digit-container d-flex flex-wrap" style="column-gap:1%; gap:1%;">
+            <div class="fas fa-0 fa-beat digit" draggable="true" style="color: #ff6384; --fa-animation-duration: 0.5s;" id="0"></div>
+            <div class="fas fa-1 fa-bounce digit" draggable="true" style="color: #0000ff; --fa-bounce-land-scale-x: 1.5; --fa-bounce-land-scale-y: 0.8; --fa-bounce-rebound: 10px;" id="1"></div>
+            <div class="fas fa-2 fa-spin digit" draggable="true" style="color: #36a2eb;" id="2"></div>
+            <div class="fas fa-3 fa-shake digit" draggable="true" style="color: #128912;" id="3"></div>
+            <div class="fas fa-4 fa-beat digit" draggable="true" style="color: #9966ff; --fa-animation-duration: 0.25s;" id="4"></div>
+            <div class="fas fa-5 fa-shake digit" draggable="true" style="color: #4bc0c0;" id="5"></div>
+            <div class="fas fa-6 fa-bounce digit" draggable="true" style="color: #ff6384; --fa-bounce-land-scale-x: 1.2; --fa-bounce-land-scale-y: 0.8; --fa-bounce-rebound: 10px; --fa-bounce-height:20px" id="6"></div>
+            <div class="fas fa-7 fa-shake digit" draggable="true" style="color: #36a2eb;" id="7"></div>
+            <div class="fas fa-8 fa-flip digit" draggable="true" style="color: #ffce56; --fa-flip-x: 0; --fa-flip-y: 1;" id="8"></div>
+            <div class="fas fa-9 fa-beat digit" draggable="true" style="color: #9966ff; --fa-animation-duration: 2s;" id="9"></div>
+        </div>
+    </div>
+
+    <div class="row gx-0" style="padding:0px;">
+        <div class="box-container">
+            @for (int i = 0; i < 3; i++)
+            {
+                <div class="boxes" box-id="@i" original-text="@i">
+                    @if (iconCounts.Count > i)
+                    {
+                        @for (int x = 0; x < iconCounts[i]; x++)
+                        {
+                            <span>
+                                <i class="icon @GetIconForBoxes(i)" style=" color: @(GetRandomColor());"></i>
+                            </span>
+                        }
+                    }
+                </div>
+            }
+        </div>
+    </div>
+    @* <span style="text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);">Test Shadow</span> *@
+    <div class="animated-text">
+        <span class="color-1 outlined">Drag</span>
+@*         <span class="color-2 outlined">r</span>
+        <span class="color-3 outlined">a</span>
+        <span class="color-4 outlined">g</span> *@
+        <span class="space">&nbsp;</span>
+        <span class="color-5 outlined">the</span>
+@*         <span class="color-6 outlined">h</span>
+        <span class="color-7 outlined">e</span> *@
+        <span class="space">&nbsp;</span>
+        <span class="color-8 outlined">numbers</span>
+@*         <span class="color-9 outlined">u</span>
+        <span class="color-10 outlined">m</span>
+        <span class="color-11 outlined">b</span>
+        <span class="color-12 outlined">e</span>
+        <span class="color-13 outlined">r</span>
+        <span class="color-14 outlined">s</span> *@
+        <span class="space">&nbsp;</span>
+        <span class="color-15 outlined">to</span>
+@*         <span class="color-16 outlined">o</span> *@
+        <span class="space">&nbsp;</span>
+        <span class="color-17 outlined">match</span>
+@*         <span class="color-18 outlined">a</span>
+        <span class="color-19 outlined">t</span>
+        <span class="color-20 outlined">c</span>
+        <span class="color-21 outlined">h</span> *@
+        <span class="space">&nbsp;</span>
+        <span class="color-22 outlined">the</span>
+@*         <span class="color-23 outlined">h</span>
+        <span class="color-24 outlined">e</span> *@
+        <span class="space">&nbsp;</span>
+        <span class="color-25 outlined">boxes.</span>
+@*         <span class="color-26 outlined">o</span>
+        <span class="color-27 outlined">x</span>
+        <span class="color-28 outlined">e</span>
+        <span class="color-29 outlined">s</span>
+        <span class="color-30 outlined">.</span> *@
+    </div>
+
+    <!-- Play Again button -->
+    <div style="margin-top:30px;align-content:center;">
+        <button id="play-again" style="display: none;">Play Again</button>
+    </div>
+</div>
+
+
+
+@code {
+
+    private string[] icons = Array.Empty<string>(); // Initialize to an empty array
+    private List<string> usedIcons = new List<string>();
+    private readonly Random random = new Random();
+    private List<int> iconCounts = new List<int>(); // To store the count of icons per droppable
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            // Call the JavaScript function after the script has loaded
+            await JSRuntime.InvokeVoidAsync("myNamespace.onLoad.sayHello", "World");
+        }
+    }
+
+
+    // protected override async Task OnAfterRenderAsync(bool firstRender)
+    // {
+    //     await base.OnAfterRenderAsync(firstRender);
+
+    //     if (firstRender)
+    //     {
+    //         try
+    //         {
+    //             bool isInitialized = false;
+    //             for (int i = 0; i < 10; i++)
+    //             {
+    //                 isInitialized = await JSRuntime.InvokeAsync<bool>("isMyNamespaceInitialized");
+    //                 if (isInitialized) break;
+
+    //                 await Task.Delay(100); // Wait 100 ms before checking again
+    //             }
+
+    //             if (isInitialized)
+    //             {
+    //                 await JSRuntime.InvokeVoidAsync("myNamespace.onLoad.sayHello", "World");
+    //             }
+    //             else
+    //             {
+    //                 Console.Error.WriteLine("`myNamespace` or `sayHello` function is not available after retries.");
+    //             }
+    //         }
+    //         catch (JSException jsEx)
+    //         {
+    //             Console.Error.WriteLine($"JavaScript error: {jsEx.Message}");
+    //         }
+    //         catch (Exception ex)
+    //         {
+    //             Console.Error.WriteLine($"An error occurred: {ex.Message}");
+    //         }
+    //     }
+    // }
+
+    // Method to be called from JavaScript
+    // [JSInvokable]
+    // public static Task NotifyInitializationComplete()
+    // {
+    //     // Handle notification here
+    //     Console.WriteLine("Blazor notified of JavaScript initialization.");
+    //     return Task.CompletedTask;
+    // }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Load icons from JSON and handle null response
+            icons = await Http.GetFromJsonAsync<string[]>("images/FontAwesomeJson/FontAwesomeV509Free.json") ?? Array.Empty<string>(); // Handle null
+            usedIcons.Clear(); // Clear used icons list
+
+            // Randomize icon counts
+            iconCounts = GetRandomIconCounts();
+        }
+        catch (HttpRequestException)
+        {
+            icons = Array.Empty<string>(); // Set to empty array on error
+        }
+    }
+
+    private string GetIconForBoxes(int boxesId)
+    {
+        if (icons.Length == 0)
+        {
+            return "fas fa-question"; 
+        }
+
+        // Ensure no duplicate icons are used
+        List<string> availableIcons = icons.Except(usedIcons).ToList();
+        if (availableIcons.Count == 0)
+        {
+            availableIcons = icons.ToList(); // If all icons used, reset
+            usedIcons.Clear();
+        }
+
+        string selectedIcon = availableIcons[random.Next(availableIcons.Count)];
+        usedIcons.Add(selectedIcon);
+
+        return selectedIcon;
+    }
+
+    private int GetIconCountForBoxes(int boxesId)
+    {
+        return iconCounts.ElementAtOrDefault(boxesId); // Use default value for safety
+    }
+
+    private List<int> GetRandomIconCounts()
+    {
+        var counts = Enumerable.Range(0, 9).ToList(); // Use 0 to 9
+        Shuffle(counts); // Randomize the order
+        return counts; // Return all 10 values
+    }
+
+    private void Shuffle<T>(IList<T> list)
+    {
+        int n = list.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = random.Next(n + 1);
+            T value = list[k];
+            list[k] = list[n];
+            list[n] = value;
+        }
+    }
+
+    private string GetRandomColor()
+    {
+        var colors = new[] { "#ff6384", "#0000ff", "#36a2eb", "#128912", "#9966ff", "#4bc0c0", "#ffce56" };
+        return colors[random.Next(colors.Length)];
+    }
+}

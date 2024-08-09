@@ -1,0 +1,530 @@
+﻿/* Container for digits - draggable elements */
+.digit-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 32px;
+}
+
+/* Styling for draggable-elements */
+.digit {
+    height: 48px;
+    width: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    margin: 3px 8px;
+    cursor: move;
+    transition: opacity 0.2s, transform 0.2s, background-color 0.4s;
+    text-align: center;
+    pointer-events: all; /* Allow pointer events */
+}
+
+    .digit:hover {
+        opacity: 0.5;
+        /*transform: scale(2);*/
+    }
+
+/* Container of dotted container for boxes elements (fa icons) */
+.box-container {
+    display: flex;
+    flex-wrap: wrap; /* Allows items to wrap onto multiple lines if necessary */
+    justify-content: center; /* Aligns items to the start of the container */
+    gap: 10px; /* Adjust this value for desired spacing between boxes elements */
+}
+
+/* Styling for boxes elements in dotted container*/
+.boxes {
+    height: 200px;
+    width: 144px;
+    display: flex;
+    padding: 10px;
+    flex-wrap: wrap; /* Allows icons to wrap within the box */
+    justify-content: center; /* Center icons horizontally */
+    align-items: center; /* Center icons vertically */
+    font-size: 48px;
+    font-weight: bold;
+    background-color: #fff;
+    border-radius: 32px;
+    margin-top: 3px;
+    border: 3px dashed #111;
+    transition: border-width 0.2s, transform 0.2s, background-color 0.4s;
+    position: relative; /* Ensures the area of the box is responsive to hover */
+    pointer-events: all; /* Allow pointer events */
+}
+
+    /* Hover number on boxes effect for boxes elements */
+    .boxes:hover {
+        border: 5px solid #111;
+        border: 5px solid dodgerblue;
+        transform: scale(1.2);
+    }
+
+.boxes-hover {
+    border: 5px solid yellow;
+    transform: scale(1.2);
+}
+
+.icon:hover:is(.boxes) {
+    border: 5px solid red;
+    transform: scale(1.2);
+}
+
+/*.boxes.icon:hover ~ .boxes {
+    transform: scale(4);
+}*/
+
+/*    .boxes.icon:is(.boxes:hover .icon:hover) {
+        transform: scale(1);
+    }*/
+
+/* Dropped state styling for boxes elements */
+.boxes.dropped {
+    border-style: solid;
+    color: #fff;
+    font-size: 100px;
+}
+
+    .boxes.dropped.icon {
+        border-style: solid;
+        color: #fff;
+    }
+
+/* Ensure there's space between icons inside boxes boxes */
+.icon {
+    margin: 5px;
+    font-size: 28px;
+    display: inline-block;
+    pointer-events: all;
+}
+
+/*.boxes.dropped .icon {
+    font-size: 32px;
+    margin-top: 8px;
+}
+*/
+.boxes.dropped {
+    font-size: 50px;
+    /* Larger font size for the dropped number icon */
+}
+
+/* Larger size for icons after drop */
+/*.boxes.dropped icon {
+    font-size: 100px;*/ /* Larger font size after drop */
+/*margin-top: 0px;*/ /* Margin after drop */
+/*}*/
+
+/* Ensure there's space between icons inside boxes boxes */
+/*.boxes.icon {
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-size: 28px;
+    display: inline-block;
+    pointer-events: none;
+}*/
+
+/*.boxes:has(.icon:hover) {
+    transform: scale(1);
+}*/
+
+
+
+
+/*.icon {
+    display: inline-block;
+    transition: transform 0.5s;
+    white-space: nowrap;
+    font-size: 24px;
+}
+*/
+/*icon in box animatation*/
+/*    .icon:hover {
+        transform: scale(1.5); Scale effect on hover 
+    }*/
+
+/*        .icon:hover ~ .boxes {
+            transform: scale(2);
+        }*/
+
+
+
+/* Styling for dragged elements */
+.digit.dragged {
+    user-select: none;
+    opacity: 0.1;
+    cursor: default;
+}
+
+    .digit.dragged:hover {
+        opacity: 0.1;
+    }
+
+
+
+
+
+/* Play Again button styling */
+#play-again-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#play-again-btn {
+    padding: 10px 20px;
+    font-size: 48px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    #play-again-btn:hover {
+        background-color: #0056b3;
+    }
+
+.animated-text {
+    display: flex;
+    justify-content: center; /* Centers characters within the container */
+    text-align: center; /* Centers the text */
+    margin-top: 20px; /* Optional: Adds some space from the top */
+    white-space: nowrap; /* Prevent line breaks between characters */
+    flex-wrap: wrap; /*Allow the text to wrap*/
+}
+
+
+
+/* Responsive design adjustments */
+/*@media (max-width: 300px) {
+    html {
+        font-size: 14px;
+    }
+
+    .game-container {
+        margin: 24px;
+    }
+}*/
+
+/* Responsive styling */
+/*@media (max-width: 300px) {
+    .animated-text {
+        font-size: 28px;*/ /* Adjust font size for smaller screens */
+/*}
+
+    span {
+        white-space: normal;*/ /* Allow line breaks between characters */
+/*}
+}*/
+
+/* Animation on load */
+/* Improved animation on load */
+@keyframes fadeIn {
+    0% {
+        opacity: 0.3;
+        transform: translateY(5px);
+    }
+
+    25% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateY(-5px);
+    }
+
+    75% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0.3;
+        transform: translateY(5px);
+    }
+}
+
+
+.outlined {
+    color: #003366; /* Dark color for inner text */
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.2), /* Soft shadow with blur */
+    0 0 10px rgba(0, 0, 0, 0.2); /* More blur for depth */
+    position: relative; /* Allow positioning of the pseudo-element */
+    animation: fadeIn 2s ease infinite;
+    /*Animate each character infinitely*/
+}
+
+/* Color classes */
+.color-1 {
+    color: #FF5733;
+}
+
+.color-2 {
+    color: #33FF57;
+}
+
+.color-3 {
+    color: #3357FF;
+}
+
+.color-4 {
+    color: #F3FF33;
+}
+
+.color-5 {
+    color: #FF33A1;
+}
+
+.color-6 {
+    color: #FF8333;
+}
+
+.color-7 {
+    color: #33FFF5;
+}
+
+.color-8 {
+    color: #9B59B6;
+}
+
+.color-9 {
+    color: #E74C3C;
+}
+
+.color-10 {
+    color: #3498DB;
+}
+
+.color-11 {
+    color: #2ECC71;
+}
+
+.color-12 {
+    color: #F1C40F;
+}
+
+.color-13 {
+    color: #E67E22;
+}
+
+.color-14 {
+    color: #F39C12;
+}
+
+.color-15 {
+    color: #D35400;
+}
+
+.color-16 {
+    color: #C0392B;
+}
+
+.color-17 {
+    color: #8E44AD;
+}
+
+.color-18 {
+    color: #2980B9;
+}
+
+.color-19 {
+    color: #27AE60;
+}
+
+.color-20 {
+    color: #16A085;
+}
+
+.color-21 {
+    color: #1ABC9C;
+}
+
+.color-22 {
+    color: #FF851B;
+}
+
+.color-23 {
+    color: #FF4136;
+}
+
+.color-24 {
+    color: #0074D9;
+}
+
+.color-25 {
+    color: #B10DC9;
+}
+
+.color-26 {
+    color: #FFDC00;
+}
+
+.color-27 {
+    color: #39CCCC;
+}
+
+.color-28 {
+    color: #3D9970;
+}
+
+.color-29 {
+    color: #85144b;
+}
+
+.color-30 {
+    color: #F012BE;
+}
+
+.color-31 {
+    color: #111111;
+}
+
+.color-32 {
+    color: #AAAAAA;
+}
+
+.color-33 {
+    color: #DDDDDD;
+}
+
+.color-34 {
+    color: #D0D0D0;
+}
+
+.color-35 {
+    color: #C0C0C0;
+}
+
+.color-36 {
+    color: #B0B0B0;
+}
+
+.space {
+    display: inline-block; /* Keeps space as an element */
+    width: 10px; /* Adjust width as needed for spacing */
+}
+
+/* Add delay for each character animation */
+.color-1 {
+    animation-delay: 0.1s;
+}
+
+.color-2 {
+    animation-delay: 0.2s;
+}
+
+.color-3 {
+    animation-delay: 0.3s;
+}
+
+.color-4 {
+    animation-delay: 0.4s;
+}
+
+.color-5 {
+    animation-delay: 0.5s;
+}
+
+.color-6 {
+    animation-delay: 0.6s;
+}
+
+.color-7 {
+    animation-delay: 0.7s;
+}
+
+.color-8 {
+    animation-delay: 0.8s;
+}
+
+.color-9 {
+    animation-delay: 0.9s;
+}
+
+.color-10 {
+    animation-delay: 1.0s;
+}
+
+.color-11 {
+    animation-delay: 1.1s;
+}
+
+.color-12 {
+    animation-delay: 1.2s;
+}
+
+.color-13 {
+    animation-delay: 1.3s;
+}
+
+.color-14 {
+    animation-delay: 1.4s;
+}
+
+.color-15 {
+    animation-delay: 1.5s;
+}
+
+.color-16 {
+    animation-delay: 1.6s;
+}
+
+.color-17 {
+    animation-delay: 1.7s;
+}
+
+.color-18 {
+    animation-delay: 1.8s;
+}
+
+.color-19 {
+    animation-delay: 1.9s;
+}
+
+.color-20 {
+    animation-delay: 2.0s;
+}
+
+.color-21 {
+    animation-delay: 2.1s;
+}
+
+.color-22 {
+    animation-delay: 2.2s;
+}
+
+.color-23 {
+    animation-delay: 2.3s;
+}
+
+.color-24 {
+    animation-delay: 2.4s;
+}
+
+.color-25 {
+    animation-delay: 2.5s;
+}
+
+.color-26 {
+    animation-delay: 2.6s;
+}
+
+.color-27 {
+    animation-delay: 2.7s;
+}
+
+.color-28 {
+    animation-delay: 2.8s;
+}
+
+.color-29 {
+    animation-delay: 2.9s;
+}
+
+.color-30 {
+    animation-delay: 3.0s;
+}

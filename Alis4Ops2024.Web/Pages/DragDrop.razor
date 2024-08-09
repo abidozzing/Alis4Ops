@@ -1,0 +1,22 @@
+﻿@* @page "/" *@
+@page "/dragdrop"
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
+<link rel="stylesheet" href="css/dragdrop.css" />
+<script src="/js/DragDrop.js" defer></script> <!-- Ensure JS file is included -->
+
+<div id="game-container">
+    <div id="draggable-container" class="draggable-elements"></div>
+    <div id="droppable-container" class="droppable-elements"></div>
+    @* <button id="play-again" style="display: none;">Play Again</button> *@
+</div>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // await JSRuntime.InvokeVoidAsync("initializeGame");
+        }
+    }
+}

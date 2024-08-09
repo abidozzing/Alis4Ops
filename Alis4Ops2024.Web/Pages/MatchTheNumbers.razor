@@ -1,0 +1,101 @@
+﻿@* @page "/" *@
+@page "/matchthenumbers"
+@* Ensure to include CSS and JS files *@
+<link rel="stylesheet" href="css/matchthenumbers.css" />
+<script src="js/MatchTheNumbers.js" defer></script>
+@* <IconDisplay /> *@
+@* <i class="fas fa-address-book" style="font-size:3rem; color: #0000ff;"></i> *@
+<div class="col-12" id="game-container">
+    <div class="row gx-0" style="padding:0px; justify-content:center;">
+        <div class="draggable-elements d-flex flex-wrap" style="column-gap:1%; gap:1%;">
+            <div class="fas fa-0 fa-beat draggable" draggable="true" style="color: #ff6384; --fa-animation-duration: 0.5s;" id="0"></div>
+            <div class="fas fa-1 fa-bounce draggable" draggable="true" style="color: #0000ff; --fa-bounce-land-scale-x: 1,5;--fa-bounce-land-scale-y: 0.8;--fa-bounce-rebound: 10px;" id="1"></div>
+            <div class="fas fa-2 fa-spin draggable" draggable="true" style="color: #36a2eb;" id="2"></div>
+            <div class="fas fa-3 fa-beat-fade draggable" draggable="true" style="color: #128912;" id="3"></div>
+            <div class="fas fa-4 fa-beat draggable" draggable="true" style="color: #9966ff; --fa-animation-duration: 0.25s;" id="4"></div>
+            <div class="fas fa-5 fa-shake draggable" draggable="true" style="color: #4bc0c0;" id="5"></div>
+            <div class="fas fa-6 fa-bounce draggable" draggable="true" style="color: #ff6384; --fa-bounce-land-scale-x: 1.2;--fa-bounce-land-scale-y: 0.8;--fa-bounce-rebound: 10px; --fa-bounce-height:20px" id="6"></div>
+            <div class="fas fa-7 fa-shake draggable" draggable="true" style="color: #36a2eb;" id="7"></div>
+            <div class="fas fa-8 fa-flip draggable" draggable="true" style="color: #ffce56; --fa-flip-x: 0; --fa-flip-y: 1;" id="8"></div>
+            <div class="fas fa-9 fa-beat draggable" draggable="true" style="color: #9966ff; --fa-animation-duration: 2s;" id="9"></div>
+        </div>
+    </div>
+
+    <div class="row gx-0" style="padding:0px;">
+        <div class="droppable-elements" style="column-gap:1%; gap:1%; justify-content:center; align-content:center;">
+            @*             <div class="droppable" data-draggable-id="0" data-original-text="0">
+            <!-- No dots for id 0 -->
+            </div> *@
+
+            @*             <div class="droppable" data-draggable-id="1" data-original-text="1">
+            @for (int i = 0; i < 1; i++)
+            {
+            <span><i class="fas fa-address-book" style="font-size:2rem; color: #0000ff;"></i></span>
+            }
+            </div>
+
+            <div class="droppable" data-draggable-id="2" data-original-text="2">
+            @for (int i = 0; i < 2; i++)
+            {
+            <span><i class="fas fa-address-book" style="font-size:2rem; color: #0000ff;"></i></span>
+            }
+            </div>*@
+
+            <div class="droppable" data-draggable-id="3" data-original-text="3">
+                @for (int x = 0; x < 3; x++)
+                {
+                    <span style="display: inline-flex; padding: 0; margin: 2px;"><i class="fas fa-basketball-ball" style="font-size:2rem; color: #ff6384; padding: 0; margin-top: 0;margin-bottom: 0;"></i></span>
+                }
+            </div>
+
+            <div class="droppable" data-draggable-id="4" data-original-text="4">
+                @for (int x = 0; x < 4; x++)
+                {
+                    <span style="display: inline-flex; padding: 0; margin: 2px;"><i class="fas fas fa-bell" style="font-size:2rem; color: #36a2eb; padding: 0; margin-top: 0;margin-bottom: 0;"></i></span>
+                }
+            </div>
+
+            <div class="droppable" data-draggable-id="5" data-original-text="5">
+                @for (int x = 0; x < 5; x++)
+                {
+                    <span style="display: inline-flex; padding: 0; margin: 2px;"><i class="fas fa-anchor" style="font-size:2rem; color: #128912; padding: 0; margin-top: 0;margin-bottom: 0;"></i></span>
+                }
+            </div>
+
+            <div class="droppable" data-draggable-id="6" data-original-text="6">
+                @for (int x = 0; x < 6; x++)
+                {
+                    <span style="display: inline-flex; padding: 0; margin: 2px;"><i class="fas fa-address-book" style="font-size:2rem; color: #ffce56; padding: 0; margin-top: 0;margin-bottom: 0;"></i></span>
+                }
+            </div>
+
+            @*           <div class="droppable" data-draggable-id="7" data-original-text="7">
+
+            @for (int i = 0; i < 7; i++)
+            { <span class="dot"></span>  }
+            </div>*@
+
+            <div class="droppable" data-draggable-id="8" data-original-text="8">
+                @for (int x = 0; x < 8; x++)
+                {
+                    <span style="display: inline-flex; padding: 2px; margin: 0px;">
+                        <i class="fas fa-bicycle" style="font-size:2rem; color: #9966ff; padding: 0; margin-top: 0;margin-bottom: 0;">
+                        </i>
+                    </span>
+                }
+            </div>
+
+            <div class="droppable" data-draggable-id="9" data-original-text="9">
+                @for (int x = 0; x < 9; x++)
+                {
+                    <span style="display: inline-flex; padding: 0; margin: 0;"><i class="fas fa-address-book" style="font-size:2rem; color: #0000ff; padding: 0; margin-top: 0;margin-bottom: 0;"></i></span>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Play Again button -->
+<div style="margin-top:20px;">
+    <button id="play-again" style="display: none;">Play Again</button>
+</div>

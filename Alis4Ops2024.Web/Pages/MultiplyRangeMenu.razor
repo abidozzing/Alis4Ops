@@ -10,7 +10,7 @@
 
         <div class="dropdown">
             <!-- Added d-flex and align-items-center for vertical centering -->
-            <button class="dropbtn" @onclick="ToggleDropdown">Multiply: @SelectedItem</button>
+    <button class="dropbtn" @onclick="ToggleDropdown">@Topic: @SelectedItem</button>
             <div class="dropdown-content" style="@dropdownStyle">
                 @foreach (var item in MenuItems)
                 {
@@ -120,7 +120,7 @@
     {
         SelectedMenuItem = clickedItem;
 
-        Operator = "Multiply";
+        // Operator = "Multiply";
         SelectedItem = SelectedMenuItem.Text;
         if (SelectedItem != null)
         {
@@ -164,7 +164,7 @@
         await LowerRangeChanged.InvokeAsync(LowerRange);
         await OperatorChanged.InvokeAsync(Operator);
         await SelectedItemChanged.InvokeAsync(SelectedItem);
-        await TopicChanged.InvokeAsync(SelectedItem);
+        await TopicChanged.InvokeAsync(Topic);
         await ParametersChanged.InvokeAsync();
     }
 

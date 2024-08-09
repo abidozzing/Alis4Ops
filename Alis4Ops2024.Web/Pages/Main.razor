@@ -1,0 +1,257 @@
+﻿@page "/"
+@page "/main"
+@using Alis4Ops2024.Web.Core
+@using Alis4Ops2024.Web.Models
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
+@inject NavigationManager _navigationManager
+@using Microsoft.AspNetCore.WebUtilities
+@inject RefreshService RefreshService
+@inject NavigationManager NavigationHelper
+<link href="css/site.css" rel="stylesheet" />
+<link href="css/dropbutton.css" rel="stylesheet" />
+
+<div class="container col-12">
+    <div class="row gx-0 align-items-center" style="font-size: 60%;">
+
+        @if (Operator == "Add")
+        {
+            <div class="col-auto">
+                <AddRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange
+                              @bind-Operator=@Operator @bind-SelectedItem=@SelectedItem
+                              @bind-Topic=Topic ParametersChanged="GenerateNewQuestion" />
+            </div>
+        }
+        else if (Operator == "Subtract")
+        {
+            <div class="col-auto">
+                <SubtractRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange
+                              @bind-Operator=@Operator @bind-SelectedItem=@SelectedItem
+                              @bind-Topic=Topic ParametersChanged="GenerateNewQuestion" />
+            </div>
+        }
+        else if (Operator == "Multiply" || Operator == "Divide")
+        {
+            <div class="col-auto">
+                <MultiplyRangeMenu @bind-UpperRange=@UpperRange @bind-LowerRange=@LowerRange
+                                   @bind-Operator=@Operator @bind-SelectedItem=@SelectedItem
+                                   @bind-Topic=Topic ParametersChanged="GenerateNewQuestion" />
+            </div>
+        }
+
+
+        <div class="col-auto ms-auto">
+            <!-- Right aligned content -->
+            <SubmitButton SubmitAnswer="HandleSubmitAnswerAsync" @ref="submitButton" />
+        </div>
+
+    </div>
+
+
+    <div>
+        <DateTimeCounterStopWatch @ref="dateTimeCounterStopWatch" />
+    </div>
+
+    @if (Operator == "Add" || Operator == "Subtract" || Operator == "Multiply")
+    {
+        <div>
+            <MathQuiz Question="@Question" AnsweredCorrectly="HandleAnsweredCorrectly" AnsweredWrongly="HandleAnsweredWrongly" Answer=@Question.Answer @ref="mathQuiz" />
+        </div>
+
+        @if (Operator == "Add")
+        {
+            <div>
+                <AddModel Question="@Question" />
+            </div>
+        }
+        else if (Operator == "Subtract")
+        {
+            <div>
+                <SubtractModel Question="@Question" />
+            </div>
+
+        }
+        else if (Operator == "Multiply")
+        {
+            <div>
+                <MultiplyModel Question="@Question" />
+            </div>
+
+        }
+    }
+    else
+    {
+        <div>
+            <DivideMathQuiz Question="@Question" AnsweredCorrectly="HandleAnsweredCorrectly" AnsweredWrongly="HandleAnsweredWrongly" Answer=@Question.Answer />
+        </div>
+        <div>
+            <DivideModel Question="@Question" />
+        </div>
+    }
+
+</div>
+
+@* <div>
+    <button @onclick="RefreshPage">Refresh Page</button>
+    <p>Parameter received: @Topic</p>
+</div> *@
+@code {
+    [Inject] private IAddQuestionGeneratorService AddQuestionGenerator { get; set; }
+    [Inject] private ISubtractQuestionGeneratorService SubtractQuestionGenerator { get; set; }
+    [Inject] private IMultiplyQuestionGeneratorService MultiplyQuestionGenerator { get; set; }
+    [Inject] private IDivideQuestionGeneratorService DivideQuestionGenerator { get; set; }
+    [Parameter] public BaseQuestion Question { get; set; }
+    [Parameter] public EventCallback AnsweredCorrectly { get; set; }
+    [Parameter] public EventCallback AnsweredWrongly { get; set; }
+    private DateTimeCounterStopWatch dateTimeCounterStopWatch; // Reference to child component
+    private MathQuiz mathQuiz; // Reference to child component
+    private DivideMathQuiz divideMathQuiz; // Reference to child component
+    private SubmitButton submitButton; // Reference to child component
+    [Parameter] public EventCallback SubmitAnswer { get; set; }
+
+    [Parameter] public EventCallback<string> OperatorChanged { get; set; }
+    [Parameter] public EventCallback<int> UpperRangeChanged { get; set; }
+    [Parameter] public EventCallback<int> LowerRangeChanged { get; set; }
+    [Parameter] public EventCallback<string> SelectedItemChanged { get; set; }
+    [Parameter] public EventCallback<string> TopicChanged { get; set; }
+
+    private int _upperRange = 5;
+    [Parameter]
+    public int UpperRange
+    { get { return _upperRange; } set { _upperRange = value; } }
+
+    private int _lowerRange = 1;
+    [Parameter]
+    public int LowerRange
+    { get { return _lowerRange; } set { _lowerRange = value; } }
+
+    private string _operator = "Add";
+    [Parameter]
+    public string Operator
+    { get { return _operator; } set { _operator = value; } }
+
+    private string _selectedItem = "1-5";
+    [Parameter]
+    public string SelectedItem
+    { get { return _selectedItem; } set { _selectedItem = value; } }
+
+    private string _topic = "Add";
+    [Parameter]
+    public string Topic
+    { get { return _topic; } set { _topic = value; } }
+
+
+    protected override void OnInitialized()
+    {
+        SelectTopic();
+        if (dateTimeCounterStopWatch is null)
+        {
+            dateTimeCounterStopWatch = new DateTimeCounterStopWatch();
+            submitButton = new SubmitButton();
+            mathQuiz = new MathQuiz();
+            divideMathQuiz = new DivideMathQuiz();
+        }
+        GenerateNewQuestion();
+        StateHasChanged();
+    }
+
+    private void SelectTopic()
+    {
+        switch (Topic)
+        {
+            case "Add":
+            case "AddMissing":
+                Operator = "Add";
+                break;
+            case "Subtract":
+            case "SubMissing":
+                Operator = "Subtract";
+                break;
+            case "Multiply":
+            case "MultiplyMissing":
+                Operator = "Multiply";
+                break;
+            case "Divide":
+            case "DivideMissing":
+                Operator = "Divide";
+                break;
+            default:
+                // Handle unexpected cases if necessary
+                Topic = "Add";
+                Operator = "Add";
+                LowerRange = 1;
+                UpperRange = 5;
+                SelectedItem = "1-5";
+                break;
+        }
+    }
+
+
+    private async Task HandleSubmitAnswerAsync()
+    {
+        // Assuming HandleKeydown method doesn't return a Task and doesn't need await
+        await mathQuiz.HandleKeydown(new KeyboardEventArgs { Key = "Enter" });
+        await mathQuiz.inputElement.FocusAsync();
+    }
+
+    private async Task HandleAnsweredCorrectly()
+    {
+
+        if (dateTimeCounterStopWatch != null)
+        {
+            await dateTimeCounterStopWatch.ResetAndStartStopwatch();
+            await dateTimeCounterStopWatch.IncrementCounter();
+            await AnsweredCorrectly.InvokeAsync();
+            GenerateNewQuestion();
+            // await InvokeAsync(() => StateHasChanged());
+        }
+
+    }
+
+    private async Task HandleAnsweredWrongly()
+    {
+
+        if (dateTimeCounterStopWatch != null)
+        {
+            await dateTimeCounterStopWatch.IncrementErrorCount();
+            await AnsweredWrongly.InvokeAsync();
+        }
+    }
+
+    public void GenerateNewQuestion()
+    {
+
+        switch (Operator)
+        {
+            case "Add":
+                Question = AddQuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem, Topic);
+                break;
+            case "Subtract":
+                Question = SubtractQuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem, Topic);
+                break;
+            case "Multiply":
+                Question = MultiplyQuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem, Topic);
+                break;
+            case "Divide":
+                Question = DivideQuestionGenerator.GenerateQuestion(UpperRange, LowerRange, Operator, SelectedItem, Topic);
+                break;
+            // Handle additional cases as needed
+            default:
+                break;
+        }
+    }
+
+    private void RefreshPage()
+    {
+        _navigationManager.NavigateTo(_navigationManager.Uri, forceLoad: true);
+        Topic = _topic;
+    }
+
+    // public void Dispose()
+    // {
+    //     RefreshService.RefreshRequested -= RefreshPage;
+    // }
+
+}
+
+
